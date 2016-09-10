@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 
 public class TexturedPolygon
 {
@@ -13,7 +13,7 @@ public class TexturedPolygon
 		this.invertNormal = false;
 		this.vertexPositions = apositionTexturevertex;
 		this.nVertices = apositionTexturevertex.length;
-		this.iNormals = new ArrayList<Vec3>();
+		this.iNormals = new ArrayList<Vec3d>();
 		this.normals = new float[0];
 	}
 	
@@ -50,7 +50,7 @@ public class TexturedPolygon
 		this.vertexPositions = var1;
 	}
 	
-	public void setNormals(ArrayList<Vec3> vec)
+	public void setNormals(ArrayList<Vec3d> vec)
 	{
 		iNormals = vec;
 	}
@@ -79,9 +79,9 @@ public class TexturedPolygon
 			} else
 			if(vertexPositions.length >= 3)
 			{
-				Vec3 Vec3 = vertexPositions[1].vector3D.subtract(vertexPositions[0].vector3D);
-				Vec3 Vec31 = vertexPositions[1].vector3D.subtract(vertexPositions[2].vector3D);
-				Vec3 Vec32 = Vec31.crossProduct(Vec3).normalize();
+				Vec3d Vec3 = vertexPositions[1].vector3D.subtract(vertexPositions[0].vector3D);
+				Vec3d Vec31 = vertexPositions[1].vector3D.subtract(vertexPositions[2].vector3D);
+				Vec3d Vec32 = Vec31.crossProduct(Vec3).normalize();
 		
 				if(invertNormal)
 				{
@@ -122,5 +122,5 @@ public class TexturedPolygon
 	public int nVertices;
 	private boolean invertNormal;
 	private float[] normals;
-	private ArrayList<Vec3> iNormals;
+	private ArrayList<Vec3d> iNormals;
 }

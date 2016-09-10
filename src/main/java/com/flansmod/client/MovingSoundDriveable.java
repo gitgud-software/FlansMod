@@ -1,10 +1,12 @@
 package com.flansmod.client;
 
-import net.minecraft.client.audio.MovingSound;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.ResourceLocation;
-
 import com.flansmod.common.driveables.EntityDriveable;
+
+import net.minecraft.client.audio.MovingSound;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.MathHelper;
 
 //TODO : Implement this!
 public class MovingSoundDriveable extends MovingSound 
@@ -14,7 +16,7 @@ public class MovingSoundDriveable extends MovingSound
 	
 	public MovingSoundDriveable(ResourceLocation sound, EntityDriveable driveable)
 	{
-	    super(sound);
+	    super(SoundEvent.REGISTRY.getObject(sound), SoundCategory.NEUTRAL);//No clue if this is right
 	    this.driveable = driveable;
 	    repeat = true;
 	    repeatDelay = 0;

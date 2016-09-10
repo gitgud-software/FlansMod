@@ -4,15 +4,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.flansmod.common.driveables.EntityDriveable;
+import com.flansmod.common.driveables.EntitySeat;
+import com.flansmod.common.teams.TeamsManager;
+
+import net.fexcraft.mod.fsu.server.util.IC;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
@@ -20,10 +23,6 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
 import net.minecraftforge.fml.relauncher.Side;
-
-import com.flansmod.common.driveables.EntityDriveable;
-import com.flansmod.common.driveables.EntitySeat;
-import com.flansmod.common.teams.TeamsManager;
 
 public class PlayerHandler
 {
@@ -40,8 +39,8 @@ public class PlayerHandler
 	@SubscribeEvent
 	public void onEntityHurt(LivingAttackEvent event)
 	{
-		EntityLivingBase entity = event.entityLiving;
-		if(event instanceof LivingAttackEvent && (entity.ridingEntity instanceof EntityDriveable || entity.ridingEntity instanceof EntitySeat))
+		EntityLivingBase entity = event.getEntityLiving();
+		if(event instanceof LivingAttackEvent && (entity.getRidingEntity() instanceof EntityDriveable || entity.getRidingEntity() instanceof EntitySeat))
 		{
 			event.setCanceled(true);
 		}
@@ -50,7 +49,7 @@ public class PlayerHandler
 	@SubscribeEvent
 	public void onEntityKilled(LivingDeathEvent event) 
 	{
-		EntityLivingBase entity = event.entityLiving;
+		EntityLivingBase entity = event.getEntityLiving();
 		if(entity instanceof EntityPlayer)
 		{
 			getPlayerData((EntityPlayer)entity).playerKilled();
@@ -59,7 +58,7 @@ public class PlayerHandler
 		
 	public void serverTick()
 	{
-		for(WorldServer world : MinecraftServer.getServer().worldServers)
+		for(WorldServer world : IC.getServer().worldServers)
 		{
 			for(Object player : world.playerEntities)
 			{

@@ -4,24 +4,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.init.Items;
-import net.minecraft.item.EnumDyeColor;
-import net.minecraft.item.ItemDye;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import com.flansmod.client.model.ModelGun;
 import com.flansmod.client.model.ModelMG;
 import com.flansmod.common.FlansMod;
-import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.PaintableType;
 import com.flansmod.common.types.TypeFile;
 import com.flansmod.common.vector.Vector3f;
+
+import net.minecraft.client.model.ModelBase;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class GunType extends PaintableType implements IScope
 {
@@ -496,8 +491,8 @@ public class GunType extends PaintableType implements IScope
 	{
 		checkForTags(gun);
 		ArrayList<AttachmentType> attachments = new ArrayList<AttachmentType>();
-		NBTTagCompound attachmentTags = gun.getTagCompound().getCompoundTag("attachments");
-		NBTTagList genericsList = attachmentTags.getTagList("generics", (byte)10); //TODO : Check this 10 is correct
+		//NBTTagCompound attachmentTags = gun.getTagCompound().getCompoundTag("attachments");
+		//NBTTagList genericsList = attachmentTags.getTagList("generics", (byte)10); //TODO : Check this 10 is correct
 		for(int i = 0; i < numGenericAttachmentSlots; i++)
 		{
 			appendToList(gun, "generic_" + i, attachments);

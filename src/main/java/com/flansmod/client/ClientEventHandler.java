@@ -11,6 +11,7 @@ import com.flansmod.common.guns.ItemGun;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
+import net.minecraftforge.client.event.EntityViewRenderEvent.CameraSetup;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
@@ -18,10 +19,9 @@ import net.minecraftforge.client.event.RenderItemInFrameEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraftforge.client.event.EntityViewRenderEvent.CameraSetup;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 /** All handled events for the client should go through here and be passed on. Makes it easier to see which events are being handled by the mod */
 public class ClientEventHandler
@@ -76,7 +76,7 @@ public class ClientEventHandler
 	@SubscribeEvent
 	public void chatMessage(ClientChatReceivedEvent event)
 	{
-		if(event.message.getUnformattedText().equals("#flansmod"))
+		if(event.getMessage().getUnformattedText().equals("#flansmod"))
 		{
 			event.setCanceled(true);
 		}
@@ -86,10 +86,10 @@ public class ClientEventHandler
 	public void CheckForOffHandWeaponSwitch(MouseEvent event)
 	{
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		if(player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemGun)
+		if(player.getHeldItemMainhand() != null && player.getHeldItemMainhand().getItem() instanceof ItemGun)
 		{
-			if(((ItemGun)player.getCurrentEquippedItem().getItem()).GetType().oneHanded && 
-					Keyboard.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode()) && Math.abs(event.dwheel) > 0)
+			if(((ItemGun)player.getHeldItemMainhand().getItem()).GetType().oneHanded && 
+					Keyboard.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode()) && Math.abs(event.getDwheel()) > 0)
 				event.setCanceled(true);
 		}
 	}
@@ -103,7 +103,7 @@ public class ClientEventHandler
 	@SubscribeEvent
 	public void renderWorld(RenderWorldLastEvent event)
 	{
-		InstantBulletRenderer.RenderAllTrails(event.partialTicks);
+		InstantBulletRenderer.RenderAllTrails(event.getPartialTicks());
 	}
 	
 	// ----------------------------------------

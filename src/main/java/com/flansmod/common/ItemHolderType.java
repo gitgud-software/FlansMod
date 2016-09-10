@@ -2,17 +2,14 @@ package com.flansmod.common;
 
 import java.util.HashMap;
 
+import com.flansmod.client.model.ModelItemHolder;
+import com.flansmod.common.types.InfoType;
+import com.flansmod.common.types.TypeFile;
+
 import net.minecraft.client.model.ModelBase;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import com.flansmod.client.model.ModelDriveable;
-import com.flansmod.client.model.ModelItemHolder;
-import com.flansmod.client.model.ModelVehicle;
-import com.flansmod.common.guns.ShootableType;
-import com.flansmod.common.types.InfoType;
-import com.flansmod.common.types.TypeFile;
 
 public class ItemHolderType extends InfoType 
 {

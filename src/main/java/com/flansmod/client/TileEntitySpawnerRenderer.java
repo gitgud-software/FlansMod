@@ -1,21 +1,14 @@
 package com.flansmod.client;
 
-import org.lwjgl.opengl.GL11;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-
 import com.flansmod.common.FlansMod;
-import com.flansmod.common.teams.BlockSpawner;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.teams.TileEntitySpawner;
+
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.tileentity.TileEntity;
 
 public class TileEntitySpawnerRenderer extends TileEntitySpecialRenderer 
 {
@@ -23,7 +16,7 @@ public class TileEntitySpawnerRenderer extends TileEntitySpecialRenderer
 	public void renderTileEntityAt(TileEntity te, double x, double y, double z, float f, int i) 
 	{
 		Tessellator tessellator = Tessellator.getInstance();
-		WorldRenderer worldRenderer = tessellator.getWorldRenderer();
+		VertexBuffer worldRenderer = tessellator.getBuffer();
 		
 		TileEntitySpawner spawner = (TileEntitySpawner)te;
         int spawnerTeamID = spawner.getTeamID();
@@ -67,9 +60,9 @@ public class TileEntitySpawnerRenderer extends TileEntitySpecialRenderer
 		GlStateManager.color(1.0f, 1.0f, 1.0f);		
 	}
 	
-	private void RenderBox(Tessellator t, WorldRenderer wr, double x0, double x1, double y0, double y1, double z0, double z1)
+	private void RenderBox(Tessellator t, VertexBuffer wr, double x0, double x1, double y0, double y1, double z0, double z1)
 	{
-		// Top
+		/*// Top
 		wr.startDrawingQuads();
         wr.addVertex(x0, y1, z0);
         wr.addVertex(x0, y1, z1);
@@ -110,6 +103,7 @@ public class TileEntitySpawnerRenderer extends TileEntitySpecialRenderer
         wr.addVertex(x0, y0, z1);
         wr.addVertex(x0, y1, z1);
         wr.addVertex(x0, y1, z0);
-        t.draw();
+        t.draw();*/
+		
 	}
 }

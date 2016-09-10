@@ -1,7 +1,9 @@
 package com.flansmod.common.teams;
 
+import com.flansmod.common.EntityItemCustomRender;
+import com.flansmod.common.PlayerHandler;
+
 import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -13,9 +15,6 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-
-import com.flansmod.common.EntityItemCustomRender;
-import com.flansmod.common.PlayerHandler;
 
 public class EntityTeamItem extends EntityItemCustomRender implements IEntityAdditionalSpawnData {
 
@@ -39,7 +38,7 @@ public class EntityTeamItem extends EntityItemCustomRender implements IEntityAdd
 		super(world);
 	}
 	
-	@Override
+	//@Override
 	public void func_180426_a(double x, double y, double z, float yaw, float pitch, int i, boolean b)
 	{
 		
@@ -98,7 +97,7 @@ public class EntityTeamItem extends EntityItemCustomRender implements IEntityAdd
 			{
 				FMLCommonHandler.instance().firePlayerItemPickupEvent(player, this);
 
-				playSound("random.pop", 0.2F, ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+				//TODO playSound("random.pop", 0.2F, ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
 				player.onItemPickup(this, var2);
 
 				//Getter of EntityItem
@@ -150,7 +149,7 @@ public class EntityTeamItem extends EntityItemCustomRender implements IEntityAdd
 	}
 	
 	@Override
-	public boolean canAttackWithItem()
+	public boolean canBeAttackedWithItem()
 	{
 		return false;
 	}

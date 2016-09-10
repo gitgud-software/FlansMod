@@ -1,20 +1,16 @@
 package com.flansmod.common;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.WorldServer;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.teams.TeamsManager;
+
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class CommonTickHandler 
 {
@@ -23,7 +19,8 @@ public class CommonTickHandler
 	
 	public CommonTickHandler()
 	{
-		FMLCommonHandler.instance().bus().register(this);
+		//FMLCommonHandler.instance().bus().register(this);
+		MinecraftForge.EVENT_BUS.register(this);
 	}
 	
 	@SubscribeEvent
@@ -76,13 +73,13 @@ public class CommonTickHandler
 	public void onEntitySpawn(EntityJoinWorldEvent event) 
 	{
 		//Replace gun items with custom render gun items
-		if(event.entity instanceof EntityItem && !(event.entity instanceof EntityItemCustomRender))
+		if(event.getEntity() instanceof EntityItem && !(event.getEntity() instanceof EntityItemCustomRender))
 		{
-			ItemStack stack = getEntityItem((EntityItem)event.entity);
+			ItemStack stack = getEntityItem((EntityItem)event.getEntity());
 			if(stack != null && stack.getItem() instanceof ItemGun && ((ItemGun)stack.getItem()).GetType().modelString != null)
 			{
 				//event.world.spawnEntityInWorld(new EntityItemCustomRender((EntityItem)event.entity));
-				replacementItemEntities.add(new EntityItemCustomRender((EntityItem)event.entity));
+				replacementItemEntities.add(new EntityItemCustomRender((EntityItem)event.getEntity()));
 				event.setCanceled(true);
 			}
 		}			
@@ -90,6 +87,6 @@ public class CommonTickHandler
 	
     public ItemStack getEntityItem(EntityItem entity)
     {
-        return entity.getDataWatcher().getWatchableObjectItemStack(10);
+        return null;//TODO return entity.getDataWatcher().getWatchableObjectItemStack(10);
     }
 }

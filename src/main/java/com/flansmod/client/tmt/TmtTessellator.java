@@ -15,7 +15,6 @@ import org.lwjgl.opengl.GLContext;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -170,7 +169,7 @@ public class TmtTessellator extends Tessellator
      * Draws the data set up in this tessellator and resets the state to prepare for new drawing.
      */
     @Override
-	public int draw()
+	public void draw()
     {
         if (!this.isDrawing)
         {
@@ -320,9 +319,9 @@ public class TmtTessellator extends Tessellator
                 rawBuffer = null;
             }
 
-            int var1 = this.rawBufferIndex * 4;
+            //int var1 = this.rawBufferIndex * 4;
             this.reset();
-            return var1;
+            return;//var1;
         }
     }
     

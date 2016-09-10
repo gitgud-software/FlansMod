@@ -2,18 +2,14 @@ package com.flansmod.common.network;
 
 import java.util.Random;
 
+import com.flansmod.common.FlansMod;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import net.minecraft.client.particle.EntityFX;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import com.flansmod.client.FlansModClient;
-import com.flansmod.common.FlansMod;
 
 public class PacketFlak extends PacketBase 
 {
@@ -65,9 +61,10 @@ public class PacketFlak extends PacketBase
 	@SideOnly(Side.CLIENT)
 	public void handleClientSide(EntityPlayer clientPlayer) 
 	{
-		World world = clientPlayer.worldObj;
+		/*World world = clientPlayer.worldObj;
 		for (int i = 0; i < numParticles; i++)
 		{
+			//TODO
 			EntityFX obj = FlansModClient.getParticle(particleType, world, x + rand.nextGaussian(), y + rand.nextGaussian(), z + rand.nextGaussian());
 			if(obj != null)
 			{
@@ -77,6 +74,6 @@ public class PacketFlak extends PacketBase
 				obj.renderDistanceWeight = 250D;
 				FMLClientHandler.instance().getClient().effectRenderer.addEffect(obj);
 			}
-		}		
+		}*/	
 	}
 }

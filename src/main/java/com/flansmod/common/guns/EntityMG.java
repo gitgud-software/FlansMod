@@ -4,27 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import io.netty.buffer.ByteBuf;
+import javax.annotation.Nullable;
 
 import org.lwjgl.input.Mouse;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerHandler;
@@ -34,6 +16,26 @@ import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.teams.EntityGunItem;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.teams.TeamsManager;
+
+import io.netty.buffer.ByteBuf;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 {
@@ -99,7 +101,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 		{
 			setDead();
 		}
-		if (worldObj.getBlockState(new BlockPos(blockX, blockY - 1, blockZ)).getBlock() == Blocks.air)
+		if (worldObj.getBlockState(new BlockPos(blockX, blockY - 1, blockZ)).getBlock() == Blocks.AIR)
 		{
 			if(!worldObj.isRemote)
 			{
@@ -187,7 +189,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 				ammo.damageItem(1, gunner);
 			shootDelay = type.shootDelay;
 			worldObj.spawnEntityInWorld(((ItemBullet)ammo.getItem()).getEntity(worldObj, 
-					new Vec3(blockX + 0.5D, blockY + type.pivotHeight, blockZ + 0.5D), 
+					new Vec3d(blockX + 0.5D, blockY + type.pivotHeight, blockZ + 0.5D), 
 					(direction * 90F + rotationYaw), 
 					rotationPitch, 
 					gunner, 
@@ -259,7 +261,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 				}
 				if (soundDelay <= 0)
 				{
-					float distortion = type.distortSound ? 1.0F / (rand.nextFloat() * 0.4F + 0.8F) : 1F;
+					//float distortion = type.distortSound ? 1.0F / (rand.nextFloat() * 0.4F + 0.8F) : 1F;
 					//worldObj.playSoundAtEntity(this, type.shootSound, 1.0F, distortion);
 					PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, type.shootSound, type.distortSound);
 
@@ -277,7 +279,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 	}
 
 	@Override
-	public boolean interactFirst(EntityPlayer player) //interact : change back when Forge updates
+	public boolean processInitialInteract(EntityPlayer player, @Nullable ItemStack stack, EnumHand hand) //interact : change back when Forge updates
 	{
 		// Player right clicked on gun
 		// Mount gun
@@ -317,7 +319,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 					ammo = player.inventory.getStackInSlot(slot);
 					player.inventory.setInventorySlotContents(slot, null);
 					reloadTimer = type.reloadTime;
-					worldObj.playSoundAtEntity(this, type.reloadSound, 1.0F, 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
+					//TODO worldObj.playSoundAtEntity(this, type.reloadSound, 1.0F, 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
 				}
 			}
 			
@@ -444,7 +446,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 	}
 	
 	@Override
-	public ItemStack getPickedResult(MovingObjectPosition target)
+	public ItemStack getPickedResult(RayTraceResult target)
 	{
 		ItemStack stack = new ItemStack(type.item, 1, 0);
 		return stack;

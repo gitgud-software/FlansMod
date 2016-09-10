@@ -1,13 +1,11 @@
 package com.flansmod.client.gui.config;
 
-import net.minecraft.client.gui.GuiScreen;
+import com.flansmod.common.FlansMod;
 
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.common.config.Configuration;
-
 import net.minecraftforge.fml.client.config.GuiConfig;
-
-import com.flansmod.common.FlansMod;
 
 public class ModGuiConfig extends GuiConfig {
 	public ModGuiConfig(GuiScreen parent) {

@@ -3,15 +3,11 @@ package com.flansmod.common.teams;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import net.minecraft.item.ItemStack;
-
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.boxes.BoxType;
-import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.item.ItemStack;
 
 public class ArmourBoxType extends BoxType
 {	

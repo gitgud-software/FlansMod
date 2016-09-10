@@ -1,11 +1,11 @@
 package com.flansmod.client.debug;
 
+import com.flansmod.common.vector.Vector3f;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
-
-import com.flansmod.common.vector.Vector3f;
 
 public class EntityDebugVector extends Entity
 {
@@ -46,7 +46,7 @@ public class EntityDebugVector extends Entity
 	}
 	
 	@Override
-	public AxisAlignedBB getBoundingBox()
+	public AxisAlignedBB getEntityBoundingBox()
 	{
 		return null;
 	}

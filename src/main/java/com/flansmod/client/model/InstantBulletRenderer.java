@@ -11,7 +11,6 @@ import com.flansmod.common.vector.Vector3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -110,7 +109,7 @@ public class InstantBulletRenderer
 	        Vector3f endPos = new Vector3f(origin.x + dPos.x * endParametric,  origin.y + dPos.y * endParametric, origin.z + dPos.z * endParametric);
 	        
 	        Tessellator tessellator = Tessellator.getInstance();
-	        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+	        //WorldRenderer worldrenderer = tessellator.getWorldRenderer();
 
 	        dPos.normalise();
 	        
@@ -129,12 +128,12 @@ public class InstantBulletRenderer
 	        GlStateManager.enableRescaleNormal();
 	        GL11.glNormal3f(normal.x, normal.y, normal.z);
 	        
-	        worldrenderer.startDrawingQuads();
+	        /*worldrenderer.startDrawingQuads();
 	        worldrenderer.addVertexWithUV(startPos.x + trailTangent.x, startPos.y + trailTangent.y, startPos.z + trailTangent.z, 0.0f, 0.0f);
 	        worldrenderer.addVertexWithUV(startPos.x - trailTangent.x, startPos.y - trailTangent.y, startPos.z - trailTangent.z, 0.0f, 1.0f);
 	        worldrenderer.addVertexWithUV(endPos.x - trailTangent.x, endPos.y - trailTangent.y, endPos.z - trailTangent.z, 1.0f, 1.0f);
 	        worldrenderer.addVertexWithUV(endPos.x + trailTangent.x, endPos.y + trailTangent.y, endPos.z + trailTangent.z, 1.0f, 0.0f);
-	        tessellator.draw();
+	        tessellator.draw();*/
 	        	
 	        GlStateManager.disableRescaleNormal();
 	        

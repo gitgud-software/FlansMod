@@ -1,13 +1,13 @@
 package com.flansmod.client;
 
+import java.awt.Point;
+import java.awt.Transparency;
+import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.ComponentColorModel;
 import java.awt.image.DataBuffer;
 import java.awt.image.DataBufferByte;
 import java.awt.image.Raster;
-import java.awt.Point;
-import java.awt.Transparency;
-import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
@@ -15,14 +15,14 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
-import net.minecraft.util.ResourceLocation;
-
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.Paintjob;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.PaintableType;
+
+import net.minecraft.util.ResourceLocation;
 
 public class FlansModResourceHandler 
 {

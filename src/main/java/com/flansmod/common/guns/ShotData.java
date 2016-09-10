@@ -4,7 +4,6 @@ import com.flansmod.common.guns.raytracing.FlansModRaytracer.BulletHit;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 
 

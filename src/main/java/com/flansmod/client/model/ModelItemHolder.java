@@ -1,7 +1,6 @@
 package com.flansmod.client.model;
 
 import com.flansmod.client.tmt.ModelRendererTurbo;
-import com.flansmod.common.driveables.mechas.EntityMecha;
 import com.flansmod.common.vector.Vector3f;
 
 import net.minecraft.client.model.ModelBase;

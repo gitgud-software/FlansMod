@@ -1,16 +1,17 @@
 package com.flansmod.common.tools;
 
 import io.netty.buffer.ByteBuf;
+import net.fexcraft.mod.lib.util.entity.EntUtil;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
@@ -38,28 +39,28 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 	{
 		super.onUpdate();
 		
-		if(!worldObj.isRemote && (riddenByEntity == null || riddenByEntity.ridingEntity != this))
+		if(!worldObj.isRemote && (getPassengers() == null || getPassengers() != this))
 		{
 			setDead();
 		}
 		
-		if(riddenByEntity != null)
-			riddenByEntity.fallDistance = 0F;
+		if(getPassengers() != null)
+			EntUtil.setFallDistance(this, 0F);
 		
 		motionY = -0.1D;
 		
-		if(riddenByEntity != null && riddenByEntity instanceof EntityLivingBase)
+		if(getPassengers() != null && getPassengers() instanceof EntityLivingBase)
 		{
 			float speedMultiplier = 0.002F;
-			double moveForwards = ((EntityLivingBase)this.riddenByEntity).moveForward;
-			double moveStrafing = ((EntityLivingBase)this.riddenByEntity).moveStrafing;
-			double sinYaw = -Math.sin((riddenByEntity.rotationYaw * (float)Math.PI / 180.0F));
-			double cosYaw = Math.cos((this.riddenByEntity.rotationYaw * (float)Math.PI / 180.0F));
+			double moveForwards = ((EntityLivingBase)this.getPassengers()).moveForward;
+			double moveStrafing = ((EntityLivingBase)this.getPassengers()).moveStrafing;
+			double sinYaw = -Math.sin((EntUtil.getPassengerOf(this).rotationYaw * (float)Math.PI / 180.0F));
+			double cosYaw = Math.cos((EntUtil.getPassengerOf(this).rotationYaw * (float)Math.PI / 180.0F));
 			motionX += (moveForwards * sinYaw + moveStrafing * cosYaw) * speedMultiplier;
 			motionZ += (moveForwards * cosYaw - moveStrafing * sinYaw) * speedMultiplier;
 			
 			prevRotationYaw = rotationYaw;
-			rotationYaw = riddenByEntity.rotationYaw;
+			rotationYaw = EntUtil.getPassengerOf(this).rotationYaw;
 		}		
 		
 		motionX *= 0.8F;
@@ -67,7 +68,7 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 		
 		moveEntity(motionX, motionY, motionZ);
 		
-		if(onGround || worldObj.getBlockState(new BlockPos(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ))).getBlock().getMaterial() == Material.water)
+		if(onGround || worldObj.getBlockState(new BlockPos(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ))).getMaterial() == Material.WATER)
 		{
 			setDead();
 		}
@@ -104,7 +105,7 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 	}
 
 	@Override
-	public ItemStack getPickedResult(MovingObjectPosition target)
+	public ItemStack getPickedResult(RayTraceResult target)
 	{
 		ItemStack stack = new ItemStack(type.item, 1, 0);
 		return stack;

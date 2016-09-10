@@ -2,12 +2,11 @@ package com.flansmod.common.guns;
 
 import java.util.HashMap;
 
-import net.minecraft.client.model.ModelBase;
-
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
 
+import net.minecraft.client.model.ModelBase;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

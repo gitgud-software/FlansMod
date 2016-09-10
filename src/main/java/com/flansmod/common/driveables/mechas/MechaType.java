@@ -2,21 +2,20 @@ package com.flansmod.common.driveables.mechas;
 
 import java.util.ArrayList;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-
 import com.flansmod.client.model.ModelMecha;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.DriveableData;
 import com.flansmod.common.driveables.DriveablePart;
 import com.flansmod.common.driveables.DriveableType;
 import com.flansmod.common.driveables.EntityDriveable;
-import com.flansmod.common.driveables.EntityPlane;
 import com.flansmod.common.driveables.EnumDriveablePart;
 import com.flansmod.common.parts.PartType;
 import com.flansmod.common.types.TypeFile;
 import com.flansmod.common.vector.Vector3f;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 
 public class MechaType extends DriveableType 
 {

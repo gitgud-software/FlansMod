@@ -4,22 +4,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSource;
-import net.minecraft.util.EntityDamageSourceIndirect;
-import net.minecraft.util.Vec3;
-
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.network.PacketBase;
 import com.flansmod.common.types.InfoType;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.EntityDamageSourceIndirect;
+import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public abstract class Gametype 
 {
@@ -83,7 +83,7 @@ public abstract class Gametype
 	
 	public boolean playerCanLoot(ItemStack stack, InfoType infoType, EntityPlayer player, Team playerTeam) { return true; }
 	
-	public abstract Vec3 getSpawnPoint(EntityPlayerMP player);
+	public abstract Vec3d getSpawnPoint(EntityPlayerMP player);
 	
 	//Return whether or not the variable exists
 	public boolean setVariable(String variable, String value) { return false; }
@@ -116,7 +116,7 @@ public abstract class Gametype
 	
 	public EntityPlayerMP getPlayer(String username)
 	{
-		return MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(username);
+		return FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUsername(username);
 	}
 	
 	public static PlayerData getPlayerData(EntityPlayerMP player)
@@ -131,12 +131,12 @@ public abstract class Gametype
 		
 	public static String[] getPlayerNames()
 	{
-		return MinecraftServer.getServer().getAllUsernames();
+		return FMLCommonHandler.instance().getMinecraftServerInstance().getAllUsernames();
 	}
 	
-	public static List<EntityPlayer> getPlayers()
+	public static List<EntityPlayerMP> getPlayers()
 	{
-		return MinecraftServer.getServer().getConfigurationManager().playerEntityList;
+		return FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerList();
 	}
 						
 	public static void givePoints(EntityPlayerMP player, int points)

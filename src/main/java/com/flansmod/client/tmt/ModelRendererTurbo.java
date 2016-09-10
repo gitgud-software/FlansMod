@@ -15,11 +15,10 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.model.TexturedQuad;
 import net.minecraft.client.renderer.GLAllocation;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 /**
  * An extension to the ModelRenderer class. It basically is a copy to ModelRenderer,
  * however, it contains various new methods to make your models.
@@ -1847,7 +1846,7 @@ public class ModelRendererTurbo extends ModelRenderer
 			PositionTextureVertex[] verts = faces[i].vertexPositions;
 			for(int j = 0; j < verts.length; j++)
 			{
-				verts[j].vector3D = new Vec3(verts[j].vector3D.xCoord * (x ? -1 : 1), verts[j].vector3D.yCoord * (y ? -1 : 1), verts[j].vector3D.zCoord * (z ? -1 : 1));	
+				verts[j].vector3D = new Vec3d(verts[j].vector3D.xCoord * (x ? -1 : 1), verts[j].vector3D.yCoord * (y ? -1 : 1), verts[j].vector3D.zCoord * (z ? -1 : 1));	
 
 			}
 			if (x ^ y ^ z)

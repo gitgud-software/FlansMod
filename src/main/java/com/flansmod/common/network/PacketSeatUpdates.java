@@ -1,18 +1,17 @@
 package com.flansmod.common.network;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EntitySeat;
+
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+import net.fexcraft.mod.lib.util.entity.EntUtil;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PacketSeatUpdates extends PacketBase 
 {
@@ -85,7 +84,7 @@ public class PacketSeatUpdates extends PacketBase
 		if(driveable != null)
 		{
 			//If this is the player who sent the packet in the first place, don't read it
-			if(driveable.seats[seatId] == null || driveable.seats[seatId].riddenByEntity == clientPlayer)
+			if(driveable.seats[seatId] == null || EntUtil.getPassengerOf(driveable.seats[seatId]) == clientPlayer)
 				return;
 			driveable.seats[seatId].prevLooking = driveable.seats[seatId].looking.clone();
 			driveable.seats[seatId].looking.setAngles(yaw, pitch, 0F);

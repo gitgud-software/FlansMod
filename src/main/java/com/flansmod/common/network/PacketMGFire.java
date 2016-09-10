@@ -1,18 +1,16 @@
 package com.flansmod.common.network;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.guns.EntityAAGun;
 import com.flansmod.common.guns.EntityMG;
+
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PacketMGFire extends PacketBase
 {
@@ -45,9 +43,9 @@ public class PacketMGFire extends PacketBase
 		{
 			mg.mouseHeld(held);
 		}
-		else if(playerEntity.ridingEntity instanceof EntityAAGun)
+		else if(playerEntity.getRidingEntity() instanceof EntityAAGun)
 		{
-			((EntityAAGun)playerEntity.ridingEntity).setMouseHeld(held);
+			((EntityAAGun)playerEntity.getRidingEntity()).setMouseHeld(held);
 		}
 	}
 

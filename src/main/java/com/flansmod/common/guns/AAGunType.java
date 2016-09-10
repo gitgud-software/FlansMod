@@ -3,16 +3,16 @@ package com.flansmod.common.guns;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.flansmod.client.model.ModelAAGun;
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.types.InfoType;
+import com.flansmod.common.types.TypeFile;
+
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import com.flansmod.client.model.ModelAAGun;
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.types.InfoType;
-import com.flansmod.common.types.TypeFile;
 
 public class AAGunType extends InfoType
 {

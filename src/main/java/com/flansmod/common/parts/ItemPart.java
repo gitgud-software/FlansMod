@@ -2,18 +2,19 @@ package com.flansmod.common.parts;
 
 import java.util.List;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.types.IFlanItem;
 import com.flansmod.common.types.InfoType;
 
-public class ItemPart extends Item implements IFlanItem
+import net.fexcraft.mod.lib.api.item.IItem;
+import net.fexcraft.mod.lib.util.item.ItemUtil;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+public class ItemPart extends Item implements IFlanItem, IItem
 {
 	public PartType type;
 	
@@ -30,7 +31,9 @@ public class ItemPart extends Item implements IFlanItem
 		type.item = this;
 		setUnlocalizedName("FlansMod:" + type.iconPath);
 		setCreativeTab(FlansMod.tabFlanParts);
-		GameRegistry.registerItem(this, type.shortName, FlansMod.MODID);
+		//GameRegistry.registerItem(this, type.shortName, FlansMod.MODID);
+		ItemUtil.register(FlansMod.MODID, this);
+		ItemUtil.registerRender(this);
 	}
 	
 	@Override
@@ -42,7 +45,7 @@ public class ItemPart extends Item implements IFlanItem
 		}
 	}
 
-	@Override
+	//TODO @Override
 	@SideOnly(Side.CLIENT)
     public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
     {
@@ -53,5 +56,15 @@ public class ItemPart extends Item implements IFlanItem
 	public InfoType getInfoType() 
 	{
 		return type;
+	}
+
+	@Override
+	public String getName(){
+		return type.shortName;
+	}
+
+	@Override
+	public int getVariantAmount(){
+		return default_variant;
 	}
 }

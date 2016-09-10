@@ -1,17 +1,15 @@
 package com.flansmod.common.network;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.EntitySeat;
 import com.flansmod.common.driveables.EnumDriveablePart;
+
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PacketRepairDriveable extends PacketBase 
 {
@@ -41,7 +39,7 @@ public class PacketRepairDriveable extends PacketBase
 	{
 		EnumDriveablePart part = EnumDriveablePart.getPart(shortName);   
 		//Try to repair the driveable
-		FlansMod.proxy.repairDriveable(playerEntity, ((EntitySeat)playerEntity.ridingEntity).driveable, ((EntitySeat)playerEntity.ridingEntity).driveable.getDriveableData().parts.get(part));
+		FlansMod.proxy.repairDriveable(playerEntity, ((EntitySeat)playerEntity.getRidingEntity()).driveable, ((EntitySeat)playerEntity.getRidingEntity()).driveable.getDriveableData().parts.get(part));
 	}
 
 	@Override

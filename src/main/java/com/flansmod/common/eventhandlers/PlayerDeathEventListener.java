@@ -22,31 +22,31 @@ public class PlayerDeathEventListener {
 	@EventHandler
 	@SubscribeEvent
 	public void PlayerDied(LivingDeathEvent DamageEvent) {
-		if ((DamageEvent.source.getDamageType().equalsIgnoreCase("explosion") && ((DamageEvent.source.getSourceOfDamage() instanceof EntityGrenade) || (DamageEvent.source.getSourceOfDamage() instanceof EntityBullet))) && DamageEvent.entityLiving instanceof EntityPlayer) {
+		if ((DamageEvent.getSource().getDamageType().equalsIgnoreCase("explosion") && ((DamageEvent.getSource().getSourceOfDamage() instanceof EntityGrenade) || (DamageEvent.getSource().getSourceOfDamage() instanceof EntityBullet))) && DamageEvent.getEntityLiving() instanceof EntityPlayer) {
 			boolean isGrenade;
-			if (DamageEvent.source.getSourceOfDamage() instanceof EntityGrenade) {
+			if (DamageEvent.getSource().getSourceOfDamage() instanceof EntityGrenade) {
 				isGrenade = true;
-				EntityGrenade Grenade = (EntityGrenade) DamageEvent.source.getSourceOfDamage();
+				//EntityGrenade Grenade = (EntityGrenade) DamageEvent.getSource().getSourceOfDamage();
 			} else {
 				isGrenade = false;
-				EntityBullet Grenade = (EntityBullet) DamageEvent.source.getSourceOfDamage();
+				//EntityBullet Grenade = (EntityBullet) DamageEvent.getSource().getSourceOfDamage();
 			}
 			EntityPlayer killer = null;
-			EntityPlayer killed = (EntityPlayer) DamageEvent.entityLiving;
+			EntityPlayer killed = (EntityPlayer) DamageEvent.getEntityLiving();
 			Team killerTeam = null;
 			Team killedTeam = null;
 			if (isGrenade) {
-				killer = (EntityPlayer) ((EntityGrenade) DamageEvent.source.getSourceOfDamage()).thrower;
+				killer = (EntityPlayer) ((EntityGrenade) DamageEvent.getSource().getSourceOfDamage()).thrower;
 			} else {
-				killer = (EntityPlayer) ((EntityBullet) DamageEvent.source.getSourceOfDamage()).owner;
+				killer = (EntityPlayer) ((EntityBullet) DamageEvent.getSource().getSourceOfDamage()).owner;
 			}
 			killerTeam = PlayerHandler.getPlayerData(killer).team;
 			killedTeam = PlayerHandler.getPlayerData(killed).team;
-			if (DamageEvent.entityLiving instanceof EntityPlayer && !isGrenade) {
-				FlansMod.getPacketHandler().sendToDimension(new PacketKillMessage(false, ((EntityBullet) DamageEvent.source.getSourceOfDamage()).type, (killedTeam == null ? "f" : killedTeam.textColour) + ((EntityPlayer) DamageEvent.entity).getDisplayName().getFormattedText(), (killerTeam == null ? "f" : killedTeam.textColour) + ((EntityPlayer) DamageEvent.source.getSourceOfDamage()).getDisplayName().getFormattedText()), DamageEvent.entityLiving.dimension);
+			if (DamageEvent.getEntityLiving() instanceof EntityPlayer && !isGrenade) {
+				FlansMod.getPacketHandler().sendToDimension(new PacketKillMessage(false, ((EntityBullet) DamageEvent.getSource().getSourceOfDamage()).type, (killedTeam == null ? "f" : killedTeam.textColour) + ((EntityPlayer) DamageEvent.getEntity()).getDisplayName().getFormattedText(), (killerTeam == null ? "f" : killedTeam.textColour) + ((EntityPlayer) DamageEvent.getSource().getSourceOfDamage()).getDisplayName().getFormattedText()), DamageEvent.getEntityLiving().dimension);
 			}
-			if (DamageEvent.entityLiving instanceof EntityPlayer && isGrenade) {
-				FlansMod.getPacketHandler().sendToDimension(new PacketKillMessage(false, ((EntityGrenade) DamageEvent.source.getSourceOfDamage()).type, (killedTeam == null ? "f" : killedTeam.textColour) + ((EntityPlayer) DamageEvent.entity).getDisplayName().getFormattedText(), (killerTeam == null ? "f" : killedTeam.textColour) + ((EntityPlayer) DamageEvent.source.getSourceOfDamage()).getDisplayName().getFormattedText()), DamageEvent.entityLiving.dimension);
+			if (DamageEvent.getEntityLiving() instanceof EntityPlayer && isGrenade) {
+				FlansMod.getPacketHandler().sendToDimension(new PacketKillMessage(false, ((EntityGrenade) DamageEvent.getSource().getSourceOfDamage()).type, (killedTeam == null ? "f" : killedTeam.textColour) + ((EntityPlayer) DamageEvent.getEntity()).getDisplayName().getFormattedText(), (killerTeam == null ? "f" : killedTeam.textColour) + ((EntityPlayer) DamageEvent.getSource().getSourceOfDamage()).getDisplayName().getFormattedText()), DamageEvent.getEntityLiving().dimension);
 			}
 		}
 	}

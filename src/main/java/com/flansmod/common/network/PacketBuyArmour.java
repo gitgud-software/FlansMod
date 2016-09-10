@@ -3,12 +3,12 @@ package com.flansmod.common.network;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.teams.ArmourBoxType;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PacketBuyArmour extends PacketBase 
 {

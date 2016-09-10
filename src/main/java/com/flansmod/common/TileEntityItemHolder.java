@@ -1,27 +1,14 @@
 package com.flansmod.common;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-import com.flansmod.apocalypse.common.FlansModApocalypse;
-import com.flansmod.common.guns.GunType;
-import com.flansmod.common.guns.ItemGun;
-import com.flansmod.common.guns.ShootableType;
-import com.flansmod.common.teams.TeamsManager;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
-import net.minecraft.server.gui.IUpdatePlayerListBox;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.ITextComponent;
 
-public class TileEntityItemHolder extends TileEntity implements IInventory, IUpdatePlayerListBox
+public class TileEntityItemHolder extends TileEntity implements IInventory//, ITickable
 {
 	private ItemStack stack;
 	public ItemHolderType type;
@@ -43,9 +30,6 @@ public class TileEntityItemHolder extends TileEntity implements IInventory, IUpd
 	public boolean hasCustomName() { return false; }
 
 	@Override
-	public IChatComponent getDisplayName() { return null; }
-
-	@Override
 	public int getSizeInventory() { return 1; }
 
 	@Override
@@ -53,9 +37,6 @@ public class TileEntityItemHolder extends TileEntity implements IInventory, IUpd
 
 	@Override
 	public ItemStack decrStackSize(int index, int count) { if(getStack() != null) { getStack().stackSize -= count; if(getStack().stackSize <= 0) setStack(null); } return getStack(); }
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int index) { return getStackInSlot(index); }
 
 	@Override
 	public void setInventorySlotContents(int index, ItemStack stack) { this.setStack(stack); }
@@ -88,7 +69,7 @@ public class TileEntityItemHolder extends TileEntity implements IInventory, IUpd
 	public void clear() { }
 	
 	@Override
-	public void writeToNBT(NBTTagCompound nbt)
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt)
 	{
 		super.writeToNBT(nbt);
 
@@ -97,6 +78,7 @@ public class TileEntityItemHolder extends TileEntity implements IInventory, IUpd
 			getStack().writeToNBT(stackNBT);
 		nbt.setTag("stack", stackNBT);		
 		nbt.setString("type", type.shortName);
+		return nbt;
 	}
 	
 	@Override
@@ -108,22 +90,22 @@ public class TileEntityItemHolder extends TileEntity implements IInventory, IUpd
 		type = ItemHolderType.getItemHolder(nbt.getString("type"));
 	}
 
-	@Override
+	/*@Override
 	public void update() 
 	{
-
-	}
+		//why implementing it, when not using It?
+	}*/
 	
 	@Override
-    public Packet getDescriptionPacket()
+    public SPacketUpdateTileEntity getUpdatePacket()
     {
 		NBTTagCompound nbt = new NBTTagCompound();
 		writeToNBT(nbt);
-        return new S35PacketUpdateTileEntity(getPos(), getBlockMetadata(), nbt);
+        return new SPacketUpdateTileEntity(getPos(), getBlockMetadata(), nbt);
     }
 	
 	@Override
-    public void onDataPacket(net.minecraft.network.NetworkManager net, net.minecraft.network.play.server.S35PacketUpdateTileEntity packet)
+    public void onDataPacket(net.minecraft.network.NetworkManager net, SPacketUpdateTileEntity packet)
     {
 		readFromNBT(packet.getNbtCompound());
     }
@@ -137,4 +119,12 @@ public class TileEntityItemHolder extends TileEntity implements IInventory, IUpd
 	{
 		this.stack = stack;
 	}
+
+	@Override
+	public ITextComponent getDisplayName() {
+		return null;
+	}
+
+	@Override
+	public ItemStack removeStackFromSlot(int index){ return getStackInSlot(index); }
 }

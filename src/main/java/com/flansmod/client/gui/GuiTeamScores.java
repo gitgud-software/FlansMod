@@ -2,14 +2,14 @@ package com.flansmod.client.gui;
 
 import org.lwjgl.opengl.GL11;
 
+import com.flansmod.client.FlansModClient;
+import com.flansmod.common.network.PacketTeamInfo;
+import com.flansmod.common.teams.Team;
+
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.ResourceLocation;
-
-import com.flansmod.client.FlansModClient;
-import com.flansmod.common.network.PacketTeamInfo;
-import com.flansmod.common.teams.Team;
 
 public class GuiTeamScores extends GuiScreen 
 {
@@ -36,7 +36,7 @@ public class GuiTeamScores extends GuiScreen
 	public void renderTwoTeamGUI(PacketTeamInfo teamInfo)
 	{
 		long newTime = mc.theWorld.getWorldInfo().getWorldTime();
-		ScaledResolution scaledresolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+		ScaledResolution scaledresolution = new ScaledResolution(mc);//, mc.displayWidth, mc.displayHeight);
 		int k = scaledresolution.getScaledWidth();
 		int l = scaledresolution.getScaledHeight();
 		FontRenderer fontrenderer = mc.fontRendererObj;
@@ -149,7 +149,7 @@ public class GuiTeamScores extends GuiScreen
 	public void renderDMGUI(PacketTeamInfo teamInfo)
 	{
 		long newTime = mc.theWorld.getWorldInfo().getWorldTime();
-		ScaledResolution scaledresolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+		ScaledResolution scaledresolution = new ScaledResolution(mc);//, mc.displayWidth, mc.displayHeight);
 		int k = scaledresolution.getScaledWidth();
 		int l = scaledresolution.getScaledHeight();
 		FontRenderer fontrenderer = mc.fontRendererObj;

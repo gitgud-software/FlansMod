@@ -1,17 +1,8 @@
 package com.flansmod.client.model;
 
-import com.flansmod.common.guns.ItemGun;
-
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.entity.RenderEntityItem;
-import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 
 public class RenderGunItem extends RenderEntityItem 
 {
@@ -23,7 +14,7 @@ public class RenderGunItem extends RenderEntityItem
 		this.gunRenderer = gunRenderer;
 	}
 	
-	@Override
+	/*@Override
     public void func_177075_a(EntityItem entity, double x, double y, double z, float p_177075_8_, float partialTicks)
     {
         ItemStack stack = entity.getEntityItem();
@@ -41,5 +32,5 @@ public class RenderGunItem extends RenderEntityItem
         {
         	super.func_177075_a(entity, x, y, z, p_177075_8_, partialTicks);
         } 
-    }
+    }*/
 }

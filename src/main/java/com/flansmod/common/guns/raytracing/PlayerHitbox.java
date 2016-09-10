@@ -1,14 +1,5 @@
 package com.flansmod.common.guns.raytracing;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.DamageSource;
-import net.minecraft.world.World;
-
-import com.flansmod.client.debug.EntityDebugAABB;
 import com.flansmod.client.debug.EntityDebugDot;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
@@ -23,6 +14,13 @@ import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.DamageSource;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -192,7 +190,7 @@ public class PlayerHitbox
 		}
 		case RIGHTITEM :
 		{
-			ItemStack currentStack = player.getCurrentEquippedItem();
+			ItemStack currentStack = player.getHeldItemMainhand();
 			if(currentStack != null && currentStack.getItem() instanceof ItemGun)
 			{
 				GunType gunType = ((ItemGun)currentStack.getItem()).GetType();

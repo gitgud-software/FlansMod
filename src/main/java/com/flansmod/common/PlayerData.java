@@ -2,10 +2,6 @@ package com.flansmod.common;
 
 import java.util.ArrayList;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-
 import com.flansmod.client.FlansModClient;
 import com.flansmod.common.guns.EntityGrenade;
 import com.flansmod.common.guns.EntityMG;
@@ -13,11 +9,13 @@ import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.guns.raytracing.PlayerSnapshot;
 import com.flansmod.common.network.PacketSelectOffHandGun;
-import com.flansmod.common.teams.ItemTeamArmour;
 import com.flansmod.common.teams.PlayerClass;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.vector.Vector3f;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -133,10 +131,10 @@ public class PlayerData
 	
 	public void clientTick(EntityPlayer player)
 	{
-		if(player.getCurrentEquippedItem() == null 
-				|| !(player.getCurrentEquippedItem().getItem() instanceof ItemGun) 
-				|| ((ItemGun)player.getCurrentEquippedItem().getItem()).GetType().oneHanded 
-				|| player.getCurrentEquippedItem() == offHandGunStack)
+		if(player.getHeldItemMainhand() == null 
+				|| !(player.getHeldItemMainhand().getItem() instanceof ItemGun) 
+				|| ((ItemGun)player.getHeldItemMainhand().getItem()).GetType().oneHanded 
+				|| player.getHeldItemMainhand() == offHandGunStack)
 		{
 			//offHandGunSlot = 0;
 			offHandGunStack = null;

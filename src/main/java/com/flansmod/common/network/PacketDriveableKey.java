@@ -1,16 +1,14 @@
 package com.flansmod.common.network;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import com.flansmod.api.IControllable;
 import com.flansmod.common.FlansMod;
+
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PacketDriveableKey extends PacketBase 
 {
@@ -38,9 +36,9 @@ public class PacketDriveableKey extends PacketBase
 	@Override
 	public void handleServerSide(EntityPlayerMP playerEntity) 
 	{
-		if(playerEntity.ridingEntity != null && playerEntity.ridingEntity instanceof IControllable)
+		if(playerEntity.getRidingEntity() != null && playerEntity.getRidingEntity() instanceof IControllable)
 		{
-			((IControllable)playerEntity.ridingEntity).pressKey(key, playerEntity);
+			((IControllable)playerEntity.getRidingEntity()).pressKey(key, playerEntity);
 		}
 	}
 

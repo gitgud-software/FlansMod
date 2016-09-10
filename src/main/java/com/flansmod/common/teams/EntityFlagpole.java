@@ -3,19 +3,22 @@ package com.flansmod.common.teams;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.PlayerData;
+import com.flansmod.common.PlayerHandler;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.PlayerData;
-import com.flansmod.common.PlayerHandler;
 
 public class EntityFlagpole extends Entity implements ITeamBase
 {
@@ -45,7 +48,7 @@ public class EntityFlagpole extends Entity implements ITeamBase
 	{
 		super(world);
 		setSize(1F, 2F);
-		renderDistanceWeight = 100D;
+		setRenderDistanceWeight(100D);
 	}	
 	
 	public EntityFlagpole(World world, double x, double y, double z) 
@@ -70,7 +73,7 @@ public class EntityFlagpole extends Entity implements ITeamBase
 	}
 
 	@Override
-	public AxisAlignedBB getBoundingBox()
+	public AxisAlignedBB getEntityBoundingBox()
 	{
 		return null;
 		//return AxisAlignedBB.getBoundingBox(posX - 0.5D, posY, posZ - 0.5D, posX + 0.5D, posY + 3D, posZ + 0.5D);
@@ -259,11 +262,11 @@ public class EntityFlagpole extends Entity implements ITeamBase
 		super.setDead();
 	}
 	
-	@Override
-	public boolean interactFirst(EntityPlayer player) //interact
+	@Override //TODO check this
+	public boolean processInitialInteract(EntityPlayer player, @Nullable ItemStack stack, EnumHand hand) //interact
 	{
 		PlayerData data = PlayerHandler.getPlayerData(player);
-		if(!worldObj.isRemote && data.team == null && TeamsManager.getInstance().playerIsOp(player) && (player.getCurrentEquippedItem() == null || !(player.getCurrentEquippedItem().getItem() instanceof ItemOpStick)))
+		if(!worldObj.isRemote && data.team == null && TeamsManager.getInstance().playerIsOp(player) && (player.getHeldItemMainhand() == null || !(player.getHeldItemMainhand().getItem() instanceof ItemOpStick)))
 			ItemOpStick.openBaseEditGUI(this, (EntityPlayerMP)player);
 		
 		/* TODO : Check the generalised code in TeamsManager works
@@ -274,7 +277,7 @@ public class EntityFlagpole extends Entity implements ITeamBase
 	}
 	
 	@Override
-	public ItemStack getPickedResult(MovingObjectPosition target)
+	public ItemStack getPickedResult(RayTraceResult target)
 	{
 		ItemStack stack = new ItemStack(FlansMod.flag, 1, 0);
 		return stack;

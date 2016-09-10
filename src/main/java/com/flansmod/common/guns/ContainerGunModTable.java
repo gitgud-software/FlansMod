@@ -58,7 +58,8 @@ public class ContainerGunModTable extends Container
 	public void onContainerClosed(EntityPlayer player)
 	{
 		if(inventory.getStackInSlot(0) != null)
-			player.dropPlayerItemWithRandomChoice(inventory.getStackInSlot(0), false);
+			//player.dropPlayerItemWithRandomChoice(inventory.getStackInSlot(0), false);
+			player.dropItem(inventory.getStackInSlot(0), false);
 	}
 		
 	@Override
@@ -130,7 +131,7 @@ public class ContainerGunModTable extends Container
 		ItemStack gunStack = inventory.getStackInSlot(0);
 		if(gunStack != null && gunStack.getItem() instanceof ItemGun)
 		{
-			GunType gunType = ((ItemGun)gunStack.getItem()).GetType();
+			//GunType gunType = ((ItemGun)gunStack.getItem()).GetType();
 
 			int numDyes = paintjob.dyesNeeded.length;
 
@@ -143,7 +144,7 @@ public class ContainerGunModTable extends Container
 					for(int s = 0; s < playerInv.getSizeInventory(); s++)
 					{
 						ItemStack stack = playerInv.getStackInSlot(s);
-						if(stack != null && stack.getItem() == Items.dye && stack.getItemDamage() == paintjob.dyesNeeded[n].getItemDamage())
+						if(stack != null && stack.getItem() == Items.DYE && stack.getItemDamage() == paintjob.dyesNeeded[n].getItemDamage())
 						{
 							amountNeeded -= stack.stackSize;
 						}
@@ -161,7 +162,7 @@ public class ContainerGunModTable extends Container
 	        			if(amountNeeded <= 0)
 	        				continue;
 	        			ItemStack stack = playerInv.getStackInSlot(s);
-	        			if(stack != null && stack.getItem() == Items.dye && stack.getItemDamage() == paintjob.dyesNeeded[n].getItemDamage())
+	        			if(stack != null && stack.getItem() == Items.DYE && stack.getItemDamage() == paintjob.dyesNeeded[n].getItemDamage())
 	        			{
 	        				ItemStack consumed = playerInv.decrStackSize(s, amountNeeded);
 	        				amountNeeded -= consumed.stackSize;

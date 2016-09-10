@@ -1,122 +1,40 @@
 package com.flansmod.client;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-import java.util.zip.ZipInputStream;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.glu.Project;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.AbstractClientPlayer;
-import net.minecraft.client.entity.EntityOtherPlayerMP;
-import net.minecraft.client.particle.EntityAuraFX;
-import net.minecraft.client.particle.EntityBlockDustFX;
-import net.minecraft.client.particle.EntityBreakingFX;
-import net.minecraft.client.particle.EntityBubbleFX;
-import net.minecraft.client.particle.EntityCloudFX;
-import net.minecraft.client.particle.EntityCritFX;
-import net.minecraft.client.particle.EntityDiggingFX;
-import net.minecraft.client.particle.EntityDropParticleFX;
-import net.minecraft.client.particle.EntityEnchantmentTableParticleFX;
-import net.minecraft.client.particle.EntityExplodeFX;
-import net.minecraft.client.particle.EntityFX;
-import net.minecraft.client.particle.EntityFireworkSparkFX;
-import net.minecraft.client.particle.EntityFishWakeFX;
-import net.minecraft.client.particle.EntityFlameFX;
-import net.minecraft.client.particle.EntityFootStepFX;
-import net.minecraft.client.particle.EntityHeartFX;
-import net.minecraft.client.particle.EntityHugeExplodeFX;
-import net.minecraft.client.particle.EntityLargeExplodeFX;
-import net.minecraft.client.particle.EntityLavaFX;
-import net.minecraft.client.particle.EntityNoteFX;
-import net.minecraft.client.particle.EntityPortalFX;
-import net.minecraft.client.particle.EntityReddustFX;
-import net.minecraft.client.particle.EntitySmokeFX;
-import net.minecraft.client.particle.EntitySnowShovelFX;
-import net.minecraft.client.particle.EntitySpellParticleFX;
-import net.minecraft.client.particle.EntitySplashFX;
-import net.minecraft.client.particle.EntitySuspendFX;
-import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.client.renderer.BlockRendererDispatcher;
-import net.minecraft.client.renderer.EntityRenderer;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.ItemRenderer;
-import net.minecraft.client.renderer.entity.RenderEntityItem;
-import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.entity.RenderPlayer;
-import net.minecraft.client.renderer.entity.RendererLivingEntity;
-import net.minecraft.client.renderer.tileentity.RenderItemFrame;
-import net.minecraft.client.resources.IReloadableResourceManager;
-import net.minecraft.client.resources.model.ModelManager;
-import net.minecraft.client.settings.GameSettings;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityItemFrame;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.EnumSkyBlock;
-import net.minecraft.world.World;
-import net.minecraftforge.client.event.ClientChatReceivedEvent;
-import net.minecraftforge.client.event.EntityViewRenderEvent.CameraSetup;
-import net.minecraftforge.client.event.RenderHandEvent;
-import net.minecraftforge.client.event.RenderPlayerEvent;
-import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.api.IControllable;
 import com.flansmod.client.gui.GuiDriveableController;
 import com.flansmod.client.gui.GuiTeamScores;
 import com.flansmod.client.model.GunAnimations;
 import com.flansmod.common.FlansMod;
-import com.flansmod.common.PlayerData;
-import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.driveables.mechas.EntityMecha;
 import com.flansmod.common.guns.AttachmentType;
 import com.flansmod.common.guns.EntityBullet;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.IScope;
 import com.flansmod.common.guns.ItemGun;
-import com.flansmod.common.guns.Paintjob;
-import com.flansmod.common.guns.boxes.BoxType;
 import com.flansmod.common.network.PacketTeamInfo;
-import com.flansmod.common.network.PacketTeamInfo.PlayerScoreData;
 import com.flansmod.common.teams.Team;
-import com.flansmod.common.types.EnumType;
 import com.flansmod.common.types.InfoType;
-import com.flansmod.common.types.TypeFile;
 import com.flansmod.common.vector.Vector3i;
-import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.EntityRenderer;
+import net.minecraft.client.settings.GameSettings;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.EnumSkyBlock;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 public class FlansModClient extends FlansMod
 {
@@ -182,8 +100,8 @@ public class FlansModClient extends FlansMod
 		if (minecraft.thePlayer == null || minecraft.theWorld == null)
 			return;
 		
-		if(minecraft.thePlayer.ridingEntity instanceof IControllable && minecraft.currentScreen == null)
-			minecraft.displayGuiScreen(new GuiDriveableController((IControllable)minecraft.thePlayer.ridingEntity));
+		if(minecraft.thePlayer.getRidingEntity() instanceof IControllable && minecraft.currentScreen == null)
+			minecraft.displayGuiScreen(new GuiDriveableController((IControllable)minecraft.thePlayer.getRidingEntity()));
 		
 		if(teamInfo != null && teamInfo.timeLeft > 0)
 			teamInfo.timeLeft--;
@@ -222,15 +140,16 @@ public class FlansModClient extends FlansMod
 		for(Object obj : minecraft.theWorld.playerEntities)
 		{
 			EntityPlayer player = (EntityPlayer)obj;
-			ItemStack currentItem = player.getCurrentEquippedItem();
+			ItemStack currentItem = player.getHeldItemMainhand();
 			if(currentItem != null && currentItem.getItem() instanceof ItemGun)
 			{
-				if(player == minecraft.thePlayer && minecraft.gameSettings.thirdPersonView == 0)
+				/*if(player == minecraft.thePlayer && minecraft.gameSettings.thirdPersonView == 0)
 					player.clearItemInUse();
 				else
 				{
 					player.setItemInUse(currentItem, 100);
-				}
+				}*/
+				//TODO
 			}
 		}
 
@@ -241,7 +160,7 @@ public class FlansModClient extends FlansMod
 			itemInHand = itemstackInHand.getItem();
 		if (currentScope != null)
 		{
-			GameSettings gameSettings = FMLClientHandler.instance().getClient().gameSettings;
+			//GameSettings gameSettings = FMLClientHandler.instance().getClient().gameSettings;
 			
 			// If we've opened a GUI page, or we switched weapons, close the current scope
 			if(FMLClientHandler.instance().getClient().currentScreen != null 
@@ -267,12 +186,12 @@ public class FlansModClient extends FlansMod
 			zoomProgress = 1F - (1F - zoomProgress) * 0.66F; 
 		}
 		
-		if (minecraft.thePlayer.ridingEntity instanceof IControllable)
+		if (minecraft.thePlayer.getRidingEntity() instanceof IControllable)
 		{
 			inPlane = true;	
 			try
 			{
-				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, ((IControllable)minecraft.thePlayer.ridingEntity).getCameraDistance(), "thirdPersonDistance", "q", "field_78490_B");
+				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, ((IControllable)minecraft.thePlayer.getRidingEntity()).getCameraDistance(), "thirdPersonDistance", "q", "field_78490_B");
 			} catch (Exception e)
 			{
 				log("I forgot to update obfuscated reflection D:");
@@ -363,7 +282,7 @@ public class FlansModClient extends FlansMod
 		if (controlModeSwitchTimer > 0)
 			return false;
 		controlModeMouse = !controlModeMouse;
-		FMLClientHandler.instance().getClient().displayGuiScreen(controlModeMouse ? new GuiDriveableController((IControllable)FMLClientHandler.instance().getClient().thePlayer.ridingEntity) : null);
+		FMLClientHandler.instance().getClient().displayGuiScreen(controlModeMouse ? new GuiDriveableController((IControllable)FMLClientHandler.instance().getClient().thePlayer.getRidingEntity()) : null);
 		controlModeSwitchTimer = 40;
 		return true;
 	}
@@ -435,7 +354,7 @@ public class FlansModClient extends FlansMod
 		return EnumParticleTypes.WATER_BUBBLE;
 	}
 	
-	@SideOnly(Side.CLIENT)
+	/*@SideOnly(Side.CLIENT)
 	public static EntityFX getParticle(String s, World w, double x, double y, double z)
 	{
 		Minecraft mc = Minecraft.getMinecraft();
@@ -515,7 +434,7 @@ public class FlansModClient extends FlansMod
 			fx.renderDistanceWeight = 200D;
 		
 		return fx;
-	}
+	}*/
 
 	public static GunAnimations getGunAnimations(EntityLivingBase living, boolean offHand) 
 	{
@@ -569,7 +488,7 @@ public class FlansModClient extends FlansMod
 			for(Object obj : mc.theWorld.playerEntities)
 			{
 				EntityPlayer player = (EntityPlayer)obj;
-				ItemStack currentHeldItem = player.getCurrentEquippedItem();
+				ItemStack currentHeldItem = player.getHeldItemMainhand();
 				if(currentHeldItem != null && currentHeldItem.getItem() instanceof ItemGun)
 				{
 					GunType type = ((ItemGun)currentHeldItem.getItem()).GetType();
@@ -578,7 +497,7 @@ public class FlansModClient extends FlansMod
 					{
 						for(int i = 0; i < 2; i++)
 						{
-							MovingObjectPosition ray = player.rayTrace(grip.flashlightRange / 2F * (i + 1), 1F);
+							RayTraceResult ray = player.rayTrace(grip.flashlightRange / 2F * (i + 1), 1F);
 							if(ray != null)
 							{
 								int x = ray.getBlockPos().getX();

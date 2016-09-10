@@ -1,15 +1,19 @@
 package com.flansmod.common.teams;
 
+import javax.annotation.Nullable;
+
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.PlayerHandler;
+
+import net.fexcraft.mod.lib.util.entity.EntUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.PlayerHandler;
 
 public class EntityFlag extends Entity implements ITeamObject {
 	
@@ -22,7 +26,7 @@ public class EntityFlag extends Entity implements ITeamObject {
 	{
 		super(world);
 		setSize(1F, 1F);
-		renderDistanceWeight = 100D;
+		setRenderDistanceWeight(100D);
 		ignoreFrustumCheck = true;
 	}
 	
@@ -39,10 +43,10 @@ public class EntityFlag extends Entity implements ITeamObject {
 		return true;
 	}
 
-	@Override
+	//@Override
 	protected void entityInit() 
 	{
-		dataWatcher.addObject(5, new Byte((byte)0));
+		//TODO dataWatcher.addObject(5, new Byte((byte)0));
 	}
 	
 	@Override
@@ -55,16 +59,16 @@ public class EntityFlag extends Entity implements ITeamObject {
 		{
 			setBase(TeamsManager.getInstance().getBase(baseID));
 		}
-		if(ridingEntity != null && ridingEntity.isDead)
+		if(getPassengers() != null && EntUtil.getPassengerOf(this).isDead)
 		{
-			if(ridingEntity instanceof EntityPlayerMP)
+			if(getPassengers() instanceof EntityPlayerMP)
 			{
-				EntityPlayerMP player = ((EntityPlayerMP)ridingEntity);
+				EntityPlayerMP player = ((EntityPlayerMP)getPassengers());
 				Team team = PlayerHandler.getPlayerData(player.getName()).team;
 				TeamsManager.getInstance();
 				TeamsManager.messageAll("\u00a7f" + player.getName() + " dropped the \u00a7" + team.textColour + team.name + "\u00a7f flag");
 			}
-			mountEntity(null);
+			dismountRidingEntity();
 			
 		}
 		if(!addedToChunk)
@@ -72,7 +76,7 @@ public class EntityFlag extends Entity implements ITeamObject {
 		
 		if(timeUntilReturn > 0)
 		{
-			if(ridingEntity != null || isHome)
+			if(getPassengers() != null || isHome)
 				timeUntilReturn = 0;
 			else
 			{
@@ -92,7 +96,7 @@ public class EntityFlag extends Entity implements ITeamObject {
 	}
 	
 	@Override
-	public void mountEntity(Entity entity)
+	public boolean startRiding(Entity entity)
 	{
 		if(entity == null)
 		{
@@ -103,12 +107,12 @@ public class EntityFlag extends Entity implements ITeamObject {
 			else timeUntilReturn = 600; //30 seconds
 		}
 		
-		super.mountEntity(entity);
+		return super.startRiding(entity);
 	}
 	
 	public void reset()
 	{
-		mountEntity(null);
+		dismountRidingEntity();
 		setPosition(base.posX, base.posY + 2F, base.posZ);
 		isHome = true;
 	}
@@ -142,7 +146,7 @@ public class EntityFlag extends Entity implements ITeamObject {
 	@Override
 	public void onBaseSet(int newTeamID) 
 	{
-		dataWatcher.updateObject(5, (byte)newTeamID);
+		//TODO dataWatcher.updateObject(5, (byte)newTeamID);
 		setPosition(base.posX, base.posY + 2F, base.posZ);
 	}
 
@@ -194,7 +198,7 @@ public class EntityFlag extends Entity implements ITeamObject {
 
 	public int getTeamID()
 	{
-		return dataWatcher.getWatchableObjectByte(5);
+		return 0;//TODO return dataWatcher.getWatchableObjectByte(5);
 	}
 		
 	@Override
@@ -203,8 +207,8 @@ public class EntityFlag extends Entity implements ITeamObject {
 		return false;
 	}
 	
-	@Override
-	public boolean interactFirst(EntityPlayer player) //interact
+	@Override //TODO check if right method replace
+	public boolean processInitialInteract(EntityPlayer player, @Nullable ItemStack stack, EnumHand hand) //interact
 	{
 		/* TODO : Check the generalised code in TeamsManager works
 		if(player instanceof EntityPlayerMP && TeamsManager.getInstance().currentGametype != null)
@@ -214,7 +218,7 @@ public class EntityFlag extends Entity implements ITeamObject {
 	}
 	
 	@Override
-	public ItemStack getPickedResult(MovingObjectPosition target)
+	public ItemStack getPickedResult(RayTraceResult target)
 	{
 		ItemStack stack = new ItemStack(FlansMod.flag, 1, 0);
 		return stack;

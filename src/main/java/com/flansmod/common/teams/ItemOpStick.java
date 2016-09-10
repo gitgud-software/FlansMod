@@ -5,17 +5,15 @@ import com.flansmod.common.network.PacketBaseEdit;
 import com.flansmod.common.types.IFlanItem;
 import com.flansmod.common.types.InfoType;
 
+import net.fexcraft.mod.lib.api.item.IItem;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemOpStick extends Item implements IFlanItem
+public class ItemOpStick extends Item implements IFlanItem, IItem
 {
 	public static final String[] teamNames = new String[] {"No Team", "Spectators", "Team 1", "Team 2"};	
 	public static final String[] stickNames = new String[] {"opStick_ownership", "opStick_connecting", "opStick_mapping", "opStick_destruction"};
@@ -23,7 +21,6 @@ public class ItemOpStick extends Item implements IFlanItem
 	public ItemOpStick()
 	{
 		super();
-		setUnlocalizedName("opStick");
 		setHasSubtypes(true);
 	}
 		
@@ -76,7 +73,7 @@ public class ItemOpStick extends Item implements IFlanItem
 		if(!world.isRemote)
 		{
 			int damage = player.inventory.getCurrentItem().getItemDamage(); 
-			TeamsManager teamsManager = TeamsManager.getInstance();
+			//TeamsManager teamsManager = TeamsManager.getInstance();
 			switch(damage)
 	    	{
 		    	case 0 : //Stick of Ownership
@@ -141,7 +138,7 @@ public class ItemOpStick extends Item implements IFlanItem
 	public void clickedObject(World world, EntityPlayerMP player, ITeamObject object)
 	{
 		int damage = player.inventory.getCurrentItem().getItemDamage(); 
-		TeamsManager teamsManager = TeamsManager.getInstance();
+		//TeamsManager teamsManager = TeamsManager.getInstance();
 		switch(damage)
 		{
 			case 0 : //Stick of Ownership
@@ -201,5 +198,15 @@ public class ItemOpStick extends Item implements IFlanItem
 	public InfoType getInfoType() 
 	{
 		return null;
+	}
+
+	@Override
+	public String getName(){
+		return "opStick";
+	}
+
+	@Override
+	public int getVariantAmount(){
+		return default_variant;
 	}
 }

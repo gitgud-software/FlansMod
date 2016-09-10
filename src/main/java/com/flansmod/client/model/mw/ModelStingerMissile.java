@@ -1,9 +1,9 @@
 package com.flansmod.client.model.mw;
 
-import net.minecraft.entity.Entity;
-
 import com.flansmod.client.model.ModelBullet;
 import com.flansmod.client.tmt.ModelRendererTurbo;
+
+import net.minecraft.entity.Entity;
 
 public class ModelStingerMissile extends ModelBullet 
 {

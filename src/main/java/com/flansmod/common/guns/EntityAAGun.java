@@ -1,25 +1,8 @@
 package com.flansmod.common.guns;
 
-import io.netty.buffer.ByteBuf;
+import javax.annotation.Nullable;
 
 import org.lwjgl.input.Mouse;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
@@ -29,7 +12,26 @@ import com.flansmod.common.network.PacketMGFire;
 import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.teams.TeamsManager;
-import com.flansmod.common.vector.Vector3f;
+
+import io.netty.buffer.ByteBuf;
+import net.fexcraft.mod.lib.util.entity.EntUtil;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 {
@@ -101,11 +103,11 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		posZ = d2;
 		float f = width / 2.0F;
 		float f1 = height;
-		setEntityBoundingBox(AxisAlignedBB.fromBounds(d - f, (d1 - yOffset) + height, d2 - f, d + f, (d1 - yOffset) + height + f1, d2 + f));
+		setEntityBoundingBox(new AxisAlignedBB(d - f, (d1 - yOffset) + height, d2 - f, d + f, (d1 - yOffset) + height + f1, d2 + f));
 	}
 	
 	@Override
-    public void func_180426_a(double d, double d1, double d2, float f, float f1, int i, boolean b)
+    public void setPositionAndRotationDirect(double d, double d1, double d2, float f, float f1, int i, boolean b)
     {
 		sPosX = d;
 		sPosY = d1;
@@ -136,7 +138,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	@Override
 	public void applyEntityCollision(Entity entity)
 	{
-		//if(entity != riddenByEntity)
+		//if(entity != EntUtil.getPassengerOf(this))
 			//super.applyEntityCollision(entity);
 	}
 
@@ -169,12 +171,12 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		if (damagesource.damageType.equals("player"))
 		{
 			Entity player = damagesource.getEntity();
-			if (player == riddenByEntity)
+			if (player == EntUtil.getPassengerOf(this))
 			{
 				
-			} else if(riddenByEntity != null)
+			} else if(EntUtil.getPassengerOf(this) != null)
 			{
-				return riddenByEntity.attackEntityFrom(damagesource, i);
+				return EntUtil.getPassengerOf(this).attackEntityFrom(damagesource, i);
 			} else if(TeamsManager.canBreakGuns)
 			{
 				setDead();
@@ -189,7 +191,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		return true;
 	}
 
-	public Vec3 rotate(double x, double y, double z)
+	public Vec3d rotate(double x, double y, double z)
 	{
 		double cosYaw = Math.cos(180F - gunYaw * 3.14159265F / 180F);
 		double sinYaw = Math.sin(180F - gunYaw * 3.14159265F / 180F);
@@ -200,7 +202,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		double newY = y * cosPitch - z * sinPitch;
 		double newZ = -x * sinYaw + (y * sinPitch + z * cosPitch) * cosYaw;
 
-		return new Vec3(newX, newY, newZ);
+		return new Vec3d(newX, newY, newZ);
 	}
 
 	@Override
@@ -223,11 +225,11 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 			setDead();
 		}
 
-		if (riddenByEntity != null)
+		if (EntUtil.getPassengerOf(this) != null)
 		{
 			ticksSinceUsed = 0;
-			gunYaw = riddenByEntity.rotationYaw - 90;
-			gunPitch = riddenByEntity.rotationPitch;
+			gunYaw = EntUtil.getPassengerOf(this).rotationYaw - 90;
+			gunPitch = EntUtil.getPassengerOf(this).rotationPitch;
 		}
 
 		if (gunPitch > type.bottomViewLimit)
@@ -284,7 +286,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		motionZ *= 0.5;
 		moveEntity(motionX, motionY, motionZ);
 		
-		if (worldObj.isRemote && riddenByEntity != null && riddenByEntity == FMLClientHandler.instance().getClient().thePlayer)
+		if (worldObj.isRemote && EntUtil.getPassengerOf(this) != null && EntUtil.getPassengerOf(this) == FMLClientHandler.instance().getClient().thePlayer)
 		{
 			checkForShooting();
 		}
@@ -312,9 +314,9 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 			return;
 		}
 
-		if (riddenByEntity != null && riddenByEntity.isDead)
+		if (EntUtil.getPassengerOf(this) != null && EntUtil.getPassengerOf(this).isDead)
 		{
-			riddenByEntity = null;
+			this.getPassengers().removeAll(this.getPassengers());
 		}
 
 		// Decrement the reload timer and reload
@@ -330,14 +332,14 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 					ammo[i] = null;
 					// Scrap metal output?
 				}
-				if (ammo[i] == null && riddenByEntity != null && riddenByEntity instanceof EntityPlayer)
+				if (ammo[i] == null && EntUtil.getPassengerOf(this) != null && EntUtil.getPassengerOf(this) instanceof EntityPlayer)
 				{
-					int slot = findAmmo(((EntityPlayer) riddenByEntity));
+					int slot = findAmmo(((EntityPlayer) EntUtil.getPassengerOf(this)));
 					if (slot >= 0)
 					{
-						ammo[i] = ((EntityPlayer) riddenByEntity).inventory.getStackInSlot(slot);
-						if (!((EntityPlayer)riddenByEntity).capabilities.isCreativeMode)
-							((EntityPlayer) riddenByEntity).inventory.decrStackSize(slot, 1);
+						ammo[i] = ((EntityPlayer) EntUtil.getPassengerOf(this)).inventory.getStackInSlot(slot);
+						if (!((EntityPlayer)EntUtil.getPassengerOf(this)).capabilities.isCreativeMode)
+							((EntityPlayer) EntUtil.getPassengerOf(this)).inventory.decrStackSize(slot, 1);
 						reloadTimer = type.reloadTime;
 						PacketPlaySound.sendSoundPacket(posX, posY, posZ, 50, dimension, type.reloadSound, true);
 					}
@@ -348,21 +350,21 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		
 		if(!worldObj.isRemote && reloadTimer <= 0 && shootDelay <= 0)
 		{
-			if(mouseHeld && riddenByEntity != null && riddenByEntity instanceof EntityPlayer)
+			if(mouseHeld && EntUtil.getPassengerOf(this) != null && EntUtil.getPassengerOf(this) instanceof EntityPlayer)
 			{
-				EntityPlayer player = (EntityPlayer)riddenByEntity;
+				EntityPlayer player = (EntityPlayer)EntUtil.getPassengerOf(this);
 				for(int j = 0; j < type.numBarrels; j++)
 				{
 					if(shootDelay <= 0 && ammo[j] != null && (!type.fireAlternately || type.fireAlternately && currentBarrel == j))
 					{
 						// Fire
-						BulletType bullet = BulletType.getBullet(ammo[j].getItem());
-						if (!((EntityPlayer)riddenByEntity).capabilities.isCreativeMode)
+						//BulletType bullet = BulletType.getBullet(ammo[j].getItem());
+						if (!((EntityPlayer)EntUtil.getPassengerOf(this)).capabilities.isCreativeMode)
 							ammo[j].damageItem(1, player);
 						shootDelay = type.shootDelay;
 						barrelRecoil[j] = type.recoil;
 						
-						Vec3 origin = rotate(type.barrelX[currentBarrel] / 16D - type.barrelZ[currentBarrel] / 16D, 
+						Vec3d origin = rotate(type.barrelX[currentBarrel] / 16D - type.barrelZ[currentBarrel] / 16D, 
 								type.barrelY[currentBarrel] / 16D, 
 								type.barrelX[currentBarrel] / 16D + type.barrelZ[currentBarrel] / 16D).addVector(posX, posY, posZ);
 						
@@ -384,12 +386,12 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 					if(shootDelay <= 0 && ammo[ammoSlot] != null && (!type.fireAlternately || type.fireAlternately && currentBarrel == ammoSlot))
 					{
 						// Fire
-						BulletType bullet = BulletType.getBullet(ammo[ammoSlot].getItem());
+						//BulletType bullet = BulletType.getBullet(ammo[ammoSlot].getItem());
 						ammo[ammoSlot].setItemDamage(ammo[ammoSlot].getItemDamage() + 1);
 						shootDelay = type.shootDelay;
 						barrelRecoil[ammoSlot] = type.recoil;
 						
-						Vec3 origin = rotate(type.barrelX[currentBarrel] / 16D - type.barrelZ[currentBarrel] / 16D, 
+						Vec3d origin = rotate(type.barrelX[currentBarrel] / 16D - type.barrelZ[currentBarrel] / 16D, 
 								type.barrelY[currentBarrel] / 16D, 
 								type.barrelX[currentBarrel] / 16D + type.barrelZ[currentBarrel] / 16D).addVector(posX, posY + 1.5F, posZ);
 						
@@ -481,9 +483,9 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	}
 
 	@Override
-	public void updateRiderPosition()
+	public void updatePassenger(Entity passenger)
 	{
-		if (riddenByEntity == null)
+		if (passenger == null)
 		{
 			return;
 		}
@@ -493,13 +495,13 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 
 		double cosYaw = Math.cos((-gunYaw / 180D) * 3.1415926535897931D);
 		double sinYaw = Math.sin((-gunYaw / 180D) * 3.1415926535897931D);
-		double cosPitch = Math.cos((gunPitch / 180D) * 3.1415926535897931D);
-		double sinPitch = Math.sin((gunPitch / 180D) * 3.1415926535897931D);
+		//double cosPitch = Math.cos((gunPitch / 180D) * 3.1415926535897931D);
+		//double sinPitch = Math.sin((gunPitch / 180D) * 3.1415926535897931D);
 
 		double x2 = x * cosYaw + z * sinYaw;
 		double z2 = -x * sinYaw + z * cosYaw;
 
-		riddenByEntity.setPosition(posX + x2, posY + y, posZ + z2);
+		EntUtil.getPassengerOf(this).setPosition(posX + x2, posY + y, posZ + z2);
 	}
 
 	@Override
@@ -533,23 +535,23 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	}
 
 	@Override
-	public boolean interactFirst(EntityPlayer entityplayer) //interact : change back when Forge updates
+	public boolean processInitialInteract(EntityPlayer entityplayer, @Nullable ItemStack stack, EnumHand hand) //interact : change back when Forge updates
 	{
 		// Player right clicked on gun
 		// Mount gun
-		if (riddenByEntity != null && (riddenByEntity instanceof EntityPlayer) && riddenByEntity != entityplayer)
+		if (EntUtil.getPassengerOf(this) != null && (EntUtil.getPassengerOf(this) instanceof EntityPlayer) && EntUtil.getPassengerOf(this) != entityplayer)
 		{
 			return true;
 		}
 		if (!worldObj.isRemote)
 		{
-			if (riddenByEntity == entityplayer)
+			if (EntUtil.getPassengerOf(this) == entityplayer)
 			{
-				entityplayer.mountEntity(null);
+				entityplayer.dismountRidingEntity();
 				return true;
 			}
 			if(!isSentry())
-				entityplayer.mountEntity(this);
+				entityplayer.dismountEntity(this);
 			for (int i = 0; i < (type.shareAmmo ? 1 : type.numBarrels); i++)
 			{
 				if (ammo[i] == null)
@@ -562,7 +564,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 						if(!entityplayer.capabilities.isCreativeMode)
 							entityplayer.inventory.decrStackSize(slot, 1);
 						reloadTimer = type.reloadTime;
-						worldObj.playSoundAtEntity(this, type.reloadSound, 1.0F, 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
+						//TODO worldObj.playSoundAtEntity(this, type.reloadSound, 1.0F, 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
 					}
 				}
 			}
@@ -612,7 +614,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	}
 	
 	@Override
-	public ItemStack getPickedResult(MovingObjectPosition target)
+	public ItemStack getPickedResult(RayTraceResult target)
 	{
 		ItemStack stack = new ItemStack(type.item, 1, 0);
 		return stack;

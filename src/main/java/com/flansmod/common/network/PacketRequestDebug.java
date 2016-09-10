@@ -6,7 +6,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 /** 
  * Sent from client to server when player wants to go into debug mode
@@ -34,7 +34,7 @@ public class PacketRequestDebug extends PacketBase
 	@Override
 	public void handleServerSide(EntityPlayerMP playerEntity) 
 	{
-		if(MinecraftServer.getServer().getConfigurationManager().canSendCommands(playerEntity.getGameProfile()))
+		if(FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().canSendCommands(playerEntity.getGameProfile()))
 			FlansMod.packetHandler.sendTo(new PacketRequestDebug(), playerEntity);
 	}
 

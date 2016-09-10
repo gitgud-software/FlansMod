@@ -23,11 +23,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
@@ -109,7 +108,7 @@ public class FlansModRaytracer
 						&& (entity instanceof EntityLivingBase || entity instanceof EntityAAGun || entity instanceof EntityGrenade) 
 						&& entity.getEntityBoundingBox() != null)
 				{
-					MovingObjectPosition mop = entity.getEntityBoundingBox().calculateIntercept(origin.toVec3(), new Vec3(origin.x + motion.x, origin.y + motion.y, origin.z + motion.z));
+					RayTraceResult mop = entity.getEntityBoundingBox().calculateIntercept(origin.toVec3(), new Vec3d(origin.x + motion.x, origin.y + motion.y, origin.z + motion.z));
 					if(mop != null)
 					{
 						Vector3f hitPoint = new Vector3f(mop.hitVec.xCoord - origin.x, mop.hitVec.yCoord - origin.y, mop.hitVec.zCoord - origin.z);
@@ -130,16 +129,16 @@ public class FlansModRaytracer
 		}
 		
 		//Ray trace the bullet by comparing its next position to its current position
-		Vec3 posVec = origin.toVec3();
-		Vec3 nextPosVec = motion.toVec3().add(posVec);
-		MovingObjectPosition hit = world.rayTraceBlocks(posVec, nextPosVec, false, true, true);
+		Vec3d posVec = origin.toVec3();
+		Vec3d nextPosVec = motion.toVec3().add(posVec);
+		RayTraceResult hit = world.rayTraceBlocks(posVec, nextPosVec, false, true, true);
 		
 		posVec = origin.toVec3();
 		
 		if(hit != null)
 		{
 			//Calculate the lambda value of the intercept
-			Vec3 hitVec = posVec.subtract(hit.hitVec);
+			Vec3d hitVec = posVec.subtract(hit.hitVec);
 			float lambda = 1;
 			//Try each co-ordinate one at a time.
 			if(motion.x != 0)
@@ -171,7 +170,7 @@ public class FlansModRaytracer
 		
 		ItemStack itemstack = (isOffHand && data != null && data.offHandGunSlot != 0 ) 
 				? player.inventory.getStackInSlot(data.offHandGunSlot - 1)
-				: player.getCurrentEquippedItem();
+				: player.getHeldItemMainhand();
 		
 		if(itemstack != null && itemstack.getItem() instanceof ItemGun)
 		{
@@ -209,9 +208,9 @@ public class FlansModRaytracer
 	
 	public static class BlockHit extends BulletHit 
 	{
-		public MovingObjectPosition raytraceResult;
+		public RayTraceResult raytraceResult;
 		
-		public BlockHit(MovingObjectPosition mop, float f) 
+		public BlockHit(RayTraceResult mop, float f) 
 		{
 			super(f);
 			raytraceResult = mop;
@@ -327,7 +326,7 @@ public class FlansModRaytracer
 				float intersectTime = buffer.readFloat();
 				EnumFacing facing = EnumFacing.VALUES[buffer.readByte()];
 				BlockPos blockPos = new BlockPos(buffer.readInt(), buffer.readInt(), buffer.readInt());
-				return new BlockHit(new MovingObjectPosition(new Vec3(0d, 0d, 0d), facing, blockPos), intersectTime);
+				return new BlockHit(new RayTraceResult(new Vec3d(0d, 0d, 0d), facing, blockPos), intersectTime);
 			}
 			case 1: // EntityHit
 			{
@@ -372,7 +371,7 @@ public class FlansModRaytracer
 	{
 		if(FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER)
 		{
-			for(World world : MinecraftServer.getServer().worldServers)
+			for(World world : FMLCommonHandler.instance().getMinecraftServerInstance().worldServers)
 			{
 				Entity entity = world.getEntityByID(id);
 				if(entity != null)

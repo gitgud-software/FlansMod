@@ -1,50 +1,27 @@
 package com.flansmod.common.paintjob;
 
-import com.flansmod.client.FlansModClient;
 import com.flansmod.common.FlansMod;
-import com.flansmod.common.ItemHolderType;
-import com.flansmod.common.TileEntityItemHolder;
-import com.flansmod.common.teams.ItemOpStick;
-import com.flansmod.common.teams.Team;
-import com.flansmod.common.teams.TileEntitySpawner;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.Packet;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockPaintjobTable extends BlockContainer
 {	
 	public BlockPaintjobTable() 
 	{
-		super(Material.rock);
+		super(Material.ROCK);
 		setHardness(2F);
 		setResistance(4F);
 	    setUnlocalizedName("paintjobTable");
@@ -54,7 +31,8 @@ public class BlockPaintjobTable extends BlockContainer
 	@Override
 	public boolean canPlaceBlockAt(World world, BlockPos pos)
 	{
-	    return world.doesBlockHaveSolidTopSurface(world, pos.add(0, -1, 0));
+	    //return world.doesBlockHaveSolidTopSurface(world, pos.add(0, -1, 0));
+		return world.isSideSolid(pos.add(0, -1, 0), EnumFacing.UP);
 	}
 	
 	@Override
@@ -64,13 +42,13 @@ public class BlockPaintjobTable extends BlockContainer
 	}
 	
 	@Override
-    public int getRenderType()
+    public EnumBlockRenderType getRenderType(IBlockState state)
     {
-        return 3;
+        return EnumBlockRenderType.MODEL;
     }
 		
     @Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float par7, float par8, float par9)
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
     {
     	if(world.isRemote)
     	{
@@ -78,7 +56,7 @@ public class BlockPaintjobTable extends BlockContainer
     		return true;
     	}
 
-    	TileEntityPaintjobTable table = (TileEntityPaintjobTable)world.getTileEntity(pos);
+    	//TileEntityPaintjobTable table = (TileEntityPaintjobTable)world.getTileEntity(pos);
     	
     	if(!world.isRemote) 
     	{

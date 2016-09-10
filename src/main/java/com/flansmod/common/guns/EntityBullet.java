@@ -1,17 +1,34 @@
 package com.flansmod.common.guns;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import com.flansmod.client.debug.EntityDebugDot;
+import com.flansmod.client.debug.EntityDebugVector;
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.FlansModExplosion;
+import com.flansmod.common.PlayerHandler;
+import com.flansmod.common.driveables.EntityPlane;
+import com.flansmod.common.driveables.EntitySeat;
+import com.flansmod.common.driveables.EntityVehicle;
+import com.flansmod.common.driveables.mechas.EntityMecha;
+import com.flansmod.common.guns.raytracing.FlansModRaytracer;
+import com.flansmod.common.guns.raytracing.FlansModRaytracer.BlockHit;
+import com.flansmod.common.guns.raytracing.FlansModRaytracer.BulletHit;
+import com.flansmod.common.guns.raytracing.FlansModRaytracer.DriveableHit;
+import com.flansmod.common.guns.raytracing.FlansModRaytracer.EntityHit;
+import com.flansmod.common.guns.raytracing.FlansModRaytracer.PlayerBulletHit;
+import com.flansmod.common.network.PacketFlak;
+import com.flansmod.common.network.PacketPlaySound;
+import com.flansmod.common.teams.TeamsManager;
+import com.flansmod.common.types.InfoType;
+import com.flansmod.common.vector.Vector3f;
+
 import io.netty.buffer.ByteBuf;
-import net.minecraft.block.Block;
+import net.fexcraft.mod.lib.util.entity.EntUtil;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.client.particle.EntityFX;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -21,52 +38,21 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import com.flansmod.client.FlansModClient;
-import com.flansmod.client.FlansModResourceHandler;
-import com.flansmod.client.debug.EntityDebugDot;
-import com.flansmod.client.debug.EntityDebugVector;
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.FlansModExplosion;
-import com.flansmod.common.PlayerData;
-import com.flansmod.common.PlayerHandler;
-import com.flansmod.common.RotatedAxes;
-import com.flansmod.common.driveables.EntityDriveable;
-import com.flansmod.common.driveables.EntityPlane;
-import com.flansmod.common.driveables.EntitySeat;
-import com.flansmod.common.driveables.EntityVehicle;
-import com.flansmod.common.driveables.mechas.EntityMecha;
-import com.flansmod.common.guns.raytracing.EnumHitboxType;
-import com.flansmod.common.guns.raytracing.FlansModRaytracer;
-import com.flansmod.common.guns.raytracing.PlayerHitbox;
-import com.flansmod.common.guns.raytracing.PlayerSnapshot;
-import com.flansmod.common.guns.raytracing.FlansModRaytracer.BlockHit;
-import com.flansmod.common.guns.raytracing.FlansModRaytracer.BulletHit;
-import com.flansmod.common.guns.raytracing.FlansModRaytracer.DriveableHit;
-import com.flansmod.common.guns.raytracing.FlansModRaytracer.EntityHit;
-import com.flansmod.common.guns.raytracing.FlansModRaytracer.PlayerBulletHit;
-import com.flansmod.common.network.PacketFlak;
-import com.flansmod.common.network.PacketPlaySound;
-import com.flansmod.common.teams.Team;
-import com.flansmod.common.teams.TeamsManager;
-import com.flansmod.common.types.InfoType;
-import com.flansmod.common.vector.Vector3f;
 
 public class EntityBullet extends EntityShootable implements IEntityAdditionalSpawnData {
 	private static int bulletLife = 600; // Kill bullets after 30 seconds
@@ -126,13 +112,13 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 	/** Method called by ItemGun for creating bullets from a hand held weapon */
 	public EntityBullet(World world, EntityLivingBase shooter, float spread, float gunDamage, BulletType type1,
 			float speed, boolean shot, InfoType shotFrom) {
-		this(world, new Vec3(shooter.posX, shooter.posY + shooter.getEyeHeight(), shooter.posZ), shooter.rotationYaw,
+		this(world, new Vec3d(shooter.posX, shooter.posY + shooter.getEyeHeight(), shooter.posZ), shooter.rotationYaw,
 				shooter.rotationPitch, shooter, spread, gunDamage, type1, speed, shotFrom);
 		shotgun = shot;
 	}
 
 	/** More generalised bullet constructor */
-	public EntityBullet(World world, Vec3 origin, float yaw, float pitch, EntityLivingBase shooter, float spread,
+	public EntityBullet(World world, Vec3d origin, float yaw, float pitch, EntityLivingBase shooter, float spread,
 			float gunDamage, BulletType type1, float speed, InfoType shotFrom) {
 		this(world, shooter, gunDamage, type1, shotFrom);
 		setLocationAndAngles(origin.xCoord, origin.yCoord, origin.zCoord, yaw, pitch);
@@ -159,7 +145,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 	}
 
 	/** Bomb constructor. Inherits the motion and rotation of the plane */
-	public EntityBullet(World world, Vec3 origin, float yaw, float pitch, double motX, double motY, double motZ,
+	public EntityBullet(World world, Vec3d origin, float yaw, float pitch, double motX, double motY, double motZ,
 			EntityLivingBase shooter, float gunDamage, BulletType type1, InfoType shotFrom) {
 		this(world, shooter, gunDamage, type1, shotFrom);
 		setLocationAndAngles(origin.xCoord, origin.yCoord, origin.zCoord, yaw, pitch);
@@ -175,7 +161,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 	}
 
 	@Override
-	public AxisAlignedBB getBoundingBox() {
+	public AxisAlignedBB getEntityBoundingBox() {
 		return getEntityBoundingBox();
 	}
 
@@ -305,21 +291,21 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		else if(bulletHit instanceof BlockHit)
 		{
 			BlockHit blockHit = (BlockHit)bulletHit;
-			MovingObjectPosition raytraceResult = blockHit.raytraceResult;
+			RayTraceResult raytraceResult = blockHit.raytraceResult;
 			//If the hit wasn't an entity hit, then it must've been a block hit
 			BlockPos pos = raytraceResult.getBlockPos();
 			if(FlansMod.DEBUG)
 				world.spawnEntityInWorld(new EntityDebugDot(world, hit, 1000, 0F, 1F, 0F));
 
-			Block block = world.getBlockState(pos).getBlock();
+			IBlockState block = world.getBlockState(pos);
 			Material mat = block.getMaterial();
 			//If the bullet breaks glass, and can do so according to FlansMod, do so.
-			if(bulletType.breaksGlass && mat == Material.glass)
+			if(bulletType.breaksGlass && mat == Material.GLASS)
 			{
 				if(TeamsManager.canBreakGlass)
                 {
                     world.setBlockToAir(pos);
-                    FlansMod.proxy.playBlockBreakSound(pos.getX(), pos.getY(), pos.getZ(), block);
+                    //TODO FlansMod.proxy.playBlockBreakSound(pos.getX(), pos.getY(), pos.getZ(), block);
                 }
 			}
 			
@@ -466,9 +452,11 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		if (this.getDistanceSqToEntity(Minecraft.getMinecraft().thePlayer) < 5 && !playedFlybySound) 
 		{
 			playedFlybySound = true;
-			FMLClientHandler.instance().getClient().getSoundHandler()
+			/*FMLClientHandler.instance().getClient().getSoundHandler()
 					.playSound(new PositionedSoundRecord(FlansModResourceHandler.getSound("bulletFlyby"), 10F,
 							1.0F / (rand.nextFloat() * 0.4F + 0.8F), (float) posX, (float) posY, (float) posZ));
+			//TODO
+			*/
 		}
 	}
 
@@ -480,11 +468,11 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 
 		float spread = 0.1F;
 		for (int i = 0; i < 10; i++) {
-			EntityFX particle = FlansModClient.getParticle(type.trailParticleType, worldObj,
+			/*EntityFX particle = FlansModClient.getParticle(type.trailParticleType, worldObj,
 					prevPosX + dX * i + rand.nextGaussian() * spread, prevPosY + dY * i + rand.nextGaussian() * spread,
 					prevPosZ + dZ * i + rand.nextGaussian() * spread);
 			if (particle != null && Minecraft.getMinecraft().gameSettings.fancyGraphics)
-				particle.renderDistanceWeight = 100D;
+				particle.renderDistanceWeight = 100D;*///TODO
 			// worldObj.spawnEntityInWorld(particle);
 		}
 	}
@@ -508,7 +496,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 	private boolean isPartOfOwner(Entity entity) {
 		if (owner == null)
 			return false;
-		if (entity == owner || entity == owner.riddenByEntity || entity == owner.ridingEntity)
+		if (entity == owner || entity == EntUtil.getPassengerOf(owner) || entity == owner.getRidingEntity())
 			return true;
 		if (owner instanceof EntityPlayer) {
 			if (PlayerHandler.getPlayerData((EntityPlayer) owner,
@@ -520,8 +508,8 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 				return true;
 			}
 		}
-		return owner.ridingEntity instanceof EntitySeat && (((EntitySeat) owner.ridingEntity).driveable == null
-				|| ((EntitySeat) owner.ridingEntity).driveable.isPartOfThis(entity));
+		return owner.getRidingEntity() instanceof EntitySeat && (((EntitySeat) owner.getRidingEntity()).driveable == null
+				|| ((EntitySeat) owner.getRidingEntity()).driveable.isPartOfThis(entity));
 	}
 
 	@Override
@@ -558,9 +546,9 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 				{
 					for (int j = -1; j < 1; j++) 
 					{
-						if (world.getBlockState(new BlockPos((int) (detonatePos.x + i), (int) (detonatePos.y + j), (int) (detonatePos.z + k))).getBlock().getMaterial() == Material.air) 
+						if (world.getBlockState(new BlockPos((int) (detonatePos.x + i), (int) (detonatePos.y + j), (int) (detonatePos.z + k))).getMaterial() == Material.AIR) 
 						{
-							world.setBlockState(new BlockPos((int) (detonatePos.x + i), (int) (detonatePos.y + j), (int) (detonatePos.z + k)), Blocks.fire.getDefaultState(), 2);
+							world.setBlockState(new BlockPos((int) (detonatePos.x + i), (int) (detonatePos.y + j), (int) (detonatePos.z + k)), Blocks.FIRE.getDefaultState(), 2);
 						}
 					}
 				}
@@ -610,8 +598,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 			type = BulletType.getBullet(typeString);
 
 		if (ownerName != null && !ownerName.equals("null"))
-			owner = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager()
-					.getPlayerByUsername(ownerName);
+			owner = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUsername(ownerName);
 	}
 
 	public int getBrightnessForRender(float par1) {
@@ -622,7 +609,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 			int j = MathHelper.floor_double(this.posZ);
 
 			if (!worldObj.isAirBlock(new BlockPos(i, 0, j))) {
-				double d0 = (getBoundingBox().maxY - getBoundingBox().minY) * 0.66D;
+				double d0 = (getEntityBoundingBox().maxY - getEntityBoundingBox().minY) * 0.66D;
 				int k = MathHelper.floor_double(this.posY - (double) this.yOffset + d0);
 				return this.worldObj.getLightFromNeighborsFor(EnumSkyBlock.SKY, new BlockPos(i, k, j));
 			} else {

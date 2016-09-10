@@ -3,19 +3,7 @@ package com.flansmod.common.teams;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.item.ItemExpireEvent;
-import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import javax.annotation.Nullable;
 
 import com.flansmod.common.EntityItemCustomRender;
 import com.flansmod.common.PlayerHandler;
@@ -24,6 +12,21 @@ import com.flansmod.common.guns.ItemBullet;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.guns.ItemShootable;
 import com.flansmod.common.guns.ShootableType;
+
+import net.minecraft.block.Block;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.item.ItemExpireEvent;
+import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class EntityGunItem extends EntityItemCustomRender {
 	
@@ -74,7 +77,7 @@ public class EntityGunItem extends EntityItemCustomRender {
 	}
 	
 	@Override
-	public AxisAlignedBB getBoundingBox()
+	public AxisAlignedBB getEntityBoundingBox()
 	{
 		return null;
 	}
@@ -93,9 +96,9 @@ public class EntityGunItem extends EntityItemCustomRender {
         prevPosY = posY;
         prevPosZ = posZ;
         motionY -= 0.03999999910593033D;
-        if(getBoundingBox() != null)
+        if(getEntityBoundingBox() != null)
         {
-        	pushOutOfBlocks(posX, (getBoundingBox().minY + getBoundingBox().maxY) / 2.0D, posZ); //PushOutOfBlocks
+        	pushOutOfBlocks(posX, (getEntityBoundingBox().minY + getEntityBoundingBox().maxY) / 2.0D, posZ); //PushOutOfBlocks
         }
         moveEntity(motionX, motionY, motionZ);
 
@@ -104,7 +107,7 @@ public class EntityGunItem extends EntityItemCustomRender {
         if (onGround)
         {
             var2 = 0.58800006F;
-            Block block = worldObj.getBlockState(new BlockPos(MathHelper.floor_double(posX), MathHelper.floor_double(getBoundingBox().minY) - 1, MathHelper.floor_double(posZ))).getBlock();
+            Block block = worldObj.getBlockState(new BlockPos(MathHelper.floor_double(posX), MathHelper.floor_double(getEntityBoundingBox().minY) - 1, MathHelper.floor_double(posZ))).getBlock();
 
             if (block != null)
             {
@@ -123,7 +126,8 @@ public class EntityGunItem extends EntityItemCustomRender {
 
         ++age;
 
-        ItemStack item = getDataWatcher().getWatchableObjectItemStack(10);
+        //TODO
+        ItemStack item = null;//getDataWatcher().getWatchableObjectItemStack(10);
 
         if (!worldObj.isRemote && age >= lifespan)
         {
@@ -132,7 +136,7 @@ public class EntityGunItem extends EntityItemCustomRender {
                 ItemExpireEvent event = new ItemExpireEvent(this, (item.getItem() == null ? 6000 : item.getItem().getEntityLifespan(item, worldObj)));
                 if (MinecraftForge.EVENT_BUS.post(event))
                 {
-                    lifespan += event.extraLife;
+                    lifespan += event.getExtraLife();
                 }
                 else
                 {
@@ -182,7 +186,7 @@ public class EntityGunItem extends EntityItemCustomRender {
 								if(player.inventory.addItemStackToInventory(ammoStack))
 								{
 									FMLCommonHandler.instance().firePlayerItemPickupEvent(player, this);
-									playSound("random.pop", 0.2F, ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+									//TODO playSound("random.pop", 0.2F, ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
 									ammoStacks.remove(j);
 								}
 							}
@@ -197,8 +201,8 @@ public class EntityGunItem extends EntityItemCustomRender {
 		}
 	}
 
-	@Override
-	public boolean interactFirst(EntityPlayer player) //interact
+	@Override //TODO
+	public boolean processInitialInteract(EntityPlayer player, @Nullable ItemStack is, EnumHand hand) //interact
 	{
 		if(worldObj.isRemote)
 			return true;
@@ -206,7 +210,7 @@ public class EntityGunItem extends EntityItemCustomRender {
 		TeamsManager.getInstance().playerLoot(event);
 		if(!event.isCanceled())
 		{
-			ItemStack currentItem = player.getCurrentEquippedItem();
+			ItemStack currentItem = player.getHeldItemMainhand();
 			if(currentItem != null && currentItem.getItem() instanceof ItemGun)
 			{
 				GunType gunType = ((ItemGun)currentItem.getItem()).GetType();
@@ -240,8 +244,8 @@ public class EntityGunItem extends EntityItemCustomRender {
 		return false;
 	}
 
-	@Override
-	public boolean canAttackWithItem()
+	@Override //TODO check
+	public boolean canBeAttackedWithItem()
 	{
 		return true;
 	}

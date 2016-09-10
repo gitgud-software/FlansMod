@@ -13,11 +13,11 @@ import com.flansmod.common.guns.raytracing.FlansModRaytracer.BulletHit;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.PlayerBulletHit;
 import com.flansmod.common.vector.Vector3f;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /** This class takes a snapshot of the player's position rotation and held items at a certain point in time. 
  * It is used to handle bullet detection. The server will store a second or two of snapshots so that it 
@@ -76,7 +76,7 @@ public class PlayerSnapshot
 		hitboxes.add(new PlayerHitbox(player, bodyAxes.findLocalAxesGlobally(rightArmAxes), new Vector3f(originXRight, 1.3F, originZRight), new Vector3f(-2F / 16F, -0.6F, -2F / 16F), new Vector3f(0.25F, 0.7F, 0.25F), EnumHitboxType.RIGHTARM));	
 		
 		//Add box for right hand shield
-		ItemStack playerRightHandStack = player.getCurrentEquippedItem();
+		ItemStack playerRightHandStack = player.getHeldItemMainhand();
 		if(playerRightHandStack != null && playerRightHandStack.getItem() instanceof ItemGun)
 		{
 			GunType gunType = ((ItemGun)playerRightHandStack.getItem()).GetType();
@@ -155,10 +155,10 @@ public class PlayerSnapshot
 		
 		if(gunType != null && gunType.model != null)
 		{
-			Vector3f barrelAttach = new Vector3f(
+			/*Vector3f barrelAttach = new Vector3f(
 					gunType.model.barrelAttachPoint.z,
 					-gunType.model.barrelAttachPoint.x,
-					gunType.model.barrelAttachPoint.y);
+					gunType.model.barrelAttachPoint.y);*/
 			//Vector3f.add(muzzlePos, barrelAttach, muzzlePos);
 		}
 		

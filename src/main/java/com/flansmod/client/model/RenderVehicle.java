@@ -2,6 +2,17 @@ package com.flansmod.client.model;
 
 import org.lwjgl.opengl.GL11;
 
+import com.flansmod.client.FlansModResourceHandler;
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.driveables.DriveablePart;
+import com.flansmod.common.driveables.DriveablePosition;
+import com.flansmod.common.driveables.DriveableType;
+import com.flansmod.common.driveables.EntityDriveable;
+import com.flansmod.common.driveables.EntityVehicle;
+import com.flansmod.common.driveables.EnumDriveablePart;
+import com.flansmod.common.driveables.VehicleType;
+import com.flansmod.common.guns.Paintjob;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -9,32 +20,14 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
-import net.minecraftforge.client.IItemRenderer;
-import net.minecraftforge.client.IItemRenderer.ItemRenderType;
-import net.minecraftforge.client.IItemRenderer.ItemRendererHelper;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import com.flansmod.client.FlansModResourceHandler;
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.driveables.DriveablePart;
-import com.flansmod.common.driveables.DriveablePosition;
-import com.flansmod.common.driveables.DriveableType;
-import com.flansmod.common.driveables.EntityDriveable;
-import com.flansmod.common.driveables.EntityPlane;
-import com.flansmod.common.driveables.EntityVehicle;
-import com.flansmod.common.driveables.EnumDriveablePart;
-import com.flansmod.common.driveables.ItemVehicle;
-import com.flansmod.common.driveables.VehicleType;
-import com.flansmod.common.guns.Paintjob;
-
-public class RenderVehicle extends Render implements IItemRenderer
+public class RenderVehicle extends Render //implements IItemRenderer
 {
 	public RenderVehicle(RenderManager renderManager) 
 	{
@@ -173,7 +166,7 @@ public class RenderVehicle extends Render implements IItemRenderer
 		return FlansModResourceHandler.getPaintjobTexture(paintjob);
 	}
 	
-	@Override
+	/*@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) 
 	{
 		switch(type)
@@ -240,7 +233,7 @@ public class RenderVehicle extends Render implements IItemRenderer
 			}
 		}
 		GL11.glPopMatrix();
-	}
+	}*/
 	
 	@SubscribeEvent
 	public void renderWorld(RenderWorldLastEvent event)
@@ -252,9 +245,9 @@ public class RenderVehicle extends Render implements IItemRenderer
 
 		//Get the camera frustrum for clipping
         Entity camera = Minecraft.getMinecraft().getRenderViewEntity();
-        double x = camera.lastTickPosX + (camera.posX - camera.lastTickPosX) * event.partialTicks;
-        double y = camera.lastTickPosY + (camera.posY - camera.lastTickPosY) * event.partialTicks;
-        double z = camera.lastTickPosZ + (camera.posZ - camera.lastTickPosZ) * event.partialTicks;
+        double x = camera.lastTickPosX + (camera.posX - camera.lastTickPosX) * event.getPartialTicks();
+        double y = camera.lastTickPosY + (camera.posY - camera.lastTickPosY) * event.getPartialTicks();
+        double z = camera.lastTickPosZ + (camera.posZ - camera.lastTickPosZ) * event.getPartialTicks();
         
         //Frustum frustrum = new Frustum();
         //frustrum.setPosition(x, y, z);
@@ -275,7 +268,7 @@ public class RenderVehicle extends Render implements IItemRenderer
 			if(entity instanceof EntityVehicle)
 			{
 				EntityVehicle vehicle = (EntityVehicle)entity;
-		        int i = vehicle.getBrightnessForRender(event.partialTicks);
+		        int i = vehicle.getBrightnessForRender(event.getPartialTicks());
 
 		        if (vehicle.isBurning())
 		        {
@@ -286,7 +279,7 @@ public class RenderVehicle extends Render implements IItemRenderer
 		        int k = i / 65536;
 		        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j / 1.0F, (float)k / 1.0F);
 		        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		        render(vehicle, vehicle.prevPosX + (vehicle.posX - vehicle.prevPosX) * event.partialTicks, vehicle.prevPosY + (vehicle.posY - vehicle.prevPosY) * event.partialTicks, vehicle.prevPosZ + (vehicle.posZ - vehicle.prevPosZ) * event.partialTicks, 0F, event.partialTicks);
+		        render(vehicle, vehicle.prevPosX + (vehicle.posX - vehicle.prevPosX) * event.getPartialTicks(), vehicle.prevPosY + (vehicle.posY - vehicle.prevPosY) * event.getPartialTicks(), vehicle.prevPosZ + (vehicle.posZ - vehicle.prevPosZ) * event.getPartialTicks(), 0F, event.getPartialTicks());
 			}
 		}
 		

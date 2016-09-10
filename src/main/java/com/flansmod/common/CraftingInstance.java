@@ -73,6 +73,7 @@ public class CraftingInstance
 		
 		for(ItemStack stack : outputStacks)
 			if(!player.inventory.addItemStackToInventory(stack))
-				player.dropPlayerItemWithRandomChoice(stack, false);
+				//player.dropPlayerItemWithRandomChoice(stack, false);
+				player.dropItem(stack, false);
 	}
 }

@@ -4,28 +4,26 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.init.Items;
-import net.minecraft.item.EnumDyeColor;
-import net.minecraft.item.ItemDye;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import com.flansmod.client.FlansModClient;
 import com.flansmod.client.model.ModelDriveable;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.EnumFireMode;
 import com.flansmod.common.parts.PartType;
-import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.PaintableType;
 import com.flansmod.common.types.TypeFile;
 import com.flansmod.common.vector.Vector3f;
+
+import net.minecraft.block.material.Material;
+import net.minecraft.client.model.ModelBase;
+import net.minecraft.init.Items;
+import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class DriveableType extends PaintableType
 {
@@ -263,31 +261,31 @@ public abstract class DriveableType extends PaintableType
 			{
 				if(split[1].equals("Axe"))
 				{
-					materialsHarvested.add(Material.wood);
-					materialsHarvested.add(Material.plants);
-					materialsHarvested.add(Material.vine);
+					materialsHarvested.add(Material.WOOD);
+					materialsHarvested.add(Material.PLANTS);
+					materialsHarvested.add(Material.VINE);
 				}
 				else if(split[1].equals("Pickaxe") || split[1].equals("Drill"))
 				{
-					materialsHarvested.add(Material.iron);
-					materialsHarvested.add(Material.anvil);
-					materialsHarvested.add(Material.rock);
+					materialsHarvested.add(Material.IRON);
+					materialsHarvested.add(Material.ANVIL);
+					materialsHarvested.add(Material.ROCK);
 				}
 				else if(split[1].equals("Spade") || split[1].equals("Shovel") || split[1].equals("Excavator"))
 				{
-					materialsHarvested.add(Material.ground);
-					materialsHarvested.add(Material.grass);
-					materialsHarvested.add(Material.sand);
-					materialsHarvested.add(Material.snow);
-					materialsHarvested.add(Material.clay);
+					materialsHarvested.add(Material.GROUND);
+					materialsHarvested.add(Material.GRASS);
+					materialsHarvested.add(Material.SAND);
+					materialsHarvested.add(Material.SNOW);
+					materialsHarvested.add(Material.CLAY);
 				}				
 				else if(split[1].equals("Hoe") || split[1].equals("Combine"))
 				{
-					materialsHarvested.add(Material.plants);
-					materialsHarvested.add(Material.leaves);
-					materialsHarvested.add(Material.vine);
-					materialsHarvested.add(Material.cactus);
-					materialsHarvested.add(Material.gourd);
+					materialsHarvested.add(Material.PLANTS);
+					materialsHarvested.add(Material.LEAVES);
+					materialsHarvested.add(Material.VINE);
+					materialsHarvested.add(Material.CACTUS);
+					materialsHarvested.add(Material.GOURD);
 				}
 			}
 			
@@ -405,7 +403,7 @@ public abstract class DriveableType extends PaintableType
 					FlansMod.log("Failed to find dye colour : " + split[2] + " while adding " + file.name);
 					return;
 				}
-				driveableRecipe.add(new ItemStack(Items.dye, amount, damage));
+				driveableRecipe.add(new ItemStack(Items.DYE, amount, damage));
 			}
 			
 			

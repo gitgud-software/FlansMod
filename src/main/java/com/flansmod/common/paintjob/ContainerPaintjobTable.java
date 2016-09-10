@@ -1,9 +1,6 @@
 package com.flansmod.common.paintjob;
 
-import com.flansmod.common.guns.GunType;
-import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.guns.Paintjob;
-import com.flansmod.common.guns.SlotGun;
 import com.flansmod.common.types.IPaintableItem;
 import com.flansmod.common.types.PaintableType;
 
@@ -123,7 +120,7 @@ public class ContainerPaintjobTable extends Container
 		ItemStack paintableStack = table.getPaintableStack();
 		if(paintableStack != null && paintableStack.getItem() instanceof IPaintableItem)
 		{
-			PaintableType paintableType = ((IPaintableItem)paintableStack.getItem()).GetPaintableType();
+			//PaintableType paintableType = ((IPaintableItem)paintableStack.getItem()).GetPaintableType();
 
 			int numDyes = paintjob.dyesNeeded.length;
 
@@ -136,7 +133,7 @@ public class ContainerPaintjobTable extends Container
 					for(int s = 0; s < playerInv.getSizeInventory(); s++)
 					{
 						ItemStack stack = playerInv.getStackInSlot(s);
-						if(stack != null && stack.getItem() == Items.dye && stack.getItemDamage() == paintjob.dyesNeeded[n].getItemDamage())
+						if(stack != null && stack.getItem() == Items.DYE && stack.getItemDamage() == paintjob.dyesNeeded[n].getItemDamage())
 						{
 							amountNeeded -= stack.stackSize;
 						}
@@ -154,7 +151,7 @@ public class ContainerPaintjobTable extends Container
 	        			if(amountNeeded <= 0)
 	        				continue;
 	        			ItemStack stack = playerInv.getStackInSlot(s);
-	        			if(stack != null && stack.getItem() == Items.dye && stack.getItemDamage() == paintjob.dyesNeeded[n].getItemDamage())
+	        			if(stack != null && stack.getItem() == Items.DYE && stack.getItemDamage() == paintjob.dyesNeeded[n].getItemDamage())
 	        			{
 	        				ItemStack consumed = playerInv.decrStackSize(s, amountNeeded);
 	        				amountNeeded -= consumed.stackSize;

@@ -3,8 +3,28 @@ package com.flansmod.client;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.block.Block;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+import org.lwjgl.util.glu.Project;
+
+import com.flansmod.api.IControllable;
+import com.flansmod.client.gui.GuiTeamScores;
+import com.flansmod.client.model.ModelGun;
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.PlayerData;
+import com.flansmod.common.PlayerHandler;
+import com.flansmod.common.driveables.EntityDriveable;
+import com.flansmod.common.driveables.EntitySeat;
+import com.flansmod.common.guns.GunType;
+import com.flansmod.common.guns.ItemGun;
+import com.flansmod.common.network.PacketTeamInfo;
+import com.flansmod.common.network.PacketTeamInfo.PlayerScoreData;
+import com.flansmod.common.teams.ItemTeamArmour;
+import com.flansmod.common.teams.Team;
+import com.flansmod.common.types.InfoType;
+
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
@@ -19,54 +39,24 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.client.renderer.entity.RenderPlayer;
-import net.minecraft.client.renderer.entity.RendererLivingEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer.ItemRenderType;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.client.event.EntityViewRenderEvent.CameraSetup;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.client.event.RenderItemInFrameEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
-import net.minecraftforge.client.event.RenderWorldEvent;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraftforge.client.event.EntityViewRenderEvent.CameraSetup;
-import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-import org.lwjgl.util.glu.Project;
-
-import com.flansmod.api.IControllable;
-import com.flansmod.client.gui.GuiTeamScores;
-import com.flansmod.client.model.InstantBulletRenderer;
-import com.flansmod.client.model.ModelGun;
-import com.flansmod.client.model.RenderGun;
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.PlayerData;
-import com.flansmod.common.PlayerHandler;
-import com.flansmod.common.driveables.EntityDriveable;
-import com.flansmod.common.driveables.EntitySeat;
-import com.flansmod.common.guns.GunType;
-import com.flansmod.common.guns.ItemGun;
-import com.flansmod.common.network.PacketTeamInfo;
-import com.flansmod.common.network.PacketTeamInfo.PlayerScoreData;
-import com.flansmod.common.teams.ItemTeamArmour;
-import com.flansmod.common.teams.Team;
-import com.flansmod.common.types.InfoType;
 
 public class ClientRenderHooks 
 {
@@ -90,14 +80,14 @@ public class ClientRenderHooks
 	/** Render guns in 3D in item frames */
 	public void renderItemFrame(RenderItemInFrameEvent event)
 	{
-		if(event.item.getItem() instanceof ItemGun)
+		if(event.getItem().getItem() instanceof ItemGun)
 		{
-			GunType type = ((ItemGun)event.item.getItem()).GetType();
+			GunType type = ((ItemGun)event.getItem().getItem()).GetType();
 			if(type.model != null)
 			{
 				event.setCanceled(true);
 				
-				int rotation = event.entityItemFrame.getRotation();
+				int rotation = event.getEntityItemFrame().getRotation();
 				GlStateManager.rotate(-rotation * 45F, 0F, 0F, 1F);
 				RenderHelper.enableStandardItemLighting();
 				GlStateManager.rotate(rotation * 45F, 0F, 0F, 1F);
@@ -105,7 +95,7 @@ public class ClientRenderHooks
 				float scale = 0.75F;
 				GlStateManager.scale(scale, scale, scale);
 				GlStateManager.translate(0.15F, -0.15F, 0F);
-				ClientProxy.gunRenderer.renderItem(ItemRenderType.ENTITY, event.item);
+				//ClientProxy.gunRenderer.renderItem(ItemRenderType.ENTITY, event.item);
 				GlStateManager.popMatrix();
 			}
 		}
@@ -114,7 +104,7 @@ public class ClientRenderHooks
 	/** When Minecraft would render a 2D gun item, instead cancel it and render the gun properly. Render the offhand gun too. */
 	public void renderHeldItem(RenderHandEvent event)
 	{
-		EntityPlayer player = mc.thePlayer;
+		//EntityPlayer player = mc.thePlayer;
 		if(itemToRender != null && itemToRender.getItem() instanceof ItemGun && ((ItemGun)itemToRender.getItem()).GetType().model != null)
 		{
 			//Cancel the hand render event so that we can do our own.
@@ -122,9 +112,9 @@ public class ClientRenderHooks
 		
 			//Render the gun in hand
 			ItemStack stack = itemToRender;
-			GunType type = ((ItemGun)stack.getItem()).GetType();
-			float partialTicks = event.partialTicks;
-			int pass = event.renderPass;
+			//GunType type = ((ItemGun)stack.getItem()).GetType();
+			float partialTicks = event.getPartialTicks();
+			int pass = event.getRenderPass();
 			EntityRenderer renderer = mc.entityRenderer;
 			float farPlaneDistance = mc.gameSettings.renderDistanceChunks * 16F;
 			ItemRenderer itemRenderer = mc.getItemRenderer();
@@ -219,7 +209,7 @@ public class ClientRenderHooks
         GlStateManager.rotate(f11 * -80.0F, 1.0F, 0.0F, 0.0F);
         GlStateManager.scale(0.4F, 0.4F, 0.4F);
 
-        ClientProxy.gunRenderer.renderItem(ItemRenderType.EQUIPPED_FIRST_PERSON, stack, mc.theWorld, mc.thePlayer);
+        //ClientProxy.gunRenderer.renderItem(ItemRenderType.EQUIPPED_FIRST_PERSON, stack, mc.theWorld, mc.thePlayer);
 
         GlStateManager.popMatrix();
         GlStateManager.disableRescaleNormal();
@@ -282,9 +272,9 @@ public class ClientRenderHooks
             f1 /= (1.0F - 500.0F / (f2 + 500.0F)) * 2.0F + 1.0F;
         }
 
-        Block block = ActiveRenderInfo.getBlockAtEntityViewpoint(this.mc.theWorld, entity, partialTicks);
+        IBlockState block = ActiveRenderInfo.getBlockStateAtEntityViewpoint(this.mc.theWorld, entity, partialTicks);
 
-        if (block.getMaterial() == Material.water)
+        if (block.getMaterial() == Material.WATER)
             f1 = f1 * 60.0F / 70.0F;
 
         return f1;
@@ -328,7 +318,7 @@ public class ClientRenderHooks
 	
 	        if(itemToRender != null && itemstack != null)
 	        {
-	            if (!itemToRender.getIsItemStackEqual(itemstack))
+	            if (!itemToRender.isItemEqual(itemstack))
 	            {
 	                if (!itemToRender.getItem().shouldCauseReequipAnimation(itemToRender, itemstack, equippedItemSlot != thePlayer.inventory.currentItem))
 	                {
@@ -376,13 +366,13 @@ public class ClientRenderHooks
     
 	public void renderThirdPersonWeapons(RenderLivingEvent.Post event)
 	{
-		ModelBase mainModel = event.renderer.getMainModel();
-		EntityLivingBase entity = event.entity;
+		ModelBase mainModel = event.getRenderer().getMainModel();
+		EntityLivingBase entity = event.getEntity();
 		
-		if(entity.getEquipmentInSlot(0) != null && entity.getEquipmentInSlot(0).getItem() instanceof ItemGun && mainModel instanceof ModelBiped)
+		if(entity.getHeldItemMainhand() != null && entity.getHeldItemMainhand().getItem() instanceof ItemGun && mainModel instanceof ModelBiped)
 		{
 			ModelBiped biped = (ModelBiped)mainModel;
-			ItemStack stack = entity.getEquipmentInSlot(0);
+			ItemStack stack = entity.getHeldItemMainhand();
 			GunType type = ((ItemGun)stack.getItem()).GetType();
 			if(type.model == null)
 				return;
@@ -408,12 +398,12 @@ public class ClientRenderHooks
 	        
 	        //System.out.println(entity.prevRenderYawOffset + "     " + entity.renderYawOffset);
 	        
-	        if (entity.isRiding() && entity.ridingEntity instanceof EntityLivingBase)
+	        if (entity.isRiding() && entity.getRidingEntity() instanceof EntityLivingBase)
 	        {
-	            EntityLivingBase entitylivingbase1 = (EntityLivingBase)entity.ridingEntity;
+	            EntityLivingBase entitylivingbase1 = (EntityLivingBase)entity.getRidingEntity();
 	            f2 = this.interpolateRotation(entitylivingbase1.prevRenderYawOffset, entitylivingbase1.renderYawOffset, partialTicks);
 	            f4 = f3 - f2;
-	            f5 = MathHelper.wrapAngleTo180_float(f4);
+	            f5 = net.fexcraft.mod.lib.util.cls.MathHelper.wrapAngleTo180_float(f4);
 	
 	            if (f5 < -85.0F)
 	            {
@@ -436,7 +426,7 @@ public class ClientRenderHooks
 	        float f9 = entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * partialTicks;
 	        if(Math.abs(entity.prevRotationPitch - entity.rotationPitch) > 5F)
 	        	f9 = entity.rotationPitch;
-	        GlStateManager.translate(event.x, event.y, event.z);
+	        GlStateManager.translate(event.getX(), event.getY(), event.getZ());
 	        
 	        f5 = entity.ticksExisted + partialTicks;
 	        //this.rotateCorpse(entity, f5, f2, partialTicks);
@@ -462,7 +452,7 @@ public class ClientRenderHooks
 	        GlStateManager.enableAlpha();
 	        
 	        //biped.isSneak = false;
-	        biped.heldItemRight = 1;
+	        //TODO ? //biped.heldItemRight = 1;
 	        biped.setLivingAnimations(entity, f8, f7, partialTicks);
 	        biped.setRotationAngles(f8, f7, f5, f4, f9, 0.0625F, entity);
 
@@ -474,7 +464,7 @@ public class ClientRenderHooks
 		        
 		        GlStateManager.translate(-0.05F, 0.4F, 0.05F);
 	
-		        ClientProxy.gunRenderer.renderItem(ItemRenderType.EQUIPPED, stack, mc.theWorld, mc.thePlayer);
+		        //ClientProxy.gunRenderer.renderItem(ItemRenderType.EQUIPPED, stack, mc.theWorld, mc.thePlayer);
 		        GlStateManager.popMatrix();
 	        }
 	        
@@ -497,7 +487,7 @@ public class ClientRenderHooks
 						
 				if(gunStack != null && gunStack.getItem() instanceof ItemGun)
 				{
-					GunType gunType = ((ItemGun)gunStack.getItem()).GetType();
+					//GunType gunType = ((ItemGun)gunStack.getItem()).GetType();
 							
 					//Render!
 					GlStateManager.pushMatrix();			
@@ -506,7 +496,7 @@ public class ClientRenderHooks
 					GlStateManager.rotate(-90F, 0F, 1F, 0F);
 
 					GlStateManager.translate(0.6F, 0F, -0.05F);
-					ClientProxy.gunRenderer.renderOffHandGun((EntityPlayer)entity, gunStack);
+					//ClientProxy.gunRenderer.renderOffHandGun((EntityPlayer)entity, gunStack);
 					GlStateManager.popMatrix();
 				}
 	        }
@@ -534,13 +524,13 @@ public class ClientRenderHooks
 	//Handle player hiding / name tag removal for teams
 	public void renderPlayer(RenderPlayerEvent.Pre event)
 	{
-		PlayerData data = PlayerHandler.getPlayerData(event.entityPlayer, Side.CLIENT);
+		PlayerData data = PlayerHandler.getPlayerData(event.getEntityPlayer(), Side.CLIENT);
 					
-		RendererLivingEntity.NAME_TAG_RANGE = 64F;
-		RendererLivingEntity.NAME_TAG_RANGE_SNEAK = 32F;		
-		if(event.entity instanceof EntityPlayer && FlansModClient.teamInfo != null && FlansModClient.teamInfo.gametype != null && !"No Gametype".equals(FlansModClient.teamInfo.gametype))
+		event.getRenderer().NAME_TAG_RANGE = 64F;
+		event.getRenderer().NAME_TAG_RANGE_SNEAK = 32F;		
+		if(event.getEntity() instanceof EntityPlayer && FlansModClient.teamInfo != null && FlansModClient.teamInfo.gametype != null && !"No Gametype".equals(FlansModClient.teamInfo.gametype))
 		{
-			PlayerScoreData rendering = FlansModClient.teamInfo.getPlayerScoreData(event.entity.getName());
+			PlayerScoreData rendering = FlansModClient.teamInfo.getPlayerScoreData(event.getEntity().getName());
 			PlayerScoreData thePlayer = FlansModClient.teamInfo.getPlayerScoreData(mc.thePlayer.getName());
 			
 			Team renderingTeam = rendering == null ? Team.spectators : rendering.team.team;
@@ -549,11 +539,11 @@ public class ClientRenderHooks
 			//Do custom skin overrides
 			//If we have no stored skin, try to get it
 			if(data.skin == null)
-				data.skin = ((AbstractClientPlayer)event.entityPlayer).getLocationSkin();
+				data.skin = ((AbstractClientPlayer)event.getEntityPlayer()).getLocationSkin();
 			//Only once we have the stored skin may we override
 			if(data.skin != null)
 			{
-				ResourceLocation skin = rendering == null || rendering.playerClass == null ? null : FlansModResourceHandler.getTexture(rendering.playerClass);
+				//ResourceLocation skin = rendering == null || rendering.playerClass == null ? null : FlansModResourceHandler.getTexture(rendering.playerClass);
 				//((AbstractClientPlayer)event.entityPlayer).func_152121_a(Type.SKIN, skin == null ? data.skin : skin);
 			}
 			
@@ -569,35 +559,35 @@ public class ClientRenderHooks
 			//If we are on the other team, don't render the name tag
 			if(renderingTeam != thePlayerTeam)
 			{
-				RendererLivingEntity.NAME_TAG_RANGE = 0F;
-				RendererLivingEntity.NAME_TAG_RANGE_SNEAK = 0F;
+				event.getRenderer().NAME_TAG_RANGE = 0F;
+				event.getRenderer().NAME_TAG_RANGE_SNEAK = 0F;
 				return;
 			}
 			//If its DM, don't render the name tag
 			if(!FlansModClient.teamInfo.sortedByTeam)
 			{
-				RendererLivingEntity.NAME_TAG_RANGE = 0F;
-				RendererLivingEntity.NAME_TAG_RANGE_SNEAK = 0F;
+				event.getRenderer().NAME_TAG_RANGE = 0F;
+				event.getRenderer().NAME_TAG_RANGE_SNEAK = 0F;
 			}
 		}
 	}
 	
 public void cameraSetup(CameraSetup event)
 	{
-		if(mc.thePlayer.ridingEntity instanceof IControllable)
+		if(mc.thePlayer.getRidingEntity() instanceof IControllable)
 		{
-			IControllable cont = (IControllable)mc.thePlayer.ridingEntity;
-			float roll = interpolateRotation(cont.getPrevPlayerRoll(), cont.getPlayerRoll(), (float)event.renderPartialTicks);
+			IControllable cont = (IControllable)mc.thePlayer.getRidingEntity();
+			float roll = interpolateRotation(cont.getPrevPlayerRoll(), cont.getPlayerRoll(), (float)event.getRenderPartialTicks());
 			//If we are driving a vehicle with the roll component enabled, having the camera roll with the vehicle is disorientating at best, so we disable the roll component for these vehicles
-			if(((EntitySeat)mc.thePlayer.ridingEntity).driveable != null){
-			EntityDriveable ent = ((EntitySeat)mc.thePlayer.ridingEntity).driveable;
+			if(((EntitySeat)mc.thePlayer.getRidingEntity()).driveable != null){
+			EntityDriveable ent = ((EntitySeat)mc.thePlayer.getRidingEntity()).driveable;
 			
 			if(ent.getDriveableType().canRoll){
 				roll = 0F;
 			}
 			}
 			
-			event.roll = roll;
+			event.setRoll(roll);
 		}
 	}
 	
@@ -606,19 +596,19 @@ public void cameraSetup(CameraSetup event)
 		Minecraft mc = Minecraft.getMinecraft();
 		
 		//Remove crosshairs if looking down the sights of a gun
-		if(event.type == ElementType.CROSSHAIRS && FlansModClient.currentScope != null)
+		if(event.getType() == ElementType.CROSSHAIRS && FlansModClient.currentScope != null)
 		{
 			event.setCanceled(true);
 			return;
 		}
 		
-		ScaledResolution scaledresolution = new ScaledResolution(FlansModClient.minecraft, FlansModClient.minecraft.displayWidth, FlansModClient.minecraft.displayHeight);
+		ScaledResolution scaledresolution = new ScaledResolution(FlansModClient.minecraft);//, FlansModClient.minecraft.displayWidth, FlansModClient.minecraft.displayHeight);
 		int i = scaledresolution.getScaledWidth();
 		int j = scaledresolution.getScaledHeight();
 					
 		Tessellator tessellator = Tessellator.getInstance();
 		
-		if(!event.isCancelable() && event.type == ElementType.HELMET)
+		if(!event.isCancelable() && event.getType() == ElementType.HELMET)
 		{
 			//Scopes and helmet overlays
 			String overlayTexture = null;
@@ -647,12 +637,12 @@ public void cameraSetup(CameraSetup event)
 
 				mc.renderEngine.bindTexture(FlansModResourceHandler.getScope(overlayTexture));
 
-				tessellator.getWorldRenderer().startDrawingQuads();
+				/*tessellator.getWorldRenderer().startDrawingQuads();
 				tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 2 * j, j, -90D, 0.0D, 1.0D);
 				tessellator.getWorldRenderer().addVertexWithUV(i / 2 + 2 * j, j, -90D, 1.0D, 1.0D);
 				tessellator.getWorldRenderer().addVertexWithUV(i / 2 + 2 * j, 0.0D, -90D, 1.0D, 0.0D);
 				tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 2 * j, 0.0D, -90D, 0.0D, 0.0D);
-				tessellator.draw();
+				tessellator.draw();*/
 				GL11.glDepthMask(true);
 				GL11.glEnable(2929 /* GL_DEPTH_TEST */);
 				GL11.glEnable(3008 /* GL_ALPHA_TEST */);
@@ -660,7 +650,7 @@ public void cameraSetup(CameraSetup event)
 			}
 		}
 		
-		if(event.isCancelable() && event.type == ElementType.CROSSHAIRS)
+		if(event.isCancelable() && event.getType() == ElementType.CROSSHAIRS)
 		{
 			if(FlansModClient.hitMarkerTime > 0)
 			{
@@ -672,16 +662,16 @@ public void cameraSetup(CameraSetup event)
 				GlStateManager.color(1.0f, 1.0f, 1.0f, Math.max(((float)FlansModClient.hitMarkerTime - 10.0f + partialTicks) / 10.0f, 0.0f));
 
 				
-				ItemStack currentStack = mc.thePlayer.inventory.getCurrentItem();
-				PlayerData data = PlayerHandler.getPlayerData(mc.thePlayer, Side.CLIENT);
+				//ItemStack currentStack = mc.thePlayer.inventory.getCurrentItem();
+				//PlayerData data = PlayerHandler.getPlayerData(mc.thePlayer, Side.CLIENT);
 				double zLevel = 0D;
 				
-				tessellator.getWorldRenderer().startDrawingQuads();
+				/*tessellator.getWorldRenderer().startDrawingQuads();
 				tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 4d, j / 2 + 5d, zLevel, 0D / 16D, 9D / 16D);
 				tessellator.getWorldRenderer().addVertexWithUV(i / 2 + 5d, j / 2 + 5d, zLevel, 9D / 16D, 9D / 16D);
 				tessellator.getWorldRenderer().addVertexWithUV(i / 2 + 5d, j / 2 - 4d, zLevel, 9D / 16D, 0D / 16D);
 				tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 4d, j / 2 - 4d, zLevel, 0D / 16D, 0D / 16D);
-				tessellator.draw();
+				tessellator.draw();*/
 				
 
 				GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
@@ -692,7 +682,7 @@ public void cameraSetup(CameraSetup event)
 
 		}
 				
-		if(event.isCancelable() && event.type == ElementType.HOTBAR)
+		if(event.isCancelable() && event.getType() == ElementType.HOTBAR)
 		{
 			//Off-hand weapon graphics
 			mc.renderEngine.bindTexture(offHand);
@@ -707,26 +697,26 @@ public void cameraSetup(CameraSetup event)
 				{
 					if(data.offHandGunSlot == n + 1)
 					{
-						tessellator.getWorldRenderer().startDrawingQuads();
+						/*tessellator.getWorldRenderer().startDrawingQuads();
 						tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 88 + 20 * n, j - 3, zLevel, 16D / 64D, 16D / 32D);
 						tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 72 + 20 * n, j - 3, zLevel, 32D / 64D, 16D / 32D);
 						tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 72 + 20 * n, j - 19, zLevel, 32D / 64D, 0D / 32D);
 						tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 88 + 20 * n, j - 19, zLevel, 16D / 64D, 0D / 32D);
-						tessellator.draw();
+						tessellator.draw();*/
 					}
 					else if(data.isValidOffHandWeapon(mc.thePlayer, n + 1))
 					{					
-						tessellator.getWorldRenderer().startDrawingQuads();
+						/*tessellator.getWorldRenderer().startDrawingQuads();
 						tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 88 + 20 * n, j - 3, zLevel, 0D / 64D, 16D / 32D);
 						tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 72 + 20 * n, j - 3, zLevel, 16D / 64D, 16D / 32D);
 						tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 72 + 20 * n, j - 19, zLevel, 16D / 64D, 0D / 32D);
 						tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 88 + 20 * n, j - 19, zLevel, 0D / 64D, 0D / 32D);
-						tessellator.draw();
+						tessellator.draw();*/
 					}
 				}
 			}
 		}
-		if(!event.isCancelable() && event.type == ElementType.HOTBAR)
+		if(!event.isCancelable() && event.getType() == ElementType.HOTBAR)
 		{
 			//Player ammo overlay
 			if(mc.thePlayer != null)
@@ -808,12 +798,12 @@ public void cameraSetup(CameraSetup event)
 	
 				mc.renderEngine.bindTexture(GuiTeamScores.texture);
 								
-				tessellator.getWorldRenderer().startDrawingQuads();
+				/*tessellator.getWorldRenderer().startDrawingQuads();
 				tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 43, 27, -90D, 85D / 256D, 27D / 256D);
 				tessellator.getWorldRenderer().addVertexWithUV(i / 2 + 43, 27, -90D, 171D / 256D, 27D / 256D);
 				tessellator.getWorldRenderer().addVertexWithUV(i / 2 + 43, 0D, -90D, 171D / 256D, 0D / 256D);
 				tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 43, 0D, -90D, 85D / 256D, 0D / 256D);
-				tessellator.draw();
+				tessellator.draw();*/
 				
 				//If we are in a two team gametype, draw the team scores at the top of the screen
 				if(teamInfo.numTeams == 2 && teamInfo.sortedByTeam)
@@ -821,21 +811,21 @@ public void cameraSetup(CameraSetup event)
 					//Draw team 1 colour bit
 					int colour = teamInfo.teamData[0].team.teamColour;	
 					GL11.glColor4f(((colour >> 16) & 0xff) / 256F, ((colour >> 8) & 0xff) / 256F, (colour & 0xff) / 256F, 1.0F);
-					tessellator.getWorldRenderer().startDrawingQuads();
+					/*tessellator.getWorldRenderer().startDrawingQuads();
 					tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 43, 27, -90D, 0D / 256D, 125D / 256D);
 					tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 19, 27, -90D, 24D / 256D, 125D / 256D);
 					tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 19, 0D, -90D, 24D / 256D, 98D / 256D);
 					tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 43, 0D, -90D, 0D / 256D, 98D / 256D);
-					tessellator.draw();
+					tessellator.draw();*/
 					//Draw team 2 colour bit
 					colour = teamInfo.teamData[1].team.teamColour;	
 					GL11.glColor4f(((colour >> 16) & 0xff) / 256F, ((colour >> 8) & 0xff) / 256F, (colour & 0xff) / 256F, 1.0F);
-					tessellator.getWorldRenderer().startDrawingQuads();
+					/*tessellator.getWorldRenderer().startDrawingQuads();
 					tessellator.getWorldRenderer().addVertexWithUV(i / 2 + 19, 27, -90D, 62D / 256D, 125D / 256D);
 					tessellator.getWorldRenderer().addVertexWithUV(i / 2 + 43, 27, -90D, 86D / 256D, 125D / 256D);
 					tessellator.getWorldRenderer().addVertexWithUV(i / 2 + 43, 0D, -90D, 86D / 256D, 98D / 256D);
 					tessellator.getWorldRenderer().addVertexWithUV(i / 2 + 19, 0D, -90D, 62D / 256D, 98D / 256D);
-					tessellator.draw();
+					tessellator.draw();*/
 					
 					GL11.glDepthMask(true);
 					GL11.glEnable(2929 /* GL_DEPTH_TEST */);
@@ -899,9 +889,9 @@ public void cameraSetup(CameraSetup event)
 			RenderHelper.disableStandardItemLighting();
 			
 			//DEBUG vehicles
-			if(mc.thePlayer.ridingEntity instanceof EntitySeat)
+			if(mc.thePlayer.getRidingEntity() instanceof EntitySeat)
 			{
-				EntityDriveable ent = ((EntitySeat)mc.thePlayer.ridingEntity).driveable;
+				EntityDriveable ent = ((EntitySeat)mc.thePlayer.getRidingEntity()).driveable;
 				
 				double dX = ent.posX - ent.prevPosX;
 				double dY = ent.posY - ent.prevPosY;

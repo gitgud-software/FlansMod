@@ -1,17 +1,15 @@
 package com.flansmod.common.network;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EntitySeat;
+
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PacketDriveableGUI extends PacketBase
 {
@@ -39,9 +37,9 @@ public class PacketDriveableGUI extends PacketBase
 	@Override
 	public void handleServerSide(EntityPlayerMP playerEntity) 
 	{
-		if(playerEntity.ridingEntity != null && playerEntity.ridingEntity instanceof EntitySeat)
+		if(playerEntity.getRidingEntity() != null && playerEntity.getRidingEntity() instanceof EntitySeat)
 		{
-			EntityDriveable d = ((EntitySeat)playerEntity.ridingEntity).driveable;
+			EntityDriveable d = ((EntitySeat)playerEntity.getRidingEntity()).driveable;
 			switch(guiID)
 			{
 			case 0 : //Guns

@@ -3,23 +3,23 @@ package com.flansmod.common.guns;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Vec3;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.types.IFlanItem;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
 
+import net.fexcraft.mod.lib.api.item.IItem;
+import net.fexcraft.mod.lib.util.item.ItemUtil;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 /** Implemented from old source. */
-public class ItemBullet extends ItemShootable implements IFlanItem
+public class ItemBullet extends ItemShootable implements IFlanItem, IItem
 {
 	public BulletType type;
 	
@@ -35,10 +35,12 @@ public class ItemBullet extends ItemShootable implements IFlanItem
 		case SHELL : case BOMB : case MINE : case MISSILE : setCreativeTab(FlansMod.tabFlanDriveables); break;
 		default : setCreativeTab(FlansMod.tabFlanGuns);
 		}
+		ItemUtil.register(FlansMod.MODID, this);
+		ItemUtil.registerRender(this);
 	}
 
     @SideOnly(Side.CLIENT)
-    @Override
+    //TODO @Override
     public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
     {
     	return type.colour;
@@ -55,7 +57,7 @@ public class ItemBullet extends ItemShootable implements IFlanItem
 
 	//Can be overriden to allow new types of bullets to be created, for planes
 	@Override
-	public EntityShootable getEntity(World worldObj, Vec3 origin, float yaw,
+	public EntityShootable getEntity(World worldObj, Vec3d origin, float yaw,
 			float pitch, double motionX, double motionY, double motionZ,
 			EntityLivingBase shooter,float gunDamage, InfoType shotFrom) 
 	{
@@ -72,7 +74,7 @@ public class ItemBullet extends ItemShootable implements IFlanItem
 
 	//Can be overriden to allow new types of bullets to be created, AA/MG constructor
 	@Override
-	public EntityShootable getEntity(World worldObj, Vec3 origin, float yaw,
+	public EntityShootable getEntity(World worldObj, Vec3d origin, float yaw,
 			float pitch, EntityLivingBase shooter, float spread, float damage,
 			InfoType shotFrom) 
 	{
@@ -97,5 +99,15 @@ public class ItemBullet extends ItemShootable implements IFlanItem
 	public void Shoot(World world, Vector3f origin, Vector3f direction, float damageModifier, float spreadModifier, float speedModifier, InfoType shotFrom, EntityLivingBase shooter) 
 	{
 		world.spawnEntityInWorld(getEntity(world, shooter, spreadModifier, damageModifier, speedModifier, false, shotFrom));
+	}
+
+	@Override
+	public int getVariantAmount() {
+		return default_variant;
+	}
+	
+	@Override
+	public String getName(){
+		return type.shortName;
 	}
 }

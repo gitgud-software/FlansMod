@@ -1,59 +1,21 @@
 package com.flansmod.client.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.lwjgl.opengl.GL11;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer;
 
-import com.flansmod.client.FlansModClient;
-import com.flansmod.client.FlansModResourceHandler;
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.PlayerData;
-import com.flansmod.common.PlayerHandler;
-import com.flansmod.common.guns.AttachmentType;
-import com.flansmod.common.guns.BulletType;
-import com.flansmod.common.guns.EnumFireMode;
-import com.flansmod.common.guns.GunType;
-import com.flansmod.common.guns.IScope;
-import com.flansmod.common.guns.ItemBullet;
-import com.flansmod.common.guns.ItemGun;
-import com.flansmod.common.guns.Paintjob;
-import com.flansmod.common.types.PaintableType;
-import com.flansmod.common.vector.Vector3f;
-
-import net.minecraftforge.fml.relauncher.Side;
-
-public class RenderGun implements IItemRenderer
+public class RenderGun// implements IItemRenderer
 {
 	private static TextureManager renderEngine;
 	
 	public static float smoothing;
 	public static boolean bindTextures = true;
 	
-	@Override
+	/*@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) 
 	{
 		switch(type)
 		{
 		case ENTITY : if(!Minecraft.getMinecraft().gameSettings.fancyGraphics) return false;
-		case EQUIPPED : case EQUIPPED_FIRST_PERSON :  /*case INVENTORY : */return item != null 
+		case EQUIPPED : case EQUIPPED_FIRST_PERSON :  /*case INVENTORY : *//*return item != null 
 				&& item.getItem() instanceof ItemGun 
 				&& ((ItemGun)item.getItem()).GetType().model != null;
 		default : break;
@@ -186,7 +148,7 @@ public class RenderGun implements IItemRenderer
 						Vector3f nextMeleePos = animations.meleeAnimationProgress + 1 < gunType.meleePath.size() ? gunType.meleePath.get(animations.meleeAnimationProgress + 1) : new Vector3f();
 						GL11.glTranslatef(meleePos.x + (nextMeleePos.x - meleePos.x) * smoothing, meleePos.y + (nextMeleePos.y - meleePos.y) * smoothing, meleePos.z + (nextMeleePos.z - meleePos.z) * smoothing);
 					}
-					*/
+					*//*
 					break;
 				}
 				case EQUIPPED_FIRST_PERSON:
@@ -326,7 +288,7 @@ public class RenderGun implements IItemRenderer
 		GL11.glPopMatrix();
 	}
 	
-	/** Gun render method, seperated from transforms so that mecha renderer may also call this */
+	/** Gun render method, seperated from transforms so that mecha renderer may also call this *//*
 	public void renderGun(ItemStack item, GunType type, float f, ModelGun model, GunAnimations animations, float reloadRotate)
 	{
 		//Make sure we actually have the renderEngine
@@ -603,7 +565,7 @@ public class RenderGun implements IItemRenderer
 								GL11.glTranslatef(-3F * (bulletProgress - 0.5F), 0F, 0F);
 								
 							}
-							*/
+							*//*
 							
 							
 							break;
@@ -711,5 +673,5 @@ public class RenderGun implements IItemRenderer
 			}
 			GL11.glPopMatrix();
 		}
-	}
+	}*/
 }

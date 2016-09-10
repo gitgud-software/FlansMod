@@ -3,24 +3,23 @@ package com.flansmod.common.teams;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.driveables.ItemPlane;
+import com.flansmod.common.driveables.ItemVehicle;
+import com.flansmod.common.guns.ItemAAGun;
+
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
-import net.minecraft.server.gui.IUpdatePlayerListBox;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ITickable;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.driveables.ItemPlane;
-import com.flansmod.common.driveables.ItemVehicle;
-import com.flansmod.common.guns.ItemAAGun;
-
-public class TileEntitySpawner extends TileEntity implements ITeamObject, IUpdatePlayerListBox
+public class TileEntitySpawner extends TileEntity implements ITeamObject, ITickable
 {
 	public static final PropertyInteger TYPE = PropertyInteger.create("type", 0, 2);
 	
@@ -49,16 +48,16 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject, IUpdat
 	}
 	
 	@Override
-    public Packet getDescriptionPacket()
+    public SPacketUpdateTileEntity getUpdatePacket()
     {
         NBTTagCompound tags = new NBTTagCompound();
         tags.setByte("TeamID", base == null ? (byte)0 : (byte)base.getOwnerID());
         tags.setString("Map", base == null || base.getMap() == null ? "" : base.getMap().shortName);
-        return new S35PacketUpdateTileEntity(pos, 1, tags);
+        return new SPacketUpdateTileEntity(pos, 1, tags);
     }
     
     @Override
-    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet)
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet)
     {
     	teamID = packet.getNbtCompound().getByte("TeamID");
     	map = packet.getNbtCompound().getString("Map");
@@ -131,12 +130,12 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject, IUpdat
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbt)
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt)
 	{
 		super.writeToNBT(nbt);
 		nbt.setInteger("delay", spawnDelay);
 		nbt.setInteger("Base", baseID);
-		nbt.setInteger("dim", worldObj.provider.getDimensionId());
+		nbt.setInteger("dim", worldObj.provider.getDimension());
 		nbt.setInteger("numStacks", stacksToSpawn.size());
 		for(int i = 0; i < stacksToSpawn.size(); i++)
 		{
@@ -144,7 +143,7 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject, IUpdat
 			stacksToSpawn.get(i).writeToNBT(stackNBT);
 			nbt.setTag("stack" + i, stackNBT);
 		}
-			
+		return nbt;	
 	}
 	
 	@Override
@@ -179,7 +178,7 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject, IUpdat
 	@Override
 	public void onBaseSet(int newTeamID) 
 	{
-		FlansMod.packetHandler.sendToDimension(getDescriptionPacket(), worldObj == null ? dimension : worldObj.provider.getDimensionId());
+		FlansMod.packetHandler.sendToDimension(getUpdatePacket(), worldObj == null ? dimension : worldObj.provider.getDimension());
 	}
 
 	@Override
@@ -194,7 +193,7 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject, IUpdat
 		base = b;
 		if(b != null)
 			baseID = b.getBaseID();
-		FlansMod.packetHandler.sendToDimension(getDescriptionPacket(), worldObj == null ? dimension : worldObj.provider.getDimensionId());
+		FlansMod.packetHandler.sendToDimension(getUpdatePacket(), worldObj == null ? dimension : worldObj.provider.getDimension());
 	}
 
 	@Override
@@ -206,7 +205,7 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject, IUpdat
 	@Override
 	public void destroy() 
 	{
-		worldObj.setBlockState(pos, Blocks.air.getDefaultState());
+		worldObj.setBlockState(pos, Blocks.AIR.getDefaultState());
 	}
 
 	@Override

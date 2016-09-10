@@ -2,26 +2,6 @@ package com.flansmod.client.model;
 
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.culling.Frustum;
-import net.minecraft.client.renderer.culling.ICamera;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraftforge.client.IItemRenderer;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
 import com.flansmod.client.FlansModResourceHandler;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.DriveablePart;
@@ -29,12 +9,26 @@ import com.flansmod.common.driveables.DriveablePosition;
 import com.flansmod.common.driveables.DriveableType;
 import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EntityPlane;
-import com.flansmod.common.driveables.ItemPlane;
 import com.flansmod.common.driveables.PlaneType;
 import com.flansmod.common.driveables.Propeller;
 import com.flansmod.common.guns.Paintjob;
 
-public class RenderPlane extends Render implements IItemRenderer 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.culling.ICamera;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.World;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+public class RenderPlane extends Render //implements IItemRenderer 
 {	
 	public RenderPlane(RenderManager renderManager) 
 	{
@@ -153,7 +147,7 @@ public class RenderPlane extends Render implements IItemRenderer
 		return FlansModResourceHandler.getPaintjobTexture(paintjob);
 	}
 
-	@Override
+	/*@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) 
 	{
 		switch(type)
@@ -162,7 +156,7 @@ public class RenderPlane extends Render implements IItemRenderer
 		default : break;
 		}
 		return false;
-	}
+	}*/
 	
 	@SubscribeEvent
 	public void renderWorld(RenderWorldLastEvent event)
@@ -174,9 +168,9 @@ public class RenderPlane extends Render implements IItemRenderer
 
 		//Get the camera frustrum for clipping
         Entity camera = Minecraft.getMinecraft().getRenderViewEntity();
-        double x = camera.lastTickPosX + (camera.posX - camera.lastTickPosX) * event.partialTicks;
-        double y = camera.lastTickPosY + (camera.posY - camera.lastTickPosY) * event.partialTicks;
-        double z = camera.lastTickPosZ + (camera.posZ - camera.lastTickPosZ) * event.partialTicks;
+        double x = camera.lastTickPosX + (camera.posX - camera.lastTickPosX) * event.getPartialTicks();
+        double y = camera.lastTickPosY + (camera.posY - camera.lastTickPosY) * event.getPartialTicks();
+        double z = camera.lastTickPosZ + (camera.posZ - camera.lastTickPosZ) * event.getPartialTicks();
         
         //Frustum frustrum = new Frustum();
         //frustrum.setPosition(x, y, z);
@@ -197,7 +191,7 @@ public class RenderPlane extends Render implements IItemRenderer
 			if(entity instanceof EntityPlane)
 			{
 				EntityPlane plane = (EntityPlane)entity;
-		        int i = plane.getBrightnessForRender(event.partialTicks);
+		        int i = plane.getBrightnessForRender(event.getPartialTicks());
 
 		        if (plane.isBurning())
 		        {
@@ -208,7 +202,7 @@ public class RenderPlane extends Render implements IItemRenderer
 		        int k = i / 65536;
 		        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j / 1.0F, (float)k / 1.0F);
 		        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		        render(plane, plane.prevPosX + (plane.posX - plane.prevPosX) * event.partialTicks, plane.prevPosY + (plane.posY - plane.prevPosY) * event.partialTicks, plane.prevPosZ + (plane.posZ - plane.prevPosZ) * event.partialTicks, 0F, event.partialTicks);
+		        render(plane, plane.prevPosX + (plane.posX - plane.prevPosX) * event.getPartialTicks(), plane.prevPosY + (plane.posY - plane.prevPosY) * event.getPartialTicks(), plane.prevPosZ + (plane.posZ - plane.prevPosZ) * event.getPartialTicks(), 0F, event.getPartialTicks());
 			}
 		}
 		
@@ -220,7 +214,7 @@ public class RenderPlane extends Render implements IItemRenderer
 		GL11.glPopMatrix();
 	}
 
-	@Override
+	/*@Override
 	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) 
 	{
 		return false;
@@ -278,5 +272,5 @@ public class RenderPlane extends Render implements IItemRenderer
 			}
 		}
 		GL11.glPopMatrix();
-	}
+	}*/
 }

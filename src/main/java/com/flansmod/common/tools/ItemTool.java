@@ -3,20 +3,6 @@ package com.flansmod.common.tools;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemFood;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import com.flansmod.client.debug.EntityDebugVector;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
@@ -28,7 +14,25 @@ import com.flansmod.common.types.IFlanItem;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
 
-public class ItemTool extends ItemFood implements IFlanItem
+import net.fexcraft.mod.lib.api.item.IItem;
+import net.fexcraft.mod.lib.util.item.ItemUtil;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemFood;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+public class ItemTool extends ItemFood implements IFlanItem, IItem
 {
 	public ToolType type;
 
@@ -47,7 +51,9 @@ public class ItemTool extends ItemFood implements IFlanItem
 			if(type.healDriveables)
 				setCreativeTab(FlansMod.tabFlanDriveables);
 		}
-		GameRegistry.registerItem(this, type.shortName, FlansMod.MODID);
+		//GameRegistry.registerItem(this, type.shortName, FlansMod.MODID);
+		ItemUtil.register(FlansMod.MODID, this);
+		ItemUtil.registerRender(this);
 	}
 
 	@Override
@@ -59,7 +65,7 @@ public class ItemTool extends ItemFood implements IFlanItem
 		}
 	}
 
-	@Override
+	//@Override
 	@SideOnly(Side.CLIENT)
     public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
     {
@@ -67,10 +73,10 @@ public class ItemTool extends ItemFood implements IFlanItem
     }
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
+	public ActionResult<ItemStack> onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer, EnumHand hand)
 	{
 		if(type.foodness > 0)
-			super.onItemRightClick(itemstack, world, entityplayer);
+			super.onItemRightClick(itemstack, world, entityplayer, hand);
 		
 		else if(type.parachute)
 		{
@@ -79,7 +85,7 @@ public class ItemTool extends ItemFood implements IFlanItem
 			{
 				EntityParachute parachute = new EntityParachute(world, type, entityplayer);
 				world.spawnEntityInWorld(parachute);
-				entityplayer.mountEntity(parachute);
+				entityplayer.startRiding(parachute);
 			}
 			
 			//If not in creative and the tool should decay, damage it
@@ -89,7 +95,7 @@ public class ItemTool extends ItemFood implements IFlanItem
 			if(type.toolLife > 0 && type.destroyOnEmpty && itemstack.getItemDamage() == itemstack.getMaxDamage())
 				itemstack.stackSize--;
 			//Our work here is done. Let's be off
-			return itemstack;
+			return new ActionResult(EnumActionResult.SUCCESS, itemstack);
 		}
 		
 		else if(type.remote)
@@ -111,7 +117,7 @@ public class ItemTool extends ItemFood implements IFlanItem
 				if(type.toolLife > 0 && type.destroyOnEmpty && itemstack.getItemDamage() == itemstack.getMaxDamage())
 					itemstack.stackSize--;
 				//Our work here is done. Let's be off
-				return itemstack;
+				return new ActionResult(EnumActionResult.SUCCESS, itemstack);
 			}
 		}
 		else
@@ -123,8 +129,8 @@ public class ItemTool extends ItemFood implements IFlanItem
 	        float cosPitch = -MathHelper.cos(entityplayer.rotationPitch * 0.01745329F);
 	        float sinPitch = MathHelper.sin(entityplayer.rotationPitch * 0.01745329F);
 	        double length = 5D;
-	        Vec3 posVec = new Vec3(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.getYOffset(), entityplayer.posZ);        
-	        Vec3 lookVec = posVec.addVector(sinYaw * cosPitch * length, sinPitch * length, cosYaw * cosPitch * length);
+	        Vec3d posVec = new Vec3d(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.getYOffset(), entityplayer.posZ);        
+	        Vec3d lookVec = posVec.addVector(sinYaw * cosPitch * length, sinPitch * length, cosYaw * cosPitch * length);
 	        
 	        if(world.isRemote && FlansMod.DEBUG)
 	        {
@@ -160,7 +166,7 @@ public class ItemTool extends ItemFood implements IFlanItem
 								if(type.toolLife > 0 && type.destroyOnEmpty && itemstack.getItemDamage() == itemstack.getMaxDamage())
 									itemstack.stackSize--;
 								//Our work here is done. Let's be off
-								return itemstack;
+								return new ActionResult(EnumActionResult.SUCCESS, itemstack);
 							}
 						}
 					}
@@ -184,7 +190,7 @@ public class ItemTool extends ItemFood implements IFlanItem
 					if (checkEntity == entityplayer)
 						continue;
 					//Do a more accurate ray trace on this entity
-					MovingObjectPosition hit = checkEntity.getEntityBoundingBox().calculateIntercept(posVec, lookVec);
+					RayTraceResult hit = checkEntity.getEntityBoundingBox().calculateIntercept(posVec, lookVec);
 					//If it hit, heal it
 					if (hit != null)
 						hitLiving = checkEntity;
@@ -194,7 +200,7 @@ public class ItemTool extends ItemFood implements IFlanItem
 				{
 					//If its finished, don't use it
 					if(itemstack.getItemDamage() >= itemstack.getMaxDamage() && type.toolLife > 0)
-						return itemstack;
+						return new ActionResult(EnumActionResult.SUCCESS, itemstack);
 
 					hitLiving.heal(type.healAmount);
 					FlansMod.getPacketHandler().sendToAllAround(new PacketFlak(hitLiving.posX, hitLiving.posY, hitLiving.posZ, 5, "heart"), new NetworkRegistry.TargetPoint(hitLiving.dimension, hitLiving.posX, hitLiving.posY, hitLiving.posZ, 50F));
@@ -208,7 +214,7 @@ public class ItemTool extends ItemFood implements IFlanItem
 				}
 			}
 		}
-		return itemstack;
+		return new ActionResult(EnumActionResult.PASS, itemstack);
 	}
 	
 	@Override
@@ -221,5 +227,15 @@ public class ItemTool extends ItemFood implements IFlanItem
 	public InfoType getInfoType() 
 	{
 		return type;
+	}
+
+	@Override
+	public String getName(){
+		return type.shortName;
+	}
+
+	@Override
+	public int getVariantAmount(){
+		return default_variant;
 	}
 }

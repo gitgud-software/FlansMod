@@ -1,16 +1,15 @@
 package com.flansmod.common;
 
+import com.flansmod.client.gui.GuiGunBox;
+import com.flansmod.common.guns.boxes.GunBoxType;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import com.flansmod.client.gui.GuiGunBox;
-import com.flansmod.common.guns.boxes.GunBoxType;
 
 public class CommonGuiHandler implements IGuiHandler
 {
@@ -29,7 +28,7 @@ public class CommonGuiHandler implements IGuiHandler
  	@SideOnly(Side.CLIENT)
  	public static void openGunBoxGui(EntityPlayer player, GunBoxType type) 
  	{
- 		EntityPlayerMP playerMP = FMLClientHandler.instance().getServer().getConfigurationManager().getPlayerByUsername(player.getName());
+ 		EntityPlayerMP playerMP = FMLClientHandler.instance().getServer().getPlayerList().getPlayerByUsername(player.getName());
  		FMLClientHandler.instance().displayGuiScreen(player, new GuiGunBox(playerMP.inventory, type));
  	}
 }

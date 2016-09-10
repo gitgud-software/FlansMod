@@ -36,7 +36,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-@Mod(modid = FlansModApocalypse.MODID, name = "Flan's Mod: Apocalypse", version = FlansModApocalypse.VERSION, acceptableRemoteVersions = "@APOCALYPSEALLOWEDVERSIONS@", dependencies = "required-after:" + FlansMod.MODID)//, guiFactory = "com.flansmod.client.gui.config.ModGuiFactory")
+//@Mod(modid = FlansModApocalypse.MODID, name = "Flan's Mod: Apocalypse", version = FlansModApocalypse.VERSION, acceptableRemoteVersions = "@APOCALYPSEALLOWEDVERSIONS@", dependencies = "required-after:" + FlansMod.MODID)//, guiFactory = "com.flansmod.client.gui.config.ModGuiFactory")
 public class FlansModApocalypse 
 {
 	//Core mod stuff

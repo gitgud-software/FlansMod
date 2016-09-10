@@ -4,13 +4,13 @@ import java.io.IOException;
 
 import org.lwjgl.opengl.GL11;
 
+import com.flansmod.common.driveables.ContainerDriveableMenu;
+import com.flansmod.common.driveables.EntityDriveable;
+
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-
-import com.flansmod.common.driveables.ContainerDriveableMenu;
-import com.flansmod.common.driveables.EntityDriveable;
 
 
 public class GuiDriveableFuel extends GuiContainer

@@ -2,19 +2,18 @@ package com.flansmod.client.gui;
 
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.fml.client.FMLClientHandler;
-
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.network.PacketTeamSelect;
 import com.flansmod.common.teams.PlayerClass;
 import com.flansmod.common.teams.Team;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.client.FMLClientHandler;
 
 public class GuiTeamSelect extends GuiScreen 
 {

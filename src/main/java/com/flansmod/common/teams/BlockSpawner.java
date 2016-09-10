@@ -2,33 +2,31 @@ package com.flansmod.common.teams;
 
 import java.util.List;
 
+import com.flansmod.client.FlansModClient;
+import com.flansmod.common.FlansMod;
+
 import net.minecraft.block.BlockContainer;
-import net.minecraft.block.BlockFence;
+import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import com.flansmod.client.FlansModClient;
-import com.flansmod.common.FlansMod;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class BlockSpawner extends BlockContainer
 {
@@ -53,52 +51,54 @@ public class BlockSpawner extends BlockContainer
     	}
     }
     
-    @Override
+    //@Override
     public AxisAlignedBB getCollisionBoundingBox(World par1World, BlockPos pos, IBlockState state)
     {
         return null;
     }
     
     @Override
-    public boolean isFullCube()
+    public boolean isFullCube(IBlockState state)
     {
         return false;
     }
     
     @Override
-    public boolean isOpaqueCube()
+    public boolean isOpaqueCube(IBlockState state)
     {
         return false;
     }
     
     @Override
-    public int getRenderType()
+    public EnumBlockRenderType getRenderType(IBlockState state)
     {
-        return 3;
+        return EnumBlockRenderType.INVISIBLE;
     }
     
     @Override
-    public boolean canPlaceBlockAt(World par1World, BlockPos pos)
+    public boolean canPlaceBlockAt(World world, BlockPos pos)
     {
-        return par1World.doesBlockHaveSolidTopSurface(par1World, pos.add(0, -1, 0));
+        //return par1World.doesBlockHaveSolidTopSurface(par1World, pos.add(0, -1, 0));
+    	return world.isSideSolid(pos.add(0,  -1, 0), EnumFacing.UP);
     }
     
-    @Override
+    //@Override
     public void onEntityCollidedWithBlock(World par1World, BlockPos pos, Entity par5Entity)
     {
     }
     
-    @Override
+    //@Override
     public void setBlockBoundsBasedOnState(IBlockAccess access, BlockPos pos)
     {
-    	setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.0625F, 1.0F);
+    	//setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.0625F, 1.0F);
     }
 
-	@Override
-	public int getMobilityFlag()
-	{
-		return 1;
-	}
+    @Override
+    @Deprecated
+    public EnumPushReaction getMobilityFlag(IBlockState state)
+    {
+        return this.blockMaterial.getMobilityFlag();
+    }
 
 	@Override
 	public TileEntity createNewTileEntity(World var1, int i)
@@ -106,7 +106,7 @@ public class BlockSpawner extends BlockContainer
 		return new TileEntitySpawner();
 	}
 	
-	@Override
+	//@Override //TODO only matching replace I found is "getBeaconColorMultiplier" ~fex
 	public int colorMultiplier(IBlockAccess access, BlockPos pos, int renderPass)
 	{		
 		if(!colouredPass)
@@ -140,7 +140,7 @@ public class BlockSpawner extends BlockContainer
 	}
 	
     @Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float par7, float par8, float par9)
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
     {
     	if(world.isRemote)
     		return true;
@@ -148,14 +148,14 @@ public class BlockSpawner extends BlockContainer
     	if(TeamsManager.getInstance().currentGametype != null)
     		TeamsManager.getInstance().currentGametype.objectClickedByPlayer((TileEntitySpawner)world.getTileEntity(x, y, z), (EntityPlayerMP)player);
     	*/
-    	if(MinecraftServer.getServer().getConfigurationManager().canSendCommands(player.getGameProfile()))
+    	if(FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().canSendCommands(player.getGameProfile()))
     	{
     		TileEntitySpawner spawner = (TileEntitySpawner)world.getTileEntity(pos);
-    		ItemStack item = player.getCurrentEquippedItem();
+    		ItemStack item = player.getHeldItemMainhand();
     		if(item == null || item.getItem() == null)
     		{
     			spawner.spawnDelay = (spawner.spawnDelay + 200) % 6000;
-    			player.addChatMessage(new ChatComponentText("Set spawn delay to " + spawner.spawnDelay / 20));
+    			player.addChatMessage(new TextComponentString("Set spawn delay to " + spawner.spawnDelay / 20));
     		}
     		else if(!(item.getItem() instanceof ItemOpStick))
     		{
@@ -171,9 +171,9 @@ public class BlockSpawner extends BlockContainer
     }
     
     @Override
-    protected BlockState createBlockState()
+    protected BlockStateContainer createBlockState()
     {
-        return new BlockState(this, new IProperty[] {TYPE});
+        return new BlockStateContainer(this, new IProperty[] {TYPE});
     }
     
     @Override

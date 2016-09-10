@@ -2,15 +2,15 @@ package com.flansmod.common.driveables.mechas;
 
 import java.util.HashMap;
 
+import com.flansmod.common.guns.ItemBullet;
+import com.flansmod.common.guns.ItemGun;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IChatComponent;
-
-import com.flansmod.common.guns.ItemBullet;
-import com.flansmod.common.guns.ItemGun;
+import net.minecraft.util.text.ITextComponent;
 
 public class MechaInventory implements IInventory 
 {
@@ -93,7 +93,7 @@ public class MechaInventory implements IInventory
 	}
 
 	@Override
-	public ItemStack getStackInSlotOnClosing(int i) 
+	public ItemStack removeStackFromSlot(int i) 
 	{
 		return getStackInSlot(i);
 	}
@@ -156,7 +156,7 @@ public class MechaInventory implements IInventory
 	}
 
 	@Override
-	public IChatComponent getDisplayName() 
+	public ITextComponent getDisplayName() 
 	{
 		return null;
 	}
