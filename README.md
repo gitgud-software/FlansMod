@@ -9,3 +9,10 @@ Please make any pull requests to the dev branch.
 
 This GitHub environment is to be treated maturely -- do not release any of this source code without prior
 permission from jamioflan.
+
+
+
+
+
+Edit by FEX: Please don't use any of the code updated by me without telling me before, thanks.
+(just wanna keep track of stuff ~~ idk where else to leave this info.)
