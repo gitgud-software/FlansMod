@@ -546,7 +546,9 @@ public abstract class DriveableType extends PaintableType
 			else if(split[0].equalsIgnoreCase("AddParticle") || split[0].equalsIgnoreCase("AddEmitter"))
 			{
 				ParticleEmitter emitter = new ParticleEmitter();
-				emitter.effectType = FlansModClient.getParticleType(split[1]);
+				if(FMLCommonHandler.instance().getSide() == Side.CLIENT){
+					emitter.effectType = FlansModClient.getParticleType(split[1]);
+				}
 				emitter.emitRate = Integer.parseInt(split[2]);
 				emitter.origin = new Vector3f(split[3], shortName);
 				emitter.extents = new Vector3f(split[4], shortName);

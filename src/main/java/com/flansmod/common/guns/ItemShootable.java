@@ -26,7 +26,7 @@ public abstract class ItemShootable extends Item implements IItem
 	}
 	
 	public String getName(){return type.shortName;}
-	public int getVariantAmount(){return 1;}
+	public int getVariantAmount(){return default_variant;}
 	
 	//Can be overriden to allow new types of bullets to be created, for planes
 	public abstract EntityShootable getEntity(World worldObj, Vec3d origin, float yaw,

@@ -3,7 +3,7 @@ package com.flansmod.common.network;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumMap;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -47,7 +47,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 	
 	/** Store received packets in these queues and have the main Minecraft threads use these */
 	private ConcurrentLinkedQueue<PacketBase> receivedPacketsClient = new ConcurrentLinkedQueue<PacketBase>();
-	private HashMap<String, ConcurrentLinkedQueue<PacketBase>> receivedPacketsServer = new HashMap<String, ConcurrentLinkedQueue<PacketBase>>();
+	//private HashMap<String, ConcurrentLinkedQueue<PacketBase>> receivedPacketsServer = new HashMap<String, ConcurrentLinkedQueue<PacketBase>>();
 	
 	/** Registers a packet with the handler */
 	public boolean registerPacket(Class<? extends PacketBase> cl)
@@ -123,11 +123,14 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		case SERVER :
 		{
 			INetHandler netHandler = ctx.channel().attr(NetworkRegistry.NET_HANDLER).get();
-			EntityPlayer player = ((NetHandlerPlayServer)netHandler).playerEntity;
-			if(!receivedPacketsServer.containsKey(player.getName()))
+			EntityPlayerMP player = ((NetHandlerPlayServer)netHandler).playerEntity;
+			/*if(!receivedPacketsServer.containsKey(player.getName()))
 				receivedPacketsServer.put(player.getName(), new ConcurrentLinkedQueue<PacketBase>());
-			receivedPacketsServer.get(player.getName()).offer(packet);
+			receivedPacketsServer.get(player.getName()).offer(packet);*/
+			getConcurrentLinkedQueue(player.getName()).offer(packet);
+			
 			//packet.handleServerSide();
+			
 			break;
 		}
 		}
@@ -141,7 +144,9 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		}
 	}
 	
-	public void handleServerPackets()
+	
+	//Made new server packet handler code cause the old one didn't work for me... ? ~Fex
+	/*public void handleServerPackets()
 	{
 		for(String playerName : receivedPacketsServer.keySet())
 		{
@@ -152,7 +157,61 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 				packet.handleServerSide(player);
 			}
 		}
+	}*/
+	//NEW CODE START
+	private static HashSet<PlayerQueue> receivedPacketsServer = new HashSet<PlayerQueue>();
+	
+	private boolean contains(String name){
+		for(PlayerQueue pq : receivedPacketsServer){
+			if(pq.player.getName().equals(name)){
+				return true;
+			}
+		}
+		return false;
 	}
+	
+	public static void add(EntityPlayerMP player){
+		receivedPacketsServer.add(new PlayerQueue(player));
+	}
+	
+	private ConcurrentLinkedQueue<PacketBase> getConcurrentLinkedQueue(String name){
+		for(PlayerQueue pq : receivedPacketsServer){
+			if(pq.player.getName().equals(name)){
+				return pq.packetQueue;
+			}
+		}
+		return null;
+	}
+	
+	public static void tryRemove(String name){
+		PlayerQueue toRemove = null;
+		for(PlayerQueue pq : receivedPacketsServer){
+			if(pq.player.getName().equals(name)){
+				toRemove = pq;
+				break;
+			}
+		}
+		receivedPacketsServer.remove(toRemove);
+	}
+	
+	public void handleServerPackets(){
+		for(PlayerQueue pq : receivedPacketsServer){
+			for(PacketBase packet = pq.packetQueue.poll(); packet != null; packet = pq.packetQueue.poll()){
+				packet.handleServerSide(pq.player);
+			}
+		}
+	}
+	
+	/** Player Packet Queue Container Object */
+	public static class PlayerQueue{
+		public EntityPlayerMP player;
+		public ConcurrentLinkedQueue<PacketBase> packetQueue;
+		public PlayerQueue(EntityPlayerMP player){
+			this.player = player;
+			this.packetQueue = new ConcurrentLinkedQueue<PacketBase>();
+		}
+	}
+	//NEW CODE END
 	
 	/** Initialisation method called from FMLInitializationEvent in FlansMod */
 	public void initialise()

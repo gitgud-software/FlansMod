@@ -357,7 +357,7 @@ public class FlansMod
 		}
 	}
 
-	@SubscribeEvent
+	//TODO temporary off //@SubscribeEvent
 	public void onLivingSpecialSpawn(EntityJoinWorldEvent event)
 	{
 		double chance = event.getWorld().rand.nextDouble();
@@ -391,11 +391,11 @@ public class FlansMod
 					if(playerClass.hat != null)
 						event.getEntity().setItemStackToSlot(EntUtil.getEquipmentSlot(1), team.hat.copy());
 					if(playerClass.chest != null)
-						event.getEntity().setItemStackToSlot(EntUtil.getEquipmentSlot(2), team.hat.copy());
+						event.getEntity().setItemStackToSlot(EntUtil.getEquipmentSlot(2), team.chest.copy());
 					if(playerClass.legs != null)
-						event.getEntity().setItemStackToSlot(EntUtil.getEquipmentSlot(3), team.hat.copy());
+						event.getEntity().setItemStackToSlot(EntUtil.getEquipmentSlot(3), team.legs.copy());
 					if(playerClass.shoes != null)
-						event.getEntity().setItemStackToSlot(EntUtil.getEquipmentSlot(4), team.hat.copy());
+						event.getEntity().setItemStackToSlot(EntUtil.getEquipmentSlot(4), team.shoes.copy());
 				}
 			}
 		}

@@ -6,12 +6,13 @@ import java.util.Map;
 
 import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EntitySeat;
+import com.flansmod.common.network.PacketHandler;
 import com.flansmod.common.teams.TeamsManager;
 
-import net.fexcraft.mod.fsu.server.util.IC;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -58,7 +59,7 @@ public class PlayerHandler
 		
 	public void serverTick()
 	{
-		for(WorldServer world : IC.getServer().worldServers)
+		for(WorldServer world : FMLCommonHandler.instance().getMinecraftServerInstance().worldServers)
 		{
 			for(Object player : world.playerEntities)
 			{
@@ -123,6 +124,8 @@ public class PlayerHandler
 				serverSideData.put(username, new PlayerData(username));
 			if(clientsToRemoveAfterThisRound.contains(username))
 				clientsToRemoveAfterThisRound.remove(username);
+			
+			PacketHandler.add((EntityPlayerMP)player);
 		}
 		else if(event instanceof PlayerLoggedOutEvent)
 		{
@@ -131,6 +134,8 @@ public class PlayerHandler
 			if(TeamsManager.getInstance().currentRound == null)
 				serverSideData.remove(username);
 			else clientsToRemoveAfterThisRound.add(username);
+			
+			PacketHandler.tryRemove(username);
 		}
 		else if(event instanceof PlayerRespawnEvent)
 		{
