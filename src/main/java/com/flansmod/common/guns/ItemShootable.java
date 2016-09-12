@@ -1,17 +1,14 @@
 package com.flansmod.common.guns;
 
-import com.flansmod.common.FlansMod;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
 
-import net.fexcraft.mod.lib.api.item.IItem;
-import net.fexcraft.mod.lib.util.item.ItemUtil;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public abstract class ItemShootable extends Item implements IItem
+public abstract class ItemShootable extends Item
 {
 	public ShootableType type;
 	
@@ -21,12 +18,12 @@ public abstract class ItemShootable extends Item implements IItem
 		maxStackSize = type.maxStackSize;
 		setMaxDamage(type.roundsPerItem);
 		//GameRegistry.registerItem(this, type.shortName, FlansMod.MODID);
-		ItemUtil.register(FlansMod.MODID, this);
-		ItemUtil.registerRender(this);
+		//ItemUtil.register(FlansMod.MODID, this);
+		//ItemUtil.registerRender(this);
 	}
 	
-	public String getName(){return type.shortName;}
-	public int getVariantAmount(){return default_variant;}
+	//public String getName(){return type.shortName;}
+	//public int getVariantAmount(){return default_variant;}
 	
 	//Can be overriden to allow new types of bullets to be created, for planes
 	public abstract EntityShootable getEntity(World worldObj, Vec3d origin, float yaw,

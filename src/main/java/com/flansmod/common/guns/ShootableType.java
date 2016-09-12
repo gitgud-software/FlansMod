@@ -11,7 +11,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public abstract class ShootableType extends InfoType 
+public class ShootableType extends InfoType 
 {
 	//Aesthetics
 	/** The model to render for this grenade in the world */

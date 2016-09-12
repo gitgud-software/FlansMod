@@ -161,8 +161,8 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 	}
 
 	@Override
-	public AxisAlignedBB getEntityBoundingBox() {
-		return getEntityBoundingBox();
+	public AxisAlignedBB getEntityBoundingBox(){
+		return new AxisAlignedBB(0, 0, 0, 1, 1, 1);//TODO
 	}
 
 	public void setArrowHeading(double d, double d1, double d2, float spread, float speed) {

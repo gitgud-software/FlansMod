@@ -508,8 +508,10 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			EntityPlayer driver = GetDriver();
 			
 			// For each 
-			ItemShootable shootableItem = (ItemShootable)shootableStack.getItem();
-			ShootableType shootableType = shootableItem.type;
+			if(shootableStack == null){
+				return;
+			}
+			ShootableType shootableType = ((ItemShootable)shootableStack.getItem()).type;
 			
 			float spread = 0.005f * gunType.bulletSpread * shootableType.bulletSpread;
 			
