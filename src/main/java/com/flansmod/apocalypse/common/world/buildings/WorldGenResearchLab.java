@@ -53,7 +53,7 @@ public class WorldGenResearchLab extends WorldGenFlan
 		//Generate empty rooms
 		for(int i = (pieceX == 1 & pieceZ == 1 ? -1 : 0); i < 8; i++)
 		{
-			fillArea(world, chunkX * 16, topLayerHeight - 8 * i, chunkZ * 16, chunkX * 16 + 16, topLayerHeight - 8 * i + 8, chunkZ * 16 + 16, FlansModApocalypse.blockLabStone.getDefaultState(), Blocks.air.getDefaultState());			
+			fillArea(world, chunkX * 16, topLayerHeight - 8 * i, chunkZ * 16, chunkX * 16 + 16, topLayerHeight - 8 * i + 8, chunkZ * 16 + 16, FlansModApocalypse.blockLabStone.getDefaultState(), Blocks.AIR.getDefaultState());			
 			fillArea(world, chunkX * 16, topLayerHeight - 8 * i + 6, chunkZ * 16, chunkX * 16 + 16, topLayerHeight - 8 * i + 7, chunkZ * 16 + 16, FlansModApocalypse.blockLabStone.getDefaultState());	
 			//Add glowstone lights
 			for(int j = 0; j < 2; j++)
@@ -77,13 +77,13 @@ public class WorldGenResearchLab extends WorldGenFlan
 			
 			//Make doors
 			if(pieceX != 0)
-				fillArea(world, chunkX * 16 + 0, topLayerHeight - 8 * i + 1, chunkZ * 16 + 7, chunkX * 16 + 1, topLayerHeight - 8 * i + 4, chunkZ * 16 + 9, Blocks.air.getDefaultState());			
+				fillArea(world, chunkX * 16 + 0, topLayerHeight - 8 * i + 1, chunkZ * 16 + 7, chunkX * 16 + 1, topLayerHeight - 8 * i + 4, chunkZ * 16 + 9, Blocks.AIR.getDefaultState());			
 			if(pieceX != 2)
-				fillArea(world, chunkX * 16 + 15, topLayerHeight - 8 * i + 1, chunkZ * 16 + 7, chunkX * 16 + 16, topLayerHeight - 8 * i + 4, chunkZ * 16 + 9, Blocks.air.getDefaultState());			
+				fillArea(world, chunkX * 16 + 15, topLayerHeight - 8 * i + 1, chunkZ * 16 + 7, chunkX * 16 + 16, topLayerHeight - 8 * i + 4, chunkZ * 16 + 9, Blocks.AIR.getDefaultState());			
 			if(pieceZ != 0)
-				fillArea(world, chunkX * 16 + 7, topLayerHeight - 8 * i + 1, chunkZ * 16 + 0, chunkX * 16 + 9, topLayerHeight - 8 * i + 4, chunkZ * 16 + 1, Blocks.air.getDefaultState());			
+				fillArea(world, chunkX * 16 + 7, topLayerHeight - 8 * i + 1, chunkZ * 16 + 0, chunkX * 16 + 9, topLayerHeight - 8 * i + 4, chunkZ * 16 + 1, Blocks.AIR.getDefaultState());			
 			if(pieceZ != 2)
-				fillArea(world, chunkX * 16 + 7, topLayerHeight - 8 * i + 1, chunkZ * 16 + 15, chunkX * 16 + 9, topLayerHeight - 8 * i + 4, chunkZ * 16 + 16, Blocks.air.getDefaultState());	
+				fillArea(world, chunkX * 16 + 7, topLayerHeight - 8 * i + 1, chunkZ * 16 + 15, chunkX * 16 + 9, topLayerHeight - 8 * i + 4, chunkZ * 16 + 16, Blocks.AIR.getDefaultState());	
 			
 			for(int j = 0; j < 16; j++)
 			{
@@ -118,8 +118,8 @@ public class WorldGenResearchLab extends WorldGenFlan
 				
 				//Make hole
 				fillArea(world, chunkX * 16 + 4, topLayerHeight - 8 * i + 1, chunkZ * 16 + 4, chunkX * 16 + 12, topLayerHeight - 8 * i + 2, chunkZ * 16 + 12, Blocks.nether_brick_fence.getDefaultState());	
-				fillArea(world, chunkX * 16 + 5, topLayerHeight - 8 * i - 2, chunkZ * 16 + 5, chunkX * 16 + 11, topLayerHeight - 8 * i + 2, chunkZ * 16 + 11, Blocks.air.getDefaultState());	
-				fillArea(world, chunkX * 16 + 7, topLayerHeight - 8 * i + 1, chunkZ * 16 + 11, chunkX * 16 + 9, topLayerHeight - 8 * i + 2, chunkZ * 16 + 12, Blocks.air.getDefaultState());	
+				fillArea(world, chunkX * 16 + 5, topLayerHeight - 8 * i - 2, chunkZ * 16 + 5, chunkX * 16 + 11, topLayerHeight - 8 * i + 2, chunkZ * 16 + 11, Blocks.AIR.getDefaultState());	
+				fillArea(world, chunkX * 16 + 7, topLayerHeight - 8 * i + 1, chunkZ * 16 + 11, chunkX * 16 + 9, topLayerHeight - 8 * i + 2, chunkZ * 16 + 12, Blocks.AIR.getDefaultState());	
 				
 				//Build stairs
 				fillArea(world, chunkX * 16 + 7, topLayerHeight - 8 * i - 1, chunkZ * 16 + 9, chunkX * 16 + 9, topLayerHeight - 8 * i, chunkZ * 16 + 11, FlansModApocalypse.blockLabStone.getDefaultState());	
@@ -145,8 +145,8 @@ public class WorldGenResearchLab extends WorldGenFlan
 				{
 					//Make hole
 					fillArea(world, chunkX * 16 + 4, topLayerHeight - 8 * i + 1, chunkZ * 16 + 4, chunkX * 16 + 12, topLayerHeight - 8 * i + 2, chunkZ * 16 + 12, Blocks.nether_brick_fence.getDefaultState());	
-					fillArea(world, chunkX * 16 + 5, topLayerHeight - 8 * i - 2, chunkZ * 16 + 5, chunkX * 16 + 11, topLayerHeight - 8 * i + 2, chunkZ * 16 + 11, Blocks.air.getDefaultState());	
-					fillArea(world, chunkX * 16 + 7, topLayerHeight - 8 * i + 1, chunkZ * 16 + 11, chunkX * 16 + 9, topLayerHeight - 8 * i + 2, chunkZ * 16 + 12, Blocks.air.getDefaultState());	
+					fillArea(world, chunkX * 16 + 5, topLayerHeight - 8 * i - 2, chunkZ * 16 + 5, chunkX * 16 + 11, topLayerHeight - 8 * i + 2, chunkZ * 16 + 11, Blocks.AIR.getDefaultState());	
+					fillArea(world, chunkX * 16 + 7, topLayerHeight - 8 * i + 1, chunkZ * 16 + 11, chunkX * 16 + 9, topLayerHeight - 8 * i + 2, chunkZ * 16 + 12, Blocks.AIR.getDefaultState());	
 					
 					//Build stairs
 					fillArea(world, chunkX * 16 + 7, topLayerHeight - 8 * i - 1, chunkZ * 16 + 9, chunkX * 16 + 9, topLayerHeight - 8 * i, chunkZ * 16 + 11, FlansModApocalypse.blockLabStone.getDefaultState());	
@@ -301,7 +301,7 @@ public class WorldGenResearchLab extends WorldGenFlan
 		fillArea(world, x + 1, y, z + 1, x + 3, y + 3, z + 3, Blocks.obsidian.getDefaultState());	
 		fillArea(world, x + 2, y, z + 2, x + 4, y + 3, z + 4, Blocks.obsidian.getDefaultState());	
 		world.setBlockState(new BlockPos(x + 1, y + 1, z + 1), FlansModApocalypse.blockPowerCube.getDefaultState());
-		world.setBlockState(new BlockPos(x + 2, y + 1, z + 2), Blocks.air.getDefaultState());
+		world.setBlockState(new BlockPos(x + 2, y + 1, z + 2), Blocks.AIR.getDefaultState());
 		world.setBlockState(new BlockPos(x + 1, y + 2, z + 1), Blocks.iron_trapdoor.getStateFromMeta(8));
 		world.setBlockState(new BlockPos(x + 2, y + 2, z + 2), Blocks.iron_trapdoor.getStateFromMeta(8));
 	}
@@ -388,7 +388,7 @@ public class WorldGenResearchLab extends WorldGenFlan
 		case 1 : fillArea(world, x + 1, y + 1, z + 1, x + 6, y + 2, z + 6, Blocks.carrots.getStateFromMeta(rand.nextInt(5) + 2)); break;	
 		case 2 : fillArea(world, x + 1, y + 1, z + 1, x + 6, y + 2, z + 6, Blocks.potatoes.getStateFromMeta(rand.nextInt(5) + 2)); break;	
 		}
-		world.setBlockState(new BlockPos(x + 3, y + 1, z + 3), Blocks.air.getDefaultState());
+		world.setBlockState(new BlockPos(x + 3, y + 1, z + 3), Blocks.AIR.getDefaultState());
 		world.setBlockState(new BlockPos(x + 3, y, z + 3), Blocks.water.getDefaultState());
 	}
 	
@@ -465,13 +465,13 @@ public class WorldGenResearchLab extends WorldGenFlan
 		fillArea(world, x, y, z, x + 4, y + 5, z + 4, FlansModApocalypse.blockLabStone.getDefaultState());
 		fillArea(world, x, y + 1, z, x + 4, y + 4, z + 4, Blocks.glass.getDefaultState());
 		
-		fillArea(world, x + 1, y, z + 1, x + 3, y + 5, z + 3, Blocks.air.getDefaultState());
+		fillArea(world, x + 1, y, z + 1, x + 3, y + 5, z + 3, Blocks.AIR.getDefaultState());
 		fillArea(world, x + 1, y, z + 1, x + 3, y + rand.nextInt(4), z + 3, liquid);		
 		
-		fillArea(world, x, y, z, 			x + 1, y + 5, z + 1, Blocks.air.getDefaultState());
-		fillArea(world, x + 3, y, z, 		x + 4, y + 5, z + 1, Blocks.air.getDefaultState());
-		fillArea(world, x + 3, y, z + 3, 	x + 4, y + 5, z + 4, Blocks.air.getDefaultState());
-		fillArea(world, x, y, z + 3, 		x + 1, y + 5, z + 4, Blocks.air.getDefaultState());
+		fillArea(world, x, y, z, 			x + 1, y + 5, z + 1, Blocks.AIR.getDefaultState());
+		fillArea(world, x + 3, y, z, 		x + 4, y + 5, z + 1, Blocks.AIR.getDefaultState());
+		fillArea(world, x + 3, y, z + 3, 	x + 4, y + 5, z + 4, Blocks.AIR.getDefaultState());
+		fillArea(world, x, y, z + 3, 		x + 1, y + 5, z + 4, Blocks.AIR.getDefaultState());
 	}
 	
 	private IBlockState getRandomLiquid(Random rand)

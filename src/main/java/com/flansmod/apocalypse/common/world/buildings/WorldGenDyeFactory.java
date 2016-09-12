@@ -66,9 +66,9 @@ public class WorldGenDyeFactory extends WorldGenFlan
 			for(int k = 0; k < 16; k += 5)
 				fillArea(world, x + i, y + 1, z + k, x + i + 1, y + 6, z + k + 1, Blocks.log.getDefaultState());
 		//Hollow out
-		fillArea(world, x + 1, y, z + 1, x + 5, y + 4, z + 15, Blocks.air.getDefaultState());
+		fillArea(world, x + 1, y, z + 1, x + 5, y + 4, z + 15, Blocks.AIR.getDefaultState());
 		//Open door
-		fillArea(world, x + 5, y, z + 6, x + 6, y + 4, z + 10, Blocks.air.getDefaultState());
+		fillArea(world, x + 5, y, z + 6, x + 6, y + 4, z + 10, Blocks.AIR.getDefaultState());
 		
 		//Add tables (two random, one gun modification and one vehicle crafting)
 		world.setBlockState(new BlockPos(x + 1, y, z + 6), FlansModApocalypse.getLootGenerator().getRandomWeaponBox(rand).getDefaultState());
@@ -131,10 +131,10 @@ public class WorldGenDyeFactory extends WorldGenFlan
 		//Cut out corners
 		for(int i = 0; i < 4; i += 3)
 			for(int k = 0; k < 4; k += 3)
-				fillArea(world, x + i, y, z + k, x + i + 1, y + 3, z + k + 1, Blocks.air.getDefaultState());
+				fillArea(world, x + i, y, z + k, x + i + 1, y + 3, z + k + 1, Blocks.AIR.getDefaultState());
 		
 		//Fill tank with wool
-		fillArea(world, x + 1, y, z + 1, x + 3, y + 3, z + 3, Blocks.air.getDefaultState());	
+		fillArea(world, x + 1, y, z + 1, x + 3, y + 3, z + 3, Blocks.AIR.getDefaultState());	
 		fillArea(world, x + 1, y, z + 1, x + 3, y + (tall ? 2 : 1), z + 3, Blocks.wool.getStateFromMeta(rand.nextInt(16)));	
 	}
 }

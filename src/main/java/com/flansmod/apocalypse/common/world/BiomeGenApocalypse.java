@@ -79,7 +79,7 @@ public class BiomeGenApocalypse extends BiomeGenBase
             {
                 IBlockState iblockstate2 = primer.getBlockState(j1, k1, i1);
 
-                if (iblockstate2.getBlock().getMaterial() == Material.air)
+                if (iblockstate2.getBlock().getMaterial() == Material.AIR)
                 {
                     k = -1;
                 }
