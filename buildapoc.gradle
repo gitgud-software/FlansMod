@@ -17,14 +17,14 @@ group= "com.flansmod.apocalypse"
 archivesBaseName = "Flan's Mod: Apocalypse"
 
 minecraft {
-    version = "1.8-11.14.4.1577"
+    version = "1.10.2-12.18.1.2011"
     runDir = "run"
 
     replace "@ALLOWED_VERSION@", "[0.1.0, 0.2.0)"
     replace "@APOCALYPSEVERSION@", project.version
     replaceIn "FlansModApocalypse.java"
 	
-	mappings = "snapshot_20141130"
+	mappings = "snapshot_20160518"
 }
 
 processResources
