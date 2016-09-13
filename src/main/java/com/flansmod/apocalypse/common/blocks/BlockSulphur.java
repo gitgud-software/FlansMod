@@ -7,14 +7,13 @@ import com.flansmod.apocalypse.common.FlansModApocalypse;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 
 public class BlockSulphur extends Block 
 {
 	public BlockSulphur() 
 	{
-		super(Material.sand);
+		super(Material.SAND);
 	}
     
 	@Override

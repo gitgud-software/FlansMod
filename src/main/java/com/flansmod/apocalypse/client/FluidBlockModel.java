@@ -1,31 +1,11 @@
 package com.flansmod.apocalypse.client;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.vecmath.Vector3f;
-
-import com.flansmod.apocalypse.common.blocks.BlockSulphuricAcid;
-
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.IBakedModel;
-import net.minecraft.client.resources.model.SimpleBakedModel;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MathHelper;
-import net.minecraftforge.client.model.ISmartBlockModel;
-import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+//TODO
 @SideOnly(Side.CLIENT)
-public class FluidBlockModel implements ISmartBlockModel
+public class FluidBlockModel {}/*implements ISmartBlockModel
 {
 	
 	static final float RENDER_OFFSET = 0.001F;	//Copied from old forge fluid renderer
@@ -202,4 +182,4 @@ public class FluidBlockModel implements ISmartBlockModel
 			return -6710887;
 		else return -1;
 	}
-}
+}*/

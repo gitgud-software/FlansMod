@@ -1,26 +1,22 @@
 package com.flansmod.apocalypse.common.entity;
 
-import net.minecraft.client.Minecraft;
+import net.fexcraft.mod.lib.util.entity.EntUtil;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-import com.flansmod.client.debug.EntityDebugVector;
-import com.flansmod.client.gui.GuiDriveableController;
-import com.flansmod.common.FlansMod;
+import javax.annotation.Nullable;
+
 import com.flansmod.common.driveables.DriveableData;
 import com.flansmod.common.driveables.EnumDriveablePart;
 import com.flansmod.common.driveables.mechas.EntityMecha;
 import com.flansmod.common.driveables.mechas.MechaType;
-import com.flansmod.common.network.PacketDriveableDamage;
-import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.vector.Vector3f;
 
 public class EntityAIMecha extends EntityMecha 
@@ -58,7 +54,7 @@ public class EntityAIMecha extends EntityMecha
 	}
 	
 	@Override
-	public boolean interactFirst(EntityPlayer entityplayer)
+	public boolean processInitialInteract(EntityPlayer entityplayer, @Nullable ItemStack stack, EnumHand hand)
 	{
 		return false;
 	}
@@ -113,7 +109,7 @@ public class EntityAIMecha extends EntityMecha
 				double blockHitZ = hit == null ? 0 : hit.hitVec.zCoord - rightArmOrigin.zCoord; 
 				
 				//If the target is nearer than the block hit or there was no block
-				if(hit == null || hit.typeOfHit != RayTraceResult.MovingObjectType.BLOCK || dX * dX + dY * dY + dZ * dZ < blockHitX * blockHitX + blockHitY * blockHitY + blockHitZ * blockHitZ)
+				if(hit == null || hit.typeOfHit != RayTraceResult.Type.BLOCK || dX * dX + dY * dY + dZ * dZ < blockHitX * blockHitX + blockHitY * blockHitY + blockHitZ * blockHitZ)
 				{
 					useItem(usingLeft);
 					if(rand.nextInt(5) == 0)
@@ -198,9 +194,9 @@ public class EntityAIMecha extends EntityMecha
 		if(worldObj.isRemote || isDead)
 			return true;
 
-		MechaType type = getMechaType();
+		//MechaType type = getMechaType();
 
-		if(damagesource.damageType.equals("player") && damagesource.getEntity().onGround && (seats[0] == null || seats[0].riddenByEntity == null))
+		if(damagesource.damageType.equals("player") && damagesource.getEntity().onGround && (seats[0] == null || EntUtil.getPassengerOf(seats[0]) == null))
 		{
 			return false;
 		}

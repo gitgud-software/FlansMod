@@ -6,14 +6,12 @@ import java.util.Random;
 
 import com.flansmod.common.TileEntityItemHolder;
 import com.flansmod.common.driveables.DriveableType;
-import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EnumPlaneMode;
 import com.flansmod.common.driveables.PlaneType;
 import com.flansmod.common.driveables.VehicleType;
 import com.flansmod.common.driveables.mechas.MechaItemType;
 import com.flansmod.common.driveables.mechas.MechaType;
 import com.flansmod.common.guns.AttachmentType;
-import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.guns.ShootableType;
@@ -27,12 +25,9 @@ import com.flansmod.common.teams.Team;
 import com.flansmod.common.tools.ToolType;
 import com.flansmod.common.types.EnumType;
 
+import net.fexcraft.mod.lib.util.entity.EntUtil;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.monster.EntitySkeleton;
-import net.minecraft.entity.monster.EntityZombie;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -148,7 +143,7 @@ public class FlansModLootGenerator
 		else if(rand.nextBoolean())
 			holder.setStack(getSurvivorJournal(rand));
 		else if(rand.nextBoolean())
-			holder.setStack(new ItemStack(Items.rotten_flesh, 1 + rand.nextInt(3)));
+			holder.setStack(new ItemStack(Items.ROTTEN_FLESH, 1 + rand.nextInt(3)));
 	}
 	
 	public void fillVillageChest(Random rand, TileEntityChest chest) 
@@ -187,8 +182,8 @@ public class FlansModLootGenerator
 		{
 			switch(rand.nextInt(4))
 			{
-			case 0 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.chicken, rand.nextInt(2) + 1)); break;
-			case 1 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.porkchop, rand.nextInt(2) + 1)); break;
+			case 0 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.CHICKEN, rand.nextInt(2) + 1)); break;
+			case 1 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.PORKCHOP, rand.nextInt(2) + 1)); break;
 			case 2 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.BEEF, rand.nextInt(2) + 1)); break;
 			case 3 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.BAKED_POTATO, rand.nextInt(3) + 1)); break;
 			}
@@ -243,32 +238,32 @@ public class FlansModLootGenerator
 			//Give a completely random piece of armour
 			ArmourType armour = ArmourType.armours.get(rand.nextInt(ArmourType.armours.size()));
 			if(armour != null && armour.type != 2)
-				entity.setCurrentItemOrArmor(armour.type + 1, new ItemStack(armour.item));
+				entity.setItemStackToSlot(EntUtil.getEquipmentSlot(armour.type + 1), new ItemStack(armour.item));
 		}
 		else if(Team.teams.size() > 0)
 		{
 			//Give a random set of armour
 			Team team = Team.teams.get(rand.nextInt(Team.teams.size()));
 			if(team.hat != null)
-				entity.setCurrentItemOrArmor(1, team.hat.copy());
+				entity.setItemStackToSlot(EntUtil.getEquipmentSlot(1), team.hat.copy());
 			if(team.chest != null)
-				entity.setCurrentItemOrArmor(2, team.chest.copy());
+				entity.setItemStackToSlot(EntUtil.getEquipmentSlot(2), team.chest.copy());
 			if(team.legs != null)
-				entity.setCurrentItemOrArmor(3, team.legs.copy());
+				entity.setItemStackToSlot(EntUtil.getEquipmentSlot(3), team.legs.copy());
 			if(team.shoes != null)
-				entity.setCurrentItemOrArmor(4, team.shoes.copy());
+				entity.setItemStackToSlot(EntUtil.getEquipmentSlot(4), team.shoes.copy());
 			
 			if(team.classes.size() > 0)
 			{
 				PlayerClass playerClass = team.classes.get(rand.nextInt(team.classes.size()));
 				if(playerClass.hat != null)
-					entity.setCurrentItemOrArmor(1, playerClass.hat.copy());
+					entity.setItemStackToSlot(EntUtil.getEquipmentSlot(1), playerClass.hat.copy());
 				if(playerClass.chest != null)
-					entity.setCurrentItemOrArmor(2, playerClass.chest.copy());
+					entity.setItemStackToSlot(EntUtil.getEquipmentSlot(2), playerClass.chest.copy());
 				if(playerClass.legs != null)
-					entity.setCurrentItemOrArmor(3, playerClass.legs.copy());
+					entity.setItemStackToSlot(EntUtil.getEquipmentSlot(3), playerClass.legs.copy());
 				if(playerClass.shoes != null)
-					entity.setCurrentItemOrArmor(4, playerClass.shoes.copy());
+					entity.setItemStackToSlot(EntUtil.getEquipmentSlot(4), playerClass.shoes.copy());
 			}
 		}
 	}
@@ -307,6 +302,7 @@ public class FlansModLootGenerator
 		case vehicle: return vehicleEngines.size() > 0 ? vehicleEngines.get(rand.nextInt(vehicleEngines.size())) : null;
 		case plane: return planeEngines.size() > 0 ? planeEngines.get(rand.nextInt(planeEngines.size())) : null;
 		case mecha: return mechaEngines.size() > 0 ? mechaEngines.get(rand.nextInt(mechaEngines.size())) : null;
+		default:break;
 		}
 		return null;
 	}
@@ -322,7 +318,7 @@ public class FlansModLootGenerator
 	{
 		for(int i = 0; i < 3; i++)
 			if(rand.nextBoolean())
-				tileentity.setInventorySlotContents(i, new ItemStack(Items.potionitem, 1, potions[rand.nextInt(9)]));
+				tileentity.setInventorySlotContents(i, new ItemStack(Items.POTIONITEM, 1, potions[rand.nextInt(9)]));
 	}
 
 	public void fillLiquidLabChest(Random rand, TileEntityChest chest) 
@@ -332,13 +328,13 @@ public class FlansModLootGenerator
 		{
 			switch(rand.nextInt(10))
 			{
-			case 0 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.bowl, rand.nextInt(5) + 1)); break;
-			case 1 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.water_bucket)); break;
-			case 2 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.bucket, rand.nextInt(2) + 1)); break;
-			case 3 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.potionitem)); break;
-			case 4 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.potionitem)); break;
-			case 5 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.potionitem)); break;
-			case 6 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.potionitem, 1, potions[rand.nextInt(9)])); break;
+			case 0 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.BOWL, rand.nextInt(5) + 1)); break;
+			case 1 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.WATER_BUCKET)); break;
+			case 2 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.BUCKET, rand.nextInt(2) + 1)); break;
+			case 3 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.POTIONITEM)); break;
+			case 4 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.POTIONITEM)); break;
+			case 5 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.POTIONITEM)); break;
+			case 6 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.POTIONITEM, 1, potions[rand.nextInt(9)])); break;
 			case 7 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(FlansModApocalypse.sulphur, rand.nextInt(12) + 1)); break;
 			case 8 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), getScientistJournal(rand)); break;
 			case 9 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), getScientistJournal(rand)); break;
@@ -388,24 +384,24 @@ public class FlansModLootGenerator
 		
 		for(int i = 0; i < numDyes; i++)
 		{
-			chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.dye, rand.nextInt(8) + 1, rand.nextInt(16)));
+			chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.DYE, rand.nextInt(8) + 1, rand.nextInt(16)));
 		}
 		
 		for(int i = 0; i < numMisc; i++)
 		{
 			switch(rand.nextInt(4))
 			{
-			case 0 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.string, rand.nextInt(5) + 1)); break;
-			case 1 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.feather, rand.nextInt(5) + 1)); break;
-			case 2 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.leather, rand.nextInt(8) + 1)); break;
-			case 3 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.clay_ball, rand.nextInt(32) + 1)); break;
+			case 0 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.STRING, rand.nextInt(5) + 1)); break;
+			case 1 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.FEATHER, rand.nextInt(5) + 1)); break;
+			case 2 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.LEATHER, rand.nextInt(8) + 1)); break;
+			case 3 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.CLAY_BALL, rand.nextInt(32) + 1)); break;
 			}
 		}
 	}
 	
 	public ItemStack getScientistJournal(Random rand)
 	{
-		ItemStack stack = new ItemStack(Items.written_book);
+		ItemStack stack = new ItemStack(Items.WRITTEN_BOOK);
 		
 		//Give the book an author
 		stack.setTagInfo("author", new NBTTagString("Dr. Brazier"));
@@ -455,7 +451,7 @@ public class FlansModLootGenerator
 	
 	public ItemStack getSurvivorJournal(Random rand)
 	{
-		ItemStack stack = new ItemStack(Items.written_book);
+		ItemStack stack = new ItemStack(Items.WRITTEN_BOOK);
 		
 		//Give the book an author
 		switch(rand.nextInt(1))

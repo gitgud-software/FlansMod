@@ -3,8 +3,6 @@ package com.flansmod.apocalypse.client.model;
 import org.lwjgl.opengl.GL11;
 
 import com.flansmod.apocalypse.common.entity.EntityNukeDrop;
-import com.flansmod.common.driveables.EntityPlane;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -96,9 +94,9 @@ public class RenderNukeDrop extends Render
 
 		//Get the camera frustrum for clipping
         Entity camera = Minecraft.getMinecraft().getRenderViewEntity();
-        double x = camera.lastTickPosX + (camera.posX - camera.lastTickPosX) * event.partialTicks;
-        double y = camera.lastTickPosY + (camera.posY - camera.lastTickPosY) * event.partialTicks;
-        double z = camera.lastTickPosZ + (camera.posZ - camera.lastTickPosZ) * event.partialTicks;
+        double x = camera.lastTickPosX + (camera.posX - camera.lastTickPosX) * event.getPartialTicks();
+        double y = camera.lastTickPosY + (camera.posY - camera.lastTickPosY) * event.getPartialTicks();
+        double z = camera.lastTickPosZ + (camera.posZ - camera.lastTickPosZ) * event.getPartialTicks();
         
         //Frustum frustrum = new Frustum();
         //frustrum.setPosition(x, y, z);
@@ -119,7 +117,7 @@ public class RenderNukeDrop extends Render
 			if(entity instanceof EntityNukeDrop)
 			{
 				EntityNukeDrop nuke = (EntityNukeDrop)entity;
-		        int i = nuke.getBrightnessForRender(event.partialTicks);
+		        int i = nuke.getBrightnessForRender(event.getPartialTicks());
 
 		        if (nuke.isBurning())
 		        {
@@ -130,7 +128,7 @@ public class RenderNukeDrop extends Render
 		        int k = i / 65536;
 		        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j / 1.0F, (float)k / 1.0F);
 		        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		        render(nuke, nuke.prevPosX + (nuke.posX - nuke.prevPosX) * event.partialTicks, nuke.prevPosY + (nuke.posY - nuke.prevPosY) * event.partialTicks, nuke.prevPosZ + (nuke.posZ - nuke.prevPosZ) * event.partialTicks, 0F, event.partialTicks);
+		        render(nuke, nuke.prevPosX + (nuke.posX - nuke.prevPosX) * event.getPartialTicks(), nuke.prevPosY + (nuke.posY - nuke.prevPosY) * event.getPartialTicks(), nuke.prevPosZ + (nuke.posZ - nuke.prevPosZ) * event.getPartialTicks(), 0F, event.getPartialTicks());
 			}
 		}
 		

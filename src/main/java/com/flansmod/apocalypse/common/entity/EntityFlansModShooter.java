@@ -1,57 +1,34 @@
 package com.flansmod.apocalypse.common.entity;
 
-import java.util.Calendar;
-
 import com.flansmod.common.FlansMod;
-import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.guns.AttachmentType;
-import com.flansmod.common.guns.EnumFireMode;
 import com.flansmod.common.guns.GunType;
-import com.flansmod.common.guns.InventoryHelper;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.guns.ItemShootable;
 import com.flansmod.common.guns.ShootableType;
 import com.flansmod.common.network.PacketPlaySound;
-import com.flansmod.common.network.PacketReload;
 import com.flansmod.common.vector.Vector3f;
-import com.google.common.base.Predicate;
-
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIArrowAttack;
-import net.minecraft.entity.ai.EntityAIAvoidEntity;
-import net.minecraft.entity.ai.EntityAIFleeSun;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.ai.EntityAIRestrictSun;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
-import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldProviderHell;
 
 public class EntityFlansModShooter extends EntityMob implements IRangedAttackMob
 {
-	private EntityAIArrowAttack aiArrowAttack = new EntityAIArrowAttack(this, 1.0D, 20, 1, 70.0F);
+	//private EntityAIArrowAttack aiArrowAttack = new EntityAIArrowAttack(this, 1.0D, 20, 1, 70.0F);
+	//TODO find replace
 	public ItemStack[] ammoStacks;
 	public float shootDelay = 0;
 	public float minigunSpeed = 0.0F;
@@ -74,10 +51,10 @@ public class EntityFlansModShooter extends EntityMob implements IRangedAttackMob
  
         if (world != null && !world.isRemote)
         {
-        	tasks.addTask(4, this.aiArrowAttack);
+        	//tasks.addTask(4, this.aiArrowAttack);
         }
         
-        renderDistanceWeight = 200D;
+        setRenderDistanceWeight(200D);
 	}
 	
 	@Override
@@ -92,11 +69,11 @@ public class EntityFlansModShooter extends EntityMob implements IRangedAttackMob
     protected void applyEntityAttributes()
     {
         super.applyEntityAttributes();
-        this.getEntityAttribute( SharedMonsterAttributes.followRange).setBaseValue(80D);
-        this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.25D);
+        this.getEntityAttribute( SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(80D);
+        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
     }
 	
-	@Override
+	/*@Override
 	public IEntityLivingData func_180482_a(DifficultyInstance difficulty, IEntityLivingData data)
     {
         data = super.func_180482_a(difficulty, data);
@@ -108,12 +85,12 @@ public class EntityFlansModShooter extends EntityMob implements IRangedAttackMob
         this.setCanPickUpLoot(this.rand.nextFloat() < 0.55F * difficulty.getClampedAdditionalDifficulty());
 
         return data;
-    }
+    }*///TODO find replace
 
 	@Override
 	public void attackEntityWithRangedAttack(EntityLivingBase entity, float range)
     {			
-		ItemStack stack = getHeldItem();
+		ItemStack stack = getHeldItem(swingingHand);//TODO check / eclipse did dis
 		if(stack != null && stack.getItem() instanceof ItemGun)
 		{
 			ItemGun item = (ItemGun)stack.getItem();
@@ -242,7 +219,7 @@ public class EntityFlansModShooter extends EntityMob implements IRangedAttackMob
 				if(bestSlot != -1)
 				{
 					ItemStack newBulletStack = ammoStacks[bestSlot];
-					ShootableType newBulletType = ((ItemShootable)newBulletStack.getItem()).type;
+					//ShootableType newBulletType = ((ItemShootable)newBulletStack.getItem()).type;
 					//Unload the old magazine (Drop an item if it is required and the player is not in creative mode)
 					if(bulletStack != null && bulletStack.getItem() instanceof ItemShootable && ((ItemShootable)bulletStack.getItem()).type.dropItemOnReload != null && !creative)
 						item.dropItem(world, this, ((ItemShootable)bulletStack.getItem()).type.dropItemOnReload);
