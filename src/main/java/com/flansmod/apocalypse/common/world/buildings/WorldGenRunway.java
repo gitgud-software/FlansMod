@@ -17,7 +17,7 @@ import net.minecraft.item.EnumDyeColor;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
@@ -46,7 +46,7 @@ public class WorldGenRunway extends WorldGenFlan
 		
 
 		
-		fillArea(world, x, yHeight + 1, z, x + 16, yHeight + 11, z + 16, Blocks.air.getDefaultState());
+		fillArea(world, x, yHeight + 1, z, x + 16, yHeight + 11, z + 16, Blocks.AIR.getDefaultState());
 		
 		if(ModuloHelper.modulo(chunkX, 4) == 0)
 		{
