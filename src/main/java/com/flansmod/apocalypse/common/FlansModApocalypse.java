@@ -5,6 +5,7 @@ import com.flansmod.apocalypse.common.blocks.BlockStatic;
 import com.flansmod.apocalypse.common.blocks.BlockSulphur;
 import com.flansmod.apocalypse.common.blocks.BlockSulphuricAcid;
 import com.flansmod.apocalypse.common.blocks.TileEntityPowerCube;
+import com.flansmod.apocalypse.common.world.WorldProviderApocalypse;
 import com.flansmod.common.BlockItemHolder;
 import com.flansmod.common.CreativeTabFlan;
 import com.flansmod.common.ItemHolderType;
@@ -127,6 +128,9 @@ public class FlansModApocalypse
 		dimensionID = DimensionManager.getNextFreeDimId();
 		//DimensionManager.registerProviderType(dimensionID, WorldProviderApocalypse.class, true);
 		//DimensionManager.registerDimension(dimensionID, dimensionID);//TODO
+		WorldProviderApocalypse wp = new WorldProviderApocalypse();
+		DimensionManager.createProviderFor(dimensionID);
+		DimensionManager.registerDimension(dimensionID, wp.type);
 
 		
 		//Grab references to apocalypse specific items and blocks here:

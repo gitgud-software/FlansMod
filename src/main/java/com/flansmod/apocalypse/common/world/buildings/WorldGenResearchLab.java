@@ -8,19 +8,15 @@ import com.flansmod.common.BlockItemHolder;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.TileEntityItemHolder;
 import com.flansmod.common.driveables.DriveableData;
-import com.flansmod.common.driveables.DriveableType;
-import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EnumDriveablePart;
 import com.flansmod.common.driveables.mechas.EnumMechaSlotType;
 import com.flansmod.common.driveables.mechas.MechaType;
-import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.guns.ShootableType;
 
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.BlockFlowerPot;
-import net.minecraft.block.BlockTorch;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -32,7 +28,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenerator;
 
 public class WorldGenResearchLab extends WorldGenFlan 
 {
@@ -42,8 +37,8 @@ public class WorldGenResearchLab extends WorldGenFlan
 		int chunkX = ModuloHelper.divide(pos.getX(), 16);
 		int chunkZ = ModuloHelper.divide(pos.getZ(), 16);
 		
-		int structureX = ModuloHelper.divide(chunkX, 3);
-		int structureZ = ModuloHelper.divide(chunkZ, 3);
+		//int structureX = ModuloHelper.divide(chunkX, 3);
+		//int structureZ = ModuloHelper.divide(chunkZ, 3);
 		
 		int pieceX = ModuloHelper.modulo(chunkX, 3);
 		int pieceZ = ModuloHelper.modulo(chunkZ, 3);
@@ -60,7 +55,7 @@ public class WorldGenResearchLab extends WorldGenFlan
 			{
 				for(int k = 0; k < 2; k++)
 				{
-					fillArea(world, chunkX * 16 + 3 + 8 * j, topLayerHeight - 8 * i + 6, chunkZ * 16 + 3 + 8 * k, chunkX * 16 + 5 + 8 * j, topLayerHeight - 8 * i + 7, chunkZ * 16 + 5 + 8 * k, Blocks.glowstone.getDefaultState());
+					fillArea(world, chunkX * 16 + 3 + 8 * j, topLayerHeight - 8 * i + 6, chunkZ * 16 + 3 + 8 * k, chunkX * 16 + 5 + 8 * j, topLayerHeight - 8 * i + 7, chunkZ * 16 + 5 + 8 * k, Blocks.GLOWSTONE.getDefaultState());
 					if(world.isRemote)
 					{
 						for(int x = 0; x < 2; x++)
@@ -99,13 +94,13 @@ public class WorldGenResearchLab extends WorldGenFlan
 			if(i == 7 && pieceX == 1 && pieceZ == 1)
 			{
 				//Teleporter Room
-				fillArea(world, chunkX * 16 + 3, topLayerHeight - 8 * i, chunkZ * 16 + 3, chunkX * 16 + 13, topLayerHeight - 8 * i + 1, chunkZ * 16 + 13, Blocks.glowstone.getDefaultState());	
+				fillArea(world, chunkX * 16 + 3, topLayerHeight - 8 * i, chunkZ * 16 + 3, chunkX * 16 + 13, topLayerHeight - 8 * i + 1, chunkZ * 16 + 13, Blocks.GLOWSTONE.getDefaultState());	
 				fillArea(world, chunkX * 16 + 4, topLayerHeight - 8 * i, chunkZ * 16 + 4, chunkX * 16 + 12, topLayerHeight - 8 * i + 1, chunkZ * 16 + 12, FlansModApocalypse.blockLabStone.getDefaultState());
-				fillArea(world, chunkX * 16 + 6, topLayerHeight - 8 * i + 1, chunkZ * 16 + 6, chunkX * 16 + 10, topLayerHeight - 8 * i + 2, chunkZ * 16 + 10, Blocks.obsidian.getDefaultState());
-				fillArea(world, chunkX * 16 + 6, topLayerHeight - 8 * i + 1, chunkZ * 16 + 7, chunkX * 16 + 7, topLayerHeight - 8 * i + 2, chunkZ * 16 + 9, Blocks.stone_slab.getStateFromMeta(7));
-				fillArea(world, chunkX * 16 + 9, topLayerHeight - 8 * i + 1, chunkZ * 16 + 7, chunkX * 16 + 10, topLayerHeight - 8 * i + 2, chunkZ * 16 + 9, Blocks.stone_slab.getStateFromMeta(7));
-				fillArea(world, chunkX * 16 + 7, topLayerHeight - 8 * i + 1, chunkZ * 16 + 6, chunkX * 16 + 9, topLayerHeight - 8 * i + 2, chunkZ * 16 + 7, Blocks.stone_slab.getStateFromMeta(7));
-				fillArea(world, chunkX * 16 + 7, topLayerHeight - 8 * i + 1, chunkZ * 16 + 9, chunkX * 16 + 9, topLayerHeight - 8 * i + 2, chunkZ * 16 + 10, Blocks.stone_slab.getStateFromMeta(7));
+				fillArea(world, chunkX * 16 + 6, topLayerHeight - 8 * i + 1, chunkZ * 16 + 6, chunkX * 16 + 10, topLayerHeight - 8 * i + 2, chunkZ * 16 + 10, Blocks.OBSIDIAN.getDefaultState());
+				fillArea(world, chunkX * 16 + 6, topLayerHeight - 8 * i + 1, chunkZ * 16 + 7, chunkX * 16 + 7, topLayerHeight - 8 * i + 2, chunkZ * 16 + 9, Blocks.STONE_SLAB.getStateFromMeta(7));
+				fillArea(world, chunkX * 16 + 9, topLayerHeight - 8 * i + 1, chunkZ * 16 + 7, chunkX * 16 + 10, topLayerHeight - 8 * i + 2, chunkZ * 16 + 9, Blocks.STONE_SLAB.getStateFromMeta(7));
+				fillArea(world, chunkX * 16 + 7, topLayerHeight - 8 * i + 1, chunkZ * 16 + 6, chunkX * 16 + 9, topLayerHeight - 8 * i + 2, chunkZ * 16 + 7, Blocks.STONE_SLAB.getStateFromMeta(7));
+				fillArea(world, chunkX * 16 + 7, topLayerHeight - 8 * i + 1, chunkZ * 16 + 9, chunkX * 16 + 9, topLayerHeight - 8 * i + 2, chunkZ * 16 + 10, Blocks.STONE_SLAB.getStateFromMeta(7));
 				world.setBlockState(new BlockPos(chunkX * 16 + 6, topLayerHeight - 8 * i + 2, chunkZ * 16 + 6), FlansModApocalypse.blockPowerCube.getDefaultState());
 				
 				for(int k = 0; k < 8; k++)
@@ -117,7 +112,7 @@ public class WorldGenResearchLab extends WorldGenFlan
 				i--;
 				
 				//Make hole
-				fillArea(world, chunkX * 16 + 4, topLayerHeight - 8 * i + 1, chunkZ * 16 + 4, chunkX * 16 + 12, topLayerHeight - 8 * i + 2, chunkZ * 16 + 12, Blocks.nether_brick_fence.getDefaultState());	
+				fillArea(world, chunkX * 16 + 4, topLayerHeight - 8 * i + 1, chunkZ * 16 + 4, chunkX * 16 + 12, topLayerHeight - 8 * i + 2, chunkZ * 16 + 12, Blocks.NETHER_BRICK_FENCE.getDefaultState());	
 				fillArea(world, chunkX * 16 + 5, topLayerHeight - 8 * i - 2, chunkZ * 16 + 5, chunkX * 16 + 11, topLayerHeight - 8 * i + 2, chunkZ * 16 + 11, Blocks.AIR.getDefaultState());	
 				fillArea(world, chunkX * 16 + 7, topLayerHeight - 8 * i + 1, chunkZ * 16 + 11, chunkX * 16 + 9, topLayerHeight - 8 * i + 2, chunkZ * 16 + 12, Blocks.AIR.getDefaultState());	
 				
@@ -144,7 +139,7 @@ public class WorldGenResearchLab extends WorldGenFlan
 				case 0 : //Stairs
 				{
 					//Make hole
-					fillArea(world, chunkX * 16 + 4, topLayerHeight - 8 * i + 1, chunkZ * 16 + 4, chunkX * 16 + 12, topLayerHeight - 8 * i + 2, chunkZ * 16 + 12, Blocks.nether_brick_fence.getDefaultState());	
+					fillArea(world, chunkX * 16 + 4, topLayerHeight - 8 * i + 1, chunkZ * 16 + 4, chunkX * 16 + 12, topLayerHeight - 8 * i + 2, chunkZ * 16 + 12, Blocks.NETHER_BRICK_FENCE.getDefaultState());	
 					fillArea(world, chunkX * 16 + 5, topLayerHeight - 8 * i - 2, chunkZ * 16 + 5, chunkX * 16 + 11, topLayerHeight - 8 * i + 2, chunkZ * 16 + 11, Blocks.AIR.getDefaultState());	
 					fillArea(world, chunkX * 16 + 7, topLayerHeight - 8 * i + 1, chunkZ * 16 + 11, chunkX * 16 + 9, topLayerHeight - 8 * i + 2, chunkZ * 16 + 12, Blocks.AIR.getDefaultState());	
 					
@@ -187,11 +182,11 @@ public class WorldGenResearchLab extends WorldGenFlan
 					{
 						generateTarget(world, rand, chunkX * 16 + 2 + 7 * j, topLayerHeight - 8 * i + 1, chunkZ * 16 + 1);
 					}
-					fillArea(world, chunkX * 16 + 3, topLayerHeight - 8 * i + 1, chunkZ * 16 + 6, chunkX * 16 + 4, topLayerHeight - 8 * i + 2, chunkZ * 16 + 12, Blocks.planks.getDefaultState());
-					fillArea(world, chunkX * 16 + 12, topLayerHeight - 8 * i + 1, chunkZ * 16 + 6, chunkX * 16 + 13, topLayerHeight - 8 * i + 2, chunkZ * 16 + 12, Blocks.planks.getDefaultState());
-					fillArea(world, chunkX * 16 + 4, topLayerHeight - 8 * i + 1, chunkZ * 16 + 11, chunkX * 16 + 12, topLayerHeight - 8 * i + 2, chunkZ * 16 + 12, Blocks.stone_slab.getStateFromMeta(10));
-					world.setBlockState(new BlockPos(chunkX * 16 + 6, topLayerHeight - 8 * i + 1, chunkZ * 16 + 11), Blocks.planks.getDefaultState());
-					world.setBlockState(new BlockPos(chunkX * 16 + 9, topLayerHeight - 8 * i + 1, chunkZ * 16 + 11), Blocks.planks.getDefaultState());
+					fillArea(world, chunkX * 16 + 3, topLayerHeight - 8 * i + 1, chunkZ * 16 + 6, chunkX * 16 + 4, topLayerHeight - 8 * i + 2, chunkZ * 16 + 12, Blocks.PLANKS.getDefaultState());
+					fillArea(world, chunkX * 16 + 12, topLayerHeight - 8 * i + 1, chunkZ * 16 + 6, chunkX * 16 + 13, topLayerHeight - 8 * i + 2, chunkZ * 16 + 12, Blocks.PLANKS.getDefaultState());
+					fillArea(world, chunkX * 16 + 4, topLayerHeight - 8 * i + 1, chunkZ * 16 + 11, chunkX * 16 + 12, topLayerHeight - 8 * i + 2, chunkZ * 16 + 12, Blocks.STONE_SLAB.getStateFromMeta(10));
+					world.setBlockState(new BlockPos(chunkX * 16 + 6, topLayerHeight - 8 * i + 1, chunkZ * 16 + 11), Blocks.PLANKS.getDefaultState());
+					world.setBlockState(new BlockPos(chunkX * 16 + 9, topLayerHeight - 8 * i + 1, chunkZ * 16 + 11), Blocks.PLANKS.getDefaultState());
 					
 					generateGunRack(world, rand, chunkX * 16 + 1, topLayerHeight - 8 * i + 1, chunkZ * 16 + 14);
 					generateGunRack(world, rand, chunkX * 16 + 4, topLayerHeight - 8 * i + 1, chunkZ * 16 + 14);
@@ -224,11 +219,11 @@ public class WorldGenResearchLab extends WorldGenFlan
 						else
 						{
 							if(rand.nextBoolean())
-								world.setBlockState(new BlockPos(chunkX * 16 + 2 + 8 * j, topLayerHeight - 8 * i + 1, chunkZ * 16 + 1), Blocks.crafting_table.getDefaultState());
+								world.setBlockState(new BlockPos(chunkX * 16 + 2 + 8 * j, topLayerHeight - 8 * i + 1, chunkZ * 16 + 1), Blocks.CRAFTING_TABLE.getDefaultState());
 							else world.setBlockState(new BlockPos(chunkX * 16 + 2 + 8 * j, topLayerHeight - 8 * i + 1, chunkZ * 16 + 1), FlansMod.workbench.getStateFromMeta(1));
-							world.setBlockState(new BlockPos(chunkX * 16 + 4 + 8 * j, topLayerHeight - 8 * i + 1, chunkZ * 16 + 1), Blocks.iron_block.getDefaultState());
-							world.setBlockState(new BlockPos(chunkX * 16 + 5 + 8 * j, topLayerHeight - 8 * i + 2, chunkZ * 16 + 1), Blocks.iron_block.getDefaultState());
-							world.setBlockState(new BlockPos(chunkX * 16 + 5 + 8 * j, topLayerHeight - 8 * i + 1, chunkZ * 16 + 1), Blocks.iron_block.getDefaultState());
+							world.setBlockState(new BlockPos(chunkX * 16 + 4 + 8 * j, topLayerHeight - 8 * i + 1, chunkZ * 16 + 1), Blocks.IRON_BLOCK.getDefaultState());
+							world.setBlockState(new BlockPos(chunkX * 16 + 5 + 8 * j, topLayerHeight - 8 * i + 2, chunkZ * 16 + 1), Blocks.IRON_BLOCK.getDefaultState());
+							world.setBlockState(new BlockPos(chunkX * 16 + 5 + 8 * j, topLayerHeight - 8 * i + 1, chunkZ * 16 + 1), Blocks.IRON_BLOCK.getDefaultState());
 							world.setBlockState(new BlockPos(chunkX * 16 + 4 + 8 * j, topLayerHeight - 8 * i + 1, chunkZ * 16 + 4), Blocks.ANVIL.getDefaultState());
 						}
 						
@@ -297,31 +292,31 @@ public class WorldGenResearchLab extends WorldGenFlan
 	
 	private void generateServerPower(World world, Random rand, int x, int y, int z) 
 	{
-		fillArea(world, x, y, z, x + 2, y + 3, z + 2, Blocks.obsidian.getDefaultState());	
-		fillArea(world, x + 1, y, z + 1, x + 3, y + 3, z + 3, Blocks.obsidian.getDefaultState());	
-		fillArea(world, x + 2, y, z + 2, x + 4, y + 3, z + 4, Blocks.obsidian.getDefaultState());	
+		fillArea(world, x, y, z, x + 2, y + 3, z + 2, Blocks.OBSIDIAN.getDefaultState());	
+		fillArea(world, x + 1, y, z + 1, x + 3, y + 3, z + 3, Blocks.OBSIDIAN.getDefaultState());	
+		fillArea(world, x + 2, y, z + 2, x + 4, y + 3, z + 4, Blocks.OBSIDIAN.getDefaultState());	
 		world.setBlockState(new BlockPos(x + 1, y + 1, z + 1), FlansModApocalypse.blockPowerCube.getDefaultState());
 		world.setBlockState(new BlockPos(x + 2, y + 1, z + 2), Blocks.AIR.getDefaultState());
-		world.setBlockState(new BlockPos(x + 1, y + 2, z + 1), Blocks.iron_trapdoor.getStateFromMeta(8));
-		world.setBlockState(new BlockPos(x + 2, y + 2, z + 2), Blocks.iron_trapdoor.getStateFromMeta(8));
+		world.setBlockState(new BlockPos(x + 1, y + 2, z + 1), Blocks.IRON_TRAPDOOR.getStateFromMeta(8));
+		world.setBlockState(new BlockPos(x + 2, y + 2, z + 2), Blocks.IRON_TRAPDOOR.getStateFromMeta(8));
 	}
 	
 	private void generateServerRack(World world, Random rand, int x, int y, int z, boolean big) 
 	{
-		fillArea(world, x, y, z, x + 3, y + 3, z + 1, Blocks.obsidian.getDefaultState());	
-		fillArea(world, x + 1, y, z, x + 2, y + 3, z + 1, Blocks.quartz_block.getStateFromMeta(3));	
+		fillArea(world, x, y, z, x + 3, y + 3, z + 1, Blocks.OBSIDIAN.getDefaultState());	
+		fillArea(world, x + 1, y, z, x + 2, y + 3, z + 1, Blocks.QUARTZ_BLOCK.getStateFromMeta(3));	
 		if(big)
 		{
-			fillArea(world, x + 3, y, z, x + 4, y + 3, z + 1, Blocks.quartz_block.getStateFromMeta(3));	
-			fillArea(world, x + 4, y, z, x + 5, y + 3, z + 1, Blocks.obsidian.getDefaultState());	
+			fillArea(world, x + 3, y, z, x + 4, y + 3, z + 1, Blocks.QUARTZ_BLOCK.getStateFromMeta(3));	
+			fillArea(world, x + 4, y, z, x + 5, y + 3, z + 1, Blocks.OBSIDIAN.getDefaultState());	
 		}
 	}
 	
 	private void generateWeapons(World world, Random rand, int x, int y, int z) 
 	{
-		fillArea(world, x + 1, y, z, x + 3, y + 1, z + 2, Blocks.planks.getDefaultState());	
-		fillArea(world, x, y, z, x + 1, y + 1, z + 2, Blocks.chest.getDefaultState());	
-		fillArea(world, x + 3, y, z, x + 4, y + 1, z + 2, Blocks.chest.getDefaultState());	
+		fillArea(world, x + 1, y, z, x + 3, y + 1, z + 2, Blocks.PLANKS.getDefaultState());	
+		fillArea(world, x, y, z, x + 1, y + 1, z + 2, Blocks.CHEST.getDefaultState());	
+		fillArea(world, x + 3, y, z, x + 4, y + 1, z + 2, Blocks.CHEST.getDefaultState());	
 
 		fillArea(world, x + 1, y + 1, z, x + 3, y + 2, z + 1, FlansModApocalypse.gunRack.getDefaultState().withProperty(BlockItemHolder.FACING, EnumFacing.SOUTH));	
 		fillArea(world, x + 1, y + 1, z + 1, x + 3, y + 2, z + 2, FlansModApocalypse.gunRack.getDefaultState().withProperty(BlockItemHolder.FACING, EnumFacing.NORTH));	
@@ -345,20 +340,20 @@ public class WorldGenResearchLab extends WorldGenFlan
 		fillArea(world, x + 1, y, z + 2, x + 3, y + 1, z + 3, FlansModApocalypse.blockLabStone.getDefaultState());	
 		fillArea(world, x + 1, y + 2, z, x + 3, y + 3, z + 2, FlansModApocalypse.blockLabStone.getDefaultState());	
 		fillArea(world, x + 1, y + 3, z, x + 3, y + 5, z + 1, FlansModApocalypse.blockLabStone.getDefaultState());	
-		fillArea(world, x + 1, y, z, x + 3, y + 1, z + 2, Blocks.lava.getDefaultState());	
+		fillArea(world, x + 1, y, z, x + 3, y + 1, z + 2, Blocks.LAVA.getDefaultState());	
 	}
 	
 	private void generatePlantPots(World world, Random rand, int x, int y, int z)
 	{
-		fillArea(world, x, y, z, x + 6, y + 1, z + 1, Blocks.quartz_block.getDefaultState());	
-		fillArea(world, x + 1, y, z, x + 5, y + 1, z + 1, Blocks.stone_slab.getStateFromMeta(15));	
+		fillArea(world, x, y, z, x + 6, y + 1, z + 1, Blocks.QUARTZ_BLOCK.getDefaultState());	
+		fillArea(world, x + 1, y, z, x + 5, y + 1, z + 1, Blocks.STONE_SLAB.getStateFromMeta(15));	
 		for(int i = 0; i < 6; i++)
-			world.setBlockState(new BlockPos(x + i, y + 1, z), Blocks.flower_pot.getDefaultState().withProperty(BlockFlowerPot.LEGACY_DATA, rand.nextInt(14)));	
+			world.setBlockState(new BlockPos(x + i, y + 1, z), Blocks.FLOWER_POT.getDefaultState().withProperty(BlockFlowerPot.LEGACY_DATA, rand.nextInt(14)));	
 		
-		fillArea(world, x, y, z + 5, x + 6, y + 1, z + 6, Blocks.quartz_block.getDefaultState());	
-		fillArea(world, x + 1, y, z + 5, x + 5, y + 1, z + 6, Blocks.stone_slab.getStateFromMeta(15));	
+		fillArea(world, x, y, z + 5, x + 6, y + 1, z + 6, Blocks.QUARTZ_BLOCK.getDefaultState());	
+		fillArea(world, x + 1, y, z + 5, x + 5, y + 1, z + 6, Blocks.STONE_SLAB.getStateFromMeta(15));	
 		for(int i = 0; i < 6; i++)
-			world.setBlockState(new BlockPos(x + i, y + 1, z + 5), Blocks.flower_pot.getDefaultState().withProperty(BlockFlowerPot.LEGACY_DATA, rand.nextInt(14)));	
+			world.setBlockState(new BlockPos(x + i, y + 1, z + 5), Blocks.FLOWER_POT.getDefaultState().withProperty(BlockFlowerPot.LEGACY_DATA, rand.nextInt(14)));	
 		
 	}
 	
@@ -372,29 +367,29 @@ public class WorldGenResearchLab extends WorldGenFlan
 			{
 				for(int j = 0; j < 2; j++)
 				{
-					world.setBlockState(new BlockPos(x + 1 + 4 * i, y + 2, z + 1 + 4 * j), Blocks.glowstone.getDefaultState());
+					world.setBlockState(new BlockPos(x + 1 + 4 * i, y + 2, z + 1 + 4 * j), Blocks.GLOWSTONE.getDefaultState());
 					world.setLightFor(EnumSkyBlock.BLOCK, new BlockPos(x + 1 + 4 * i, y + 2, z + 1 + 4 * j), 15);
 					world.getLightFromNeighborsFor(EnumSkyBlock.BLOCK, new BlockPos(x + 1 + 4 * i, y + 1, z + 1 + 4 * j));
-					world.setBlockState(new BlockPos(x + 1 + 4 * i, y + 3, z + 1 + 4 * j), Blocks.oak_fence.getDefaultState());
-					world.setBlockState(new BlockPos(x + 1 + 4 * i, y + 4, z + 1 + 4 * j), Blocks.oak_fence.getDefaultState());				
+					world.setBlockState(new BlockPos(x + 1 + 4 * i, y + 3, z + 1 + 4 * j), Blocks.OAK_FENCE.getDefaultState());
+					world.setBlockState(new BlockPos(x + 1 + 4 * i, y + 4, z + 1 + 4 * j), Blocks.OAK_FENCE.getDefaultState());				
 				}
 			}
 		}
 		
-		fillArea(world, x + 1, y, z + 1, x + 6, y + 1, z + 6, Blocks.farmland.getStateFromMeta(7));	
+		fillArea(world, x + 1, y, z + 1, x + 6, y + 1, z + 6, Blocks.FARMLAND.getStateFromMeta(7));	
 		switch(rand.nextInt(3))
 		{
-		case 0 : fillArea(world, x + 1, y + 1, z + 1, x + 6, y + 2, z + 6, Blocks.wheat.getStateFromMeta(rand.nextInt(5) + 2)); break;	
-		case 1 : fillArea(world, x + 1, y + 1, z + 1, x + 6, y + 2, z + 6, Blocks.carrots.getStateFromMeta(rand.nextInt(5) + 2)); break;	
-		case 2 : fillArea(world, x + 1, y + 1, z + 1, x + 6, y + 2, z + 6, Blocks.potatoes.getStateFromMeta(rand.nextInt(5) + 2)); break;	
+		case 0 : fillArea(world, x + 1, y + 1, z + 1, x + 6, y + 2, z + 6, Blocks.WHEAT.getStateFromMeta(rand.nextInt(5) + 2)); break;	
+		case 1 : fillArea(world, x + 1, y + 1, z + 1, x + 6, y + 2, z + 6, Blocks.CARROTS.getStateFromMeta(rand.nextInt(5) + 2)); break;	
+		case 2 : fillArea(world, x + 1, y + 1, z + 1, x + 6, y + 2, z + 6, Blocks.POTATOES.getStateFromMeta(rand.nextInt(5) + 2)); break;	
 		}
 		world.setBlockState(new BlockPos(x + 3, y + 1, z + 3), Blocks.AIR.getDefaultState());
-		world.setBlockState(new BlockPos(x + 3, y, z + 3), Blocks.water.getDefaultState());
+		world.setBlockState(new BlockPos(x + 3, y, z + 3), Blocks.WATER.getDefaultState());
 	}
 	
 	private void generateGunRack(World world, Random rand, int x, int y, int z)
 	{
-		fillArea(world, x, y, z, x + 2, y + 1, z + 1, Blocks.planks.getDefaultState());
+		fillArea(world, x, y, z, x + 2, y + 1, z + 1, Blocks.PLANKS.getDefaultState());
 		fillArea(world, x, y + 1, z, x + 2, y + 2, z + 1, FlansModApocalypse.gunRack.getDefaultState().withProperty(BlockItemHolder.FACING, EnumFacing.SOUTH));		
 		for(int i = 0; i < 2; i++)
 		{
@@ -405,29 +400,29 @@ public class WorldGenResearchLab extends WorldGenFlan
 	
 	private void generateTarget(World world, Random rand, int x, int y, int z)
 	{
-		fillArea(world, x + 1, y + 1, z, x + 4, y + 4, z + 1, Blocks.wool.getStateFromMeta(14));
-		world.setBlockState(new BlockPos(x + 2, y, z), Blocks.wool.getStateFromMeta(14));
-		world.setBlockState(new BlockPos(x + 2, y + 4, z), Blocks.wool.getStateFromMeta(14));
-		world.setBlockState(new BlockPos(x, y + 2, z), Blocks.wool.getStateFromMeta(14));
-		world.setBlockState(new BlockPos(x + 4, y + 2, z), Blocks.wool.getStateFromMeta(14));
-		world.setBlockState(new BlockPos(x + 2, y + 1, z), Blocks.wool.getDefaultState());
-		world.setBlockState(new BlockPos(x + 2, y + 3, z), Blocks.wool.getDefaultState());
-		world.setBlockState(new BlockPos(x + 1, y + 2, z), Blocks.wool.getDefaultState());
-		world.setBlockState(new BlockPos(x + 3, y + 2, z), Blocks.wool.getDefaultState());
+		fillArea(world, x + 1, y + 1, z, x + 4, y + 4, z + 1, Blocks.WOOL.getStateFromMeta(14));
+		world.setBlockState(new BlockPos(x + 2, y, z), Blocks.WOOL.getStateFromMeta(14));
+		world.setBlockState(new BlockPos(x + 2, y + 4, z), Blocks.WOOL.getStateFromMeta(14));
+		world.setBlockState(new BlockPos(x, y + 2, z), Blocks.WOOL.getStateFromMeta(14));
+		world.setBlockState(new BlockPos(x + 4, y + 2, z), Blocks.WOOL.getStateFromMeta(14));
+		world.setBlockState(new BlockPos(x + 2, y + 1, z), Blocks.WOOL.getDefaultState());
+		world.setBlockState(new BlockPos(x + 2, y + 3, z), Blocks.WOOL.getDefaultState());
+		world.setBlockState(new BlockPos(x + 1, y + 2, z), Blocks.WOOL.getDefaultState());
+		world.setBlockState(new BlockPos(x + 3, y + 2, z), Blocks.WOOL.getDefaultState());
 	}
 	
 	private void generateLiquidsLab(World world, Random rand, int x, int y, int z)
 	{
-		fillArea(world, x, y, z, x + 4, y + 1, z + 1, Blocks.quartz_block.getDefaultState());
-		fillArea(world, x + 1, y, z, x + 3, y + 1, z + 1, Blocks.stone_slab.getStateFromMeta(15));
+		fillArea(world, x, y, z, x + 4, y + 1, z + 1, Blocks.QUARTZ_BLOCK.getDefaultState());
+		fillArea(world, x + 1, y, z, x + 3, y + 1, z + 1, Blocks.STONE_SLAB.getStateFromMeta(15));
 		
-		fillArea(world, x, y, z + 5, x + 5, y + 1, z + 6, Blocks.quartz_block.getDefaultState());
-		fillArea(world, x + 1, y, z + 5, x + 4, y + 1, z + 6, Blocks.stone_slab.getStateFromMeta(15));
+		fillArea(world, x, y, z + 5, x + 5, y + 1, z + 6, Blocks.QUARTZ_BLOCK.getDefaultState());
+		fillArea(world, x + 1, y, z + 5, x + 4, y + 1, z + 6, Blocks.STONE_SLAB.getStateFromMeta(15));
 		
-		world.setBlockState(new BlockPos(x + 5, y, z + 5), Blocks.cauldron.getStateFromMeta(rand.nextInt(4)));
+		world.setBlockState(new BlockPos(x + 5, y, z + 5), Blocks.CAULDRON.getStateFromMeta(rand.nextInt(4)));
 		
-		world.setBlockState(new BlockPos(x + 4, y, z), Blocks.chest.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.SOUTH));
-		world.setBlockState(new BlockPos(x + 5, y, z), Blocks.chest.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.SOUTH));
+		world.setBlockState(new BlockPos(x + 4, y, z), Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.SOUTH));
+		world.setBlockState(new BlockPos(x + 5, y, z), Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.SOUTH));
 		
 		//Fill chests
         TileEntity tileentity = world.getTileEntity(new BlockPos(x + 4, y, z));
@@ -444,7 +439,7 @@ public class WorldGenResearchLab extends WorldGenFlan
 		
 		//Brewing stands
 		BlockPos pos = new BlockPos(x + rand.nextInt(4), y + 1, z);
-		world.setBlockState(pos, Blocks.brewing_stand.getDefaultState());
+		world.setBlockState(pos, Blocks.BREWING_STAND.getDefaultState());
         tileentity = world.getTileEntity(pos);
         if (tileentity instanceof TileEntityBrewingStand)
         {
@@ -452,7 +447,7 @@ public class WorldGenResearchLab extends WorldGenFlan
         }
 		
 		pos = new BlockPos(x + rand.nextInt(5), y + 1, z + 5);
-		world.setBlockState(pos, Blocks.brewing_stand.getDefaultState());
+		world.setBlockState(pos, Blocks.BREWING_STAND.getDefaultState());
         tileentity = world.getTileEntity(pos);
         if (tileentity instanceof TileEntityBrewingStand)
         {
@@ -463,7 +458,7 @@ public class WorldGenResearchLab extends WorldGenFlan
 	private void generateLiquidContainer(World world, Random rand, int x, int y, int z, IBlockState liquid)
 	{
 		fillArea(world, x, y, z, x + 4, y + 5, z + 4, FlansModApocalypse.blockLabStone.getDefaultState());
-		fillArea(world, x, y + 1, z, x + 4, y + 4, z + 4, Blocks.glass.getDefaultState());
+		fillArea(world, x, y + 1, z, x + 4, y + 4, z + 4, Blocks.GLASS.getDefaultState());
 		
 		fillArea(world, x + 1, y, z + 1, x + 3, y + 5, z + 3, Blocks.AIR.getDefaultState());
 		fillArea(world, x + 1, y, z + 1, x + 3, y + rand.nextInt(4), z + 3, liquid);		
@@ -478,12 +473,12 @@ public class WorldGenResearchLab extends WorldGenFlan
 	{
 		switch(rand.nextInt(3))
 		{
-		case 0 : return Blocks.water.getDefaultState();
-		case 1 : return Blocks.lava.getDefaultState();
+		case 0 : return Blocks.WATER.getDefaultState();
+		case 1 : return Blocks.LAVA.getDefaultState();
 		case 2 : return FlansModApocalypse.blockSulphuricAcid.getDefaultState();
 		}
 		
-		return Blocks.water.getDefaultState();
+		return Blocks.WATER.getDefaultState();
 	}
 	
 	private void generateRoom(World world, Random rand, int chunkX, int layerY, int chunkZ)
