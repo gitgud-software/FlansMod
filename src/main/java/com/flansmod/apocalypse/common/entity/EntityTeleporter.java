@@ -137,7 +137,7 @@ public class EntityTeleporter extends Entity
 			{
 				for(int k = 0; k < 4; k++)
 				{
-					if(world.getBlockState(pos.add(i, j, k)).getBlock() != Blocks.air)
+					if(world.getBlockState(pos.add(i, j, k)).getBlock() != Blocks.AIR)
 						return false;
 				}
 			}
@@ -157,7 +157,7 @@ public class EntityTeleporter extends Entity
 		{
 			for(int k = 0; k < 4; k++)
 			{
-				for(int j = -1; j >= 1 && world.getBlockState(pos.add(i, j, k)).getBlock() == Blocks.air; j--)
+				for(int j = -1; j >= 1 && world.getBlockState(pos.add(i, j, k)).getBlock() == Blocks.AIR; j--)
 				{
 					world.setBlockState(pos.add(i, j, k), Blocks.obsidian.getDefaultState());
 				}

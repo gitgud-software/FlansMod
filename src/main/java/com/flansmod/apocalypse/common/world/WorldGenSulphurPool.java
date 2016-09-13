@@ -107,7 +107,7 @@ public class WorldGenSulphurPool extends WorldGenerator
                     {
                         if (aboolean[(j * 16 + k1) * 8 + k])
                         {
-                            world.setBlockState(pos.add(j, k, k1), k >= 4 ? Blocks.air.getDefaultState() : this.block.getDefaultState(), 2);
+                            world.setBlockState(pos.add(j, k, k1), k >= 4 ? Blocks.AIR.getDefaultState() : this.block.getDefaultState(), 2);
                         }
                     }
                 }
