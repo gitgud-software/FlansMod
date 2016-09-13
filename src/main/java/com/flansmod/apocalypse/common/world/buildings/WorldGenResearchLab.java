@@ -28,7 +28,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityBrewingStand;
 import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
@@ -229,7 +229,7 @@ public class WorldGenResearchLab extends WorldGenFlan
 							world.setBlockState(new BlockPos(chunkX * 16 + 4 + 8 * j, topLayerHeight - 8 * i + 1, chunkZ * 16 + 1), Blocks.iron_block.getDefaultState());
 							world.setBlockState(new BlockPos(chunkX * 16 + 5 + 8 * j, topLayerHeight - 8 * i + 2, chunkZ * 16 + 1), Blocks.iron_block.getDefaultState());
 							world.setBlockState(new BlockPos(chunkX * 16 + 5 + 8 * j, topLayerHeight - 8 * i + 1, chunkZ * 16 + 1), Blocks.iron_block.getDefaultState());
-							world.setBlockState(new BlockPos(chunkX * 16 + 4 + 8 * j, topLayerHeight - 8 * i + 1, chunkZ * 16 + 4), Blocks.anvil.getDefaultState());
+							world.setBlockState(new BlockPos(chunkX * 16 + 4 + 8 * j, topLayerHeight - 8 * i + 1, chunkZ * 16 + 4), Blocks.ANVIL.getDefaultState());
 						}
 						
 						{

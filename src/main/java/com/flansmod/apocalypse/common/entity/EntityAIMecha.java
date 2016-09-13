@@ -8,8 +8,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import com.flansmod.client.debug.EntityDebugVector;
@@ -87,8 +87,8 @@ public class EntityAIMecha extends EntityMecha
 		//And if we have line of sight, shoot it
 		if(!worldObj.isRemote && target != null)
 		{
-			Vec3 rightArmOrigin = usingLeft ? axes.findLocalVectorGlobally(getMechaType().leftArmOrigin).toVec3().addVector(posX, posY, posZ) : axes.findLocalVectorGlobally(getMechaType().rightArmOrigin).toVec3().addVector(posX, posY, posZ);
-			Vec3 targetOrigin = new Vec3(target.posX, target.posY + target.getEyeHeight() / 2D, target.posZ);
+			Vec3d rightArmOrigin = usingLeft ? axes.findLocalVectorGlobally(getMechaType().leftArmOrigin).toVec3().addVector(posX, posY, posZ) : axes.findLocalVectorGlobally(getMechaType().rightArmOrigin).toVec3().addVector(posX, posY, posZ);
+			Vec3d targetOrigin = new Vec3d(target.posX, target.posY + target.getEyeHeight() / 2D, target.posZ);
 			
 			double dX = targetOrigin.xCoord - rightArmOrigin.xCoord;
 			double dY = targetOrigin.yCoord - rightArmOrigin.yCoord;
@@ -101,7 +101,7 @@ public class EntityAIMecha extends EntityMecha
 				seats[0].prevLooking.setAngles(0F, -(float)Math.atan2(dY, Math.sqrt(dX * dX + dZ * dZ)) * 180F / 3.14159F, 0F);
 			}
 			
-			MovingObjectPosition hit = worldObj.rayTraceBlocks(rightArmOrigin, targetOrigin, false);
+			RayTraceResult hit = worldObj.rayTraceBlocks(rightArmOrigin, targetOrigin, false);
 			
 			if(worldObj.isRemote)
 			{
@@ -113,7 +113,7 @@ public class EntityAIMecha extends EntityMecha
 				double blockHitZ = hit == null ? 0 : hit.hitVec.zCoord - rightArmOrigin.zCoord; 
 				
 				//If the target is nearer than the block hit or there was no block
-				if(hit == null || hit.typeOfHit != MovingObjectPosition.MovingObjectType.BLOCK || dX * dX + dY * dY + dZ * dZ < blockHitX * blockHitX + blockHitY * blockHitY + blockHitZ * blockHitZ)
+				if(hit == null || hit.typeOfHit != RayTraceResult.MovingObjectType.BLOCK || dX * dX + dY * dY + dZ * dZ < blockHitX * blockHitX + blockHitY * blockHitY + blockHitZ * blockHitZ)
 				{
 					useItem(usingLeft);
 					if(rand.nextInt(5) == 0)

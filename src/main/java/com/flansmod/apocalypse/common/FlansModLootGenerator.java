@@ -189,8 +189,8 @@ public class FlansModLootGenerator
 			{
 			case 0 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.chicken, rand.nextInt(2) + 1)); break;
 			case 1 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.porkchop, rand.nextInt(2) + 1)); break;
-			case 2 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.beef, rand.nextInt(2) + 1)); break;
-			case 3 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.baked_potato, rand.nextInt(3) + 1)); break;
+			case 2 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.BEEF, rand.nextInt(2) + 1)); break;
+			case 3 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.BAKED_POTATO, rand.nextInt(3) + 1)); break;
 			}
 		}
 		
