@@ -19,7 +19,6 @@ public class CommonTickHandler
 	
 	public CommonTickHandler()
 	{
-		//FMLCommonHandler.instance().bus().register(this);
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 	

@@ -2,6 +2,7 @@ package com.flansmod.common.paintjob;
 
 import com.flansmod.common.FlansMod;
 
+import net.fexcraft.mod.lib.api.block.IBlock;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -17,7 +18,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 
-public class BlockPaintjobTable extends BlockContainer
+public class BlockPaintjobTable extends BlockContainer implements IBlock
 {	
 	public BlockPaintjobTable() 
 	{
@@ -78,4 +79,14 @@ public class BlockPaintjobTable extends BlockContainer
 
         super.breakBlock(worldIn, pos, state);
     }
+
+	@Override
+	public String getName(){
+		return "paintjobTable";
+	}
+
+	@Override
+	public int getVariantAmount(){
+		return default_variant;
+	}
 }
