@@ -15,7 +15,7 @@ public class EntityNukeDrop extends Entity
 	{
 		super(world);
 		
-		renderDistanceWeight = 400D;
+		setRenderDistanceWeight(400D);
 		setSize(1F, 1F);
 		noClip = false;
 		ignoreFrustumCheck = true;

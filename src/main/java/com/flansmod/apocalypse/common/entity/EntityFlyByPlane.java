@@ -1,11 +1,6 @@
 package com.flansmod.apocalypse.common.entity;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
-
-import com.flansmod.apocalypse.common.world.BiomeGenApocalypse;
 import com.flansmod.common.driveables.DriveableData;
 import com.flansmod.common.driveables.EntityPlane;
 import com.flansmod.common.driveables.PlaneType;
@@ -37,7 +32,7 @@ public class EntityFlyByPlane extends EntityPlane
 		
 	}
 	
-	private float getBiomeHeight(BiomeGenBase biome)
+	/*private float getBiomeHeight(BiomeGenBase biome)
 	{
 		if(biome == BiomeGenApocalypse.desert)
 			return 80F;
@@ -46,7 +41,7 @@ public class EntityFlyByPlane extends EntityPlane
 		else if(biome == BiomeGenApocalypse.highPlateau)
 			return 120F;
 		return 128F;
-	}
+	}*///TODO
 
 	@Override
 	public boolean canThrust() 

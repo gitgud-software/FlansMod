@@ -73,6 +73,7 @@ import com.flansmod.common.types.EnumType;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
 
+import net.fexcraft.mod.lib.util.block.BlockUtil;
 import net.fexcraft.mod.lib.util.entity.EntUtil;
 import net.fexcraft.mod.lib.util.item.ItemUtil;
 import net.minecraft.block.material.Material;
@@ -195,26 +196,32 @@ public class FlansMod
 		}
 		
 		//Set up mod blocks and items
-		workbench = (BlockFlansWorkbench)(new BlockFlansWorkbench(1, 0).setUnlocalizedName("flansWorkbench"));
-		GameRegistry.registerBlock(workbench, ItemBlockManyNames.class, "flansWorkbench");
+		workbench = (BlockFlansWorkbench)(new BlockFlansWorkbench(1, 0));
+		workbench.setRegistryName(MODID, "flansWorkbench");
+		workbench.setUnlocalizedName(workbench.getRegistryName().toString());
+		GameRegistry.register(workbench);
+		GameRegistry.register(new ItemBlockManyNames(workbench));
 		GameRegistry.addRecipe(new ItemStack(workbench, 1, 0), "BBB", "III", "III", 'B', Items.BOWL, 'I', Items.IRON_INGOT );
 		GameRegistry.addRecipe(new ItemStack(workbench, 1, 1), "ICI", "III", 'C', Items.CAULDRON, 'I', Items.IRON_INGOT );
 		opStick = new ItemOpStick();
 		ItemUtil.register(MODID, opStick);
 		ItemUtil.registerRender(opStick);
-		flag = (ItemFlagpole)(new ItemFlagpole().setUnlocalizedName("flagpole"));
+		flag = (ItemFlagpole)(new ItemFlagpole());
 		ItemUtil.register(MODID, flag);
 		ItemUtil.registerRender(flag);
-		spawner = (BlockSpawner)(new BlockSpawner(Material.IRON).setUnlocalizedName("teamsSpawner").setBlockUnbreakable().setResistance(1000000F));
-		//TODO GameRegistry.registerBlock(spawner, ItemBlockManyNames.class, "teamsSpawner");
+		spawner = (BlockSpawner)(new BlockSpawner(Material.IRON).setBlockUnbreakable().setResistance(1000000F));
+		GameRegistry.register(spawner);
+		GameRegistry.register(new ItemBlockManyNames(spawner));
 		GameRegistry.registerTileEntity(TileEntitySpawner.class, "teamsSpawner");
 		
-		rainbowPaintcan = new Item().setUnlocalizedName("rainbowPaintcan").setCreativeTab(tabFlanGuns);
-		//TODO GameRegistry.registerItem(rainbowPaintcan, "rainbowPaintcan", MODID);
+		rainbowPaintcan = new Item().setCreativeTab(tabFlanGuns);
+		rainbowPaintcan.setRegistryName(MODID, "rainbowPaintcan");
+		rainbowPaintcan.setUnlocalizedName(rainbowPaintcan.getRegistryName().toString());
+		GameRegistry.register(rainbowPaintcan);
 		paintjobTable = new BlockPaintjobTable();
-		GameRegistry.registerBlock(paintjobTable, "paintjobTable");
+		BlockUtil.register(MODID, paintjobTable);
+		BlockUtil.registerFIB(paintjobTable);
 		GameRegistry.registerTileEntity(TileEntityPaintjobTable.class, MODID);
-		
 		GameRegistry.registerTileEntity(TileEntityItemHolder.class, "itemHolder");
 		
 		//Read content packs

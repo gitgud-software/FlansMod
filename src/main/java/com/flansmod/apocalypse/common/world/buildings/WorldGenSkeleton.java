@@ -6,7 +6,6 @@ import com.flansmod.apocalypse.common.FlansModApocalypse;
 import com.flansmod.common.BlockItemHolder;
 import com.flansmod.common.TileEntityItemHolder;
 
-import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
@@ -19,7 +18,7 @@ public class WorldGenSkeleton extends WorldGenerator
 	{	
 		for( ; pos.getY() < 256; pos = pos.up())
 		{		
-			if(world.isAirBlock(pos) && World.doesBlockHaveSolidTopSurface(world, pos.down()))
+			if(world.isAirBlock(pos) && world.isSideSolid(pos.down(), EnumFacing.UP))//World.doesBlockHaveSolidTopSurface(world, pos.down()))
 			{
 				world.setBlockState(pos, FlansModApocalypse.skeleton.getDefaultState().withProperty(BlockItemHolder.FACING, EnumFacing.HORIZONTALS[rand.nextInt(4)]), 2);
 				FlansModApocalypse.getLootGenerator().addRandomLoot((TileEntityItemHolder)world.getTileEntity(pos), rand, false);

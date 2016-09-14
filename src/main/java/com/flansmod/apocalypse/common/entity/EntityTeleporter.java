@@ -8,13 +8,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class EntityTeleporter extends Entity 
 {
@@ -77,20 +76,20 @@ public class EntityTeleporter extends Entity
 	{
 		if(!worldObj.isRemote)
 		{			
-			if(targetTeleporter == null && worldObj.provider.getDimensionId() == FlansModApocalypse.dimensionID)
+			if(targetTeleporter == null && worldObj.provider.getDimension() == FlansModApocalypse.dimensionID)
 				findPortal(player);
 			
 			if(targetTeleporter != null && player.timeUntilPortal <= 0)
 			{
 				player.timeUntilPortal = 200;
 				//Switch between overworld and apocalypse
-				if(worldObj.provider.getDimensionId() == 0)
+				if(worldObj.provider.getDimension() == 0)
 				{
-					MinecraftServer.getServer().getConfigurationManager().transferPlayerToDimension((EntityPlayerMP)player, FlansModApocalypse.dimensionID, new TeleporterApocalypse(MinecraftServer.getServer().worldServerForDimension(FlansModApocalypse.dimensionID), this.targetTeleporter));
+					FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().transferPlayerToDimension((EntityPlayerMP)player, FlansModApocalypse.dimensionID, new TeleporterApocalypse(FMLCommonHandler.instance().getMinecraftServerInstance().worldServerForDimension(FlansModApocalypse.dimensionID), this.targetTeleporter));
 				}
 				else
 				{
-					MinecraftServer.getServer().getConfigurationManager().transferPlayerToDimension((EntityPlayerMP)player, 0, new TeleporterApocalypse(MinecraftServer.getServer().worldServerForDimension(0), this.targetTeleporter));
+					FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().transferPlayerToDimension((EntityPlayerMP)player, 0, new TeleporterApocalypse(FMLCommonHandler.instance().getMinecraftServerInstance().worldServerForDimension(0), this.targetTeleporter));
 				}
 			}
 		}
@@ -102,7 +101,7 @@ public class EntityTeleporter extends Entity
 		BlockPos entryPoint = FlansModApocalypse.proxy.data.entryPoints.get(player.getPersistentID());
 
 		//Find a valid place to enter the world
-		World overworld = MinecraftServer.getServer().worldServerForDimension(0);
+		World overworld = FMLCommonHandler.instance().getMinecraftServerInstance().worldServerForDimension(0);
 		
 		if(entryPoint == null)
 			entryPoint = overworld.getSpawnPoint();
@@ -115,7 +114,7 @@ public class EntityTeleporter extends Entity
 			BlockPos pos = new BlockPos(entryPoint.getX() + dX, 256, entryPoint.getZ() + dZ);
 			for( ; pos.getY() >= 0; pos = pos.down())
 			{		
-				if(overworld.isAirBlock(pos) && World.doesBlockHaveSolidTopSurface(overworld, pos.down()))
+				if(overworld.isAirBlock(pos) && overworld.isSideSolid(pos.down(), EnumFacing.UP))//World.doesBlockHaveSolidTopSurface(overworld, pos.down()))
 				{
 					//We have found a valid position
 					if(createPortal(overworld, pos))
@@ -147,9 +146,9 @@ public class EntityTeleporter extends Entity
 		{
 			for(int j = 0; j < 2; j++)
 			{
-				world.setBlockState(pos.add(i * 3, -1, j * 3), Blocks.obsidian.getDefaultState());
+				world.setBlockState(pos.add(i * 3, -1, j * 3), Blocks.OBSIDIAN.getDefaultState());
 				world.setBlockState(pos.add(i * 3, 0, j * 3), FlansModApocalypse.blockPowerCube.getDefaultState());
-				world.setBlockState(pos.add(1 + i, -1, 1 + j), Blocks.obsidian.getDefaultState());
+				world.setBlockState(pos.add(1 + i, -1, 1 + j), Blocks.OBSIDIAN.getDefaultState());
 			}
 		}
 		//Create obsidian base pillar to avoid floating portals
@@ -159,7 +158,7 @@ public class EntityTeleporter extends Entity
 			{
 				for(int j = -1; j >= 1 && world.getBlockState(pos.add(i, j, k)).getBlock() == Blocks.AIR; j--)
 				{
-					world.setBlockState(pos.add(i, j, k), Blocks.obsidian.getDefaultState());
+					world.setBlockState(pos.add(i, j, k), Blocks.OBSIDIAN.getDefaultState());
 				}
 			}
 		}

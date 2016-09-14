@@ -33,16 +33,15 @@ import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.IProgressUpdate;
-import net.minecraft.util.MathHelper;
-import net.minecraft.world.ChunkCoordIntPair;
-import net.minecraft.world.SpawnerAnimals;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome.SpawnListEntry;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
+import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.ChunkProviderSettings;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
@@ -51,12 +50,11 @@ import net.minecraft.world.gen.feature.WorldGenDungeons;
 import net.minecraft.world.gen.feature.WorldGenLakes;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.terraingen.ChunkProviderEvent;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
 
-public class ChunkProviderApocalypse implements IChunkProvider 
+public class ChunkProviderApocalypse implements IChunkGenerator 
 {
 	private Random rand;
 	private NoiseGeneratorOctaves noiseGen1;
@@ -559,11 +557,11 @@ public class ChunkProviderApocalypse implements IChunkProvider
                             {
                                 if ((d15 += d16) > 0.0D)
                                 {
-                                    p_180518_3_.setBlockState(subChunkX * 4 + blockX, subChunkY * 8 + blockY, subChunkZ * 4 + blockZ, Blocks.stone.getDefaultState());
+                                    p_180518_3_.setBlockState(subChunkX * 4 + blockX, subChunkY * 8 + blockY, subChunkZ * 4 + blockZ, Blocks.STONE.getDefaultState());
                                 }
                                 else if (subChunkY * 8 + blockY < this.seaLevel)
                                 {
-                                    p_180518_3_.setBlockState(subChunkX * 4 + blockX, subChunkY * 8 + blockY, subChunkZ * 4 + blockZ, Blocks.water.getDefaultState());
+                                    p_180518_3_.setBlockState(subChunkX * 4 + blockX, subChunkY * 8 + blockY, subChunkZ * 4 + blockZ, Blocks.WATER.getDefaultState());
                                 }
                             }
 
@@ -734,4 +732,28 @@ public class ChunkProviderApocalypse implements IChunkProvider
 */
         return flag;
     }
+
+	@Override
+	public void populate(int x, int z) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean generateStructures(Chunk chunkIn, int x, int z) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public List<SpawnListEntry> getPossibleCreatures(EnumCreatureType creatureType, BlockPos pos) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public BlockPos getStrongholdGen(World worldIn, String structureName, BlockPos position) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

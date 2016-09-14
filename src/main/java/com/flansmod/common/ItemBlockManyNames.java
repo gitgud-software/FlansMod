@@ -5,12 +5,14 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
-public class ItemBlockManyNames extends ItemBlock {
+public class ItemBlockManyNames extends ItemBlock{
 	
 	public ItemBlockManyNames(Block b)
 	{
 		super(b);
 		setHasSubtypes(true);
+		setRegistryName(b.getRegistryName());
+		setUnlocalizedName(b.getRegistryName().toString());
 	}
 	
 	@Override

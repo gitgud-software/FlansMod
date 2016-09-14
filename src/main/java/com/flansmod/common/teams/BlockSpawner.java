@@ -38,6 +38,8 @@ public class BlockSpawner extends BlockContainer
 		super(material);
 		setCreativeTab(FlansMod.tabFlanTeams);
 		setDefaultState(blockState.getBaseState().withProperty(TYPE, Integer.valueOf(0)));
+		this.setRegistryName("teamsSpawner");
+		this.setUnlocalizedName(this.getRegistryName().toString());
 	}
 
     @Override

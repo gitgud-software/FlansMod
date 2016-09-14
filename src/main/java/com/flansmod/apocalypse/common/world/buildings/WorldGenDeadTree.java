@@ -2,15 +2,10 @@ package com.flansmod.apocalypse.common.world.buildings;
 
 import java.util.Random;
 
-import net.minecraft.block.BlockLog;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import com.flansmod.apocalypse.common.FlansModApocalypse;
-import com.flansmod.common.BlockItemHolder;
-import com.flansmod.common.TileEntityItemHolder;
 
 public class WorldGenDeadTree extends WorldGenFlan
 {
@@ -19,19 +14,19 @@ public class WorldGenDeadTree extends WorldGenFlan
 	{	
 		for( ; pos.getY() < 256; pos = pos.up())
 		{		
-			if(world.isAirBlock(pos) && World.doesBlockHaveSolidTopSurface(world, pos.down()))
+			if(world.isAirBlock(pos) && world.isSideSolid(pos.down(), EnumFacing.UP))//World.doesBlockHaveSolidTopSurface(world, pos.down()))
 			{
 				int treeHeight = rand.nextInt(3) + 3;
 				for(int i = 0; i < treeHeight; i++)
 				{
-					world.setBlockState(pos.add(0, i, 0), Blocks.log.getDefaultState());
+					world.setBlockState(pos.add(0, i, 0), Blocks.LOG.getDefaultState());
 				}
 				for(int j = 0; j < rand.nextInt(2) + 2; j++)
 				{
 					int dx = 0, dy = 0, dz = 0;
 					int branchXDir = rand.nextInt(3) - 1;
 					int branchZDir = rand.nextInt(3) - 1;
-					int branchStartPoint = rand.nextInt(treeHeight / 2) + treeHeight / 2;
+					//int branchStartPoint = rand.nextInt(treeHeight / 2) + treeHeight / 2;
 					for(int i = 0; i < treeHeight; i++)
 					{
 						if(rand.nextBoolean())
@@ -40,7 +35,7 @@ public class WorldGenDeadTree extends WorldGenFlan
 							dz += branchZDir;
 						}
 						dy++;
-						world.setBlockState(pos.add(dx, dy + treeHeight - 1, dz), Blocks.log.getDefaultState());
+						world.setBlockState(pos.add(dx, dy + treeHeight - 1, dz), Blocks.LOG.getDefaultState());
 					}
 				}
 				break;

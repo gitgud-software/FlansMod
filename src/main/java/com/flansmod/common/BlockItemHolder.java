@@ -37,8 +37,9 @@ public class BlockItemHolder extends BlockContainer
 		setCreativeTab(FlansMod.tabFlanParts);
 		setHardness(2F);
 		setResistance(4F);
-	    setUnlocalizedName(type.shortName);
-	    GameRegistry.registerBlock(this, type.shortName);
+	    this.setRegistryName(FlansMod.MODID, type.shortName);
+	    this.setUnlocalizedName(this.getRegistryName().toString());
+	    GameRegistry.register(this);
 		setCreativeTab(FlansMod.tabFlanParts);
 		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
 		type.block = this;

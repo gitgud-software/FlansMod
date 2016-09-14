@@ -6,42 +6,28 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldProvider;
-import net.minecraft.world.WorldType;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraft.world.biome.BiomeGenHills;
-import net.minecraft.world.biome.WorldChunkManager;
-import net.minecraft.world.biome.WorldChunkManagerHell;
-import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class WorldProviderApocalypse extends WorldProvider 
-{
-	@Override
+public class WorldProviderApocalypse extends WorldProvider{
+	
+	public DimensionType type = DimensionType.register("Apocalypse", "_apocalypse", FlansModApocalypse.dimensionID, WorldProviderApocalypse.class, false);
+	
+	/*@Override
 	public void registerWorldChunkManager()
 	{
 		this.worldChunkMgr = new WorldChunkManagerApocalypse(this.worldObj);
 		dimensionId = FlansModApocalypse.dimensionID;
 		hasNoSky = false;
-	}
+	}*/
 	
 	@Override
-	public IChunkProvider createChunkGenerator()
+	public IChunkGenerator createChunkGenerator()
 	{
 		return new ChunkProviderApocalypse(worldObj, worldObj.getSeed());
-	}
-	
-	@Override
-	public String getDimensionName() 
-	{
-		return "Apocalypse";
-	}
-
-	@Override
-	public String getInternalNameSuffix() 
-	{
-		return "_apocalypse";
 	}
 
 	@Override
@@ -53,7 +39,7 @@ public class WorldProviderApocalypse extends WorldProvider
 	@Override
     public boolean canCoordinateBeSpawn(int x, int z)
     {
-        return this.worldObj.getGroundAboveSeaLevel(new BlockPos(x, 0, z)) == Blocks.sand;
+        return this.worldObj.getGroundAboveSeaLevel(new BlockPos(x, 0, z)) == Blocks.SAND;
     }
 	
     /**
@@ -92,4 +78,9 @@ public class WorldProviderApocalypse extends WorldProvider
     {
         return false;
     }
+
+	@Override
+	public DimensionType getDimensionType(){
+		return type;
+	}
 }

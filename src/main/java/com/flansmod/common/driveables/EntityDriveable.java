@@ -129,7 +129,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		setSize(1F, 1F);
 		yOffset = 6F / 16F;
 		ignoreFrustumCheck = true;
-		//setRenderDistanceWeight(200D);
+		setRenderDistanceWeight(200D);
 	}
 	
 	public EntityDriveable(World world, DriveableType t, DriveableData d)

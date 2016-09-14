@@ -6,12 +6,12 @@ import com.flansmod.common.FlansMod;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.property.ExtendedBlockState;
@@ -42,7 +42,7 @@ public class BlockSulphuricAcid extends BlockFluidClassic
     }
 	
 	@Override
-	protected BlockState createBlockState()
+	protected BlockStateContainer createBlockState()
 	{
 		return new ExtendedBlockState(this, new IProperty[] {LEVEL}, new IUnlistedProperty[] {HEIGHT_SW, HEIGHT_NW, HEIGHT_SE, HEIGHT_NE, FLOW_DIRECTION, LEVEL_CORNERS[0], LEVEL_CORNERS[1], LEVEL_CORNERS[2], LEVEL_CORNERS[3]});
 	}
@@ -87,13 +87,13 @@ public class BlockSulphuricAcid extends BlockFluidClassic
 		return extState;
 	}
 	
-	@Override
+	/*@Override
 	public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, EnumFacing side)
 	{
 		if(side == EnumFacing.UP)
 			return world.getBlockState(pos).getBlock() != this;
 		else return super.shouldSideBeRendered(world, pos, side);
-	}
+	}*/
 	
 	@Override
 	public float getFluidHeightForRender(IBlockAccess world, BlockPos pos)
@@ -102,7 +102,7 @@ public class BlockSulphuricAcid extends BlockFluidClassic
 		Block verticalOrigin = world.getBlockState(pos.down(this.densityDir)).getBlock();
 		if (state.getBlock() == this)
 		{
-			if (verticalOrigin.getMaterial().isLiquid() || verticalOrigin instanceof IFluidBlock)
+			if (state.getMaterial().isLiquid() || verticalOrigin instanceof IFluidBlock)
 			{
 				return 1;
 			}
@@ -112,7 +112,7 @@ public class BlockSulphuricAcid extends BlockFluidClassic
 				return 0.875F;
 			}
 		}
-		return !state.getBlock().getMaterial().isSolid() && verticalOrigin == this ? 1 : this.getQuantaPercentage(world, pos) * 0.875F;
+		return !state.getMaterial().isSolid() && verticalOrigin == this ? 1 : this.getQuantaPercentage(world, pos) * 0.875F;
 	}
 	
 	@Override
@@ -144,9 +144,9 @@ public class BlockSulphuricAcid extends BlockFluidClassic
 	}
 	
 	@Override
-	public int getRenderType()
+	public EnumBlockRenderType getRenderType(IBlockState state)
 	{
-		return 3;
+		return EnumBlockRenderType.MODEL;//TODO which one was 3?
 	}
 	
 }
